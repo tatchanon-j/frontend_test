@@ -1,0 +1,110 @@
+.pdf *{
+    font-family: 'THSarabunNew' !important;
+    font-size: 20px;
+}
+ol{
+    list-style-type: thai;
+}
+table {
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #9E9E9E;
+}
+table th,
+table td{
+    border: 1px solid #9E9E9E;
+}
+table td{
+    padding: 8px;
+}
+table.no-border,
+table.no-border td{
+    border: none;
+}
+table.no-padding td{
+    padding: 0;
+}
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    max-height: 297mm;
+    padding: 10mm;
+    margin: 10mm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+.page.page-landscape{
+    /*-ms-transform: rotate(-90deg);*/
+    /* IE 9 */
+    /*-webkit-transform: rotate(-90deg);*/
+    /* Chrome, Safari, Opera */
+    /*transform: rotate(-90deg);*/
+    min-height: 210mm;
+    max-height: 210mm;
+    width: 277mm;
+    /*margin: 43.5mm auto;*/
+}
+/*.page-portrait + .page-landscape,
+.page-landscape + .page-portrait{
+    margin-top: 43.5mm;
+}
+.page-landscape + .page-landscape{
+    margin-top: 80mm;
+}*/
+.subpage {
+    min-height: 277mm;
+    max-height: 277mm;
+}
+.page-landscape .subpage{
+    min-height: 190mm;
+    max-height: 190mm;
+}
+.footer-content{
+    position: absolute;
+    bottom: 10mm;
+    left: 10mm;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    textarea {
+        resize: none;
+        border: none;
+    }
+    html, body {
+        width: 210mm;
+        height: 297mm;
+        font-family: 'THSarabunNew' !important;
+        font-size: 20px;
+    }
+    .page {
+        margin: 0 !important;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        min-height: 277mm;
+        width: 210mm;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+    .page-landscape{
+        min-height: 210mm;
+        width: 277mm;
+        top: 42.5mm;
+        left: -22.5mm;
+        padding: 0;
+        -ms-transform: rotate(-90deg);
+        /* IE 9 */
+        -webkit-transform: rotate(-90deg);
+        /* Chrome, Safari, Opera */
+        transform: rotate(-90deg);
+    }
+}

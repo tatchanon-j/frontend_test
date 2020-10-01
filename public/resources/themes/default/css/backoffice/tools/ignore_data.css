@@ -1,0 +1,153 @@
+@CHARSET "ISO-8859-1";
+
+
+
+table.history-datatables th {
+	text-align: center;
+}
+table.history-datatables td:nth-child(9){
+    text-align: right;
+}
+/*
+table.history-datatables th:nth-child(1) {
+	width: 25% !important;
+}
+
+table.history-datatables th:nth-child(2) {
+	width: 60% !important;
+}
+
+table.history-datatables td:nth-child(1) {
+    text-align: center;
+}*/
+
+/* ###############  Ignore Table ##################*/
+table.ignore-datatables th {
+	text-align: center;
+}
+
+table.ignore-datatables th:nth-child(1),
+table.ignore-datatables th:nth-child(3),
+table.ignore-datatables th:nth-child(6),
+table.ignore-datatables th:nth-child(7){
+	width: 5% !important;
+}
+
+table.ignore-datatables th:nth-child(2) {
+	width: 15% !important;
+}
+
+table.ignore-datatables th:nth-child(4),
+table.ignore-datatables th:nth-child(5){
+	width: 30%;
+}
+
+table.ignore-datatables td:nth-child(1),
+table.ignore-datatables td:nth-child(7){
+    text-align: center;
+}
+
+/*table.ignore-datatables td:nth-child(2),
+table.ignore-datatables td:nth-child(4),{
+	text-align: left;
+}*/
+table.ignore-datatables td:nth-child(6){
+	text-align: right;
+}
+
+table.ignore-datatables i.btn-ignore:before {
+	content: '\f05e';
+	color: red;
+}
+
+
+/* ###############  Unignore Table ##################*/
+table.unignore-datatables th {
+	text-align: center;
+}
+
+table.unignore-datatables th:nth-child(1),
+table.unignore-datatables th:nth-child(3){
+	width: 5% !important;
+}
+
+table.unignore-datatables th:nth-child(2){
+	width: 15% !important;
+}
+
+table.unignore-datatables th:nth-child(3){
+	width: 75% !important;
+}
+
+table.unignore-datatables td:nth-child(4){
+    text-align: center;
+}
+
+table.unignore-datatables td:nth-child(3) {
+    text-align: left;
+}
+
+table.unignore-datatables i.btn-unignore:before{
+	content: '\f05e';
+	color: green;
+}
+
+/* ########## Fix Mobile ####### */
+table.dataTable.dtr-column>tbody>tr>td.control:before, table.dataTable.dtr-column>tbody>tr>th.control:before {
+				left: 14%;
+}
+table.dataTable>tbody>tr.child ul.dtr-details {
+	display: initial !important;
+}
+table.dataTable>tbody>tr.child ul.dtr-details>li {
+	text-align: left;
+	padding-left: 18px;
+}
+table.unignore-datatables td:nth-child(1) {
+		text-align: center;
+}
+table.dataTable.dtr-column>tbody>tr>td.control:before, table.dataTable.dtr-column>tbody>tr>th.control:before {
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+}
+table.ignore-datatables i.btn-ignore:before {
+		content: '\f1f6';
+}
+table.unignore-datatables i.btn-unignore:before {
+		content: '\f0f3';
+}
+.ignore-search-botton {
+	padding-top: 0px;
+}
+@media (max-width: 992px) {
+	.ignore-search-botton {
+		padding-top: 10px;
+		text-align: center;
+	}
+}
+@media screen and (max-width: 767px){
+	div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate {
+		text-align: center;
+		overflow: auto;
+	}
+	div.dataTables_wrapper div.dataTables_filter {
+			float: unset !important;
+	}
+	.skin-blue-light .main-header .logo {
+			display: none;
+	}
+	.main-sidebar, .left-side {
+			padding-top: 50px;
+	}
+	.content-header > h1 {
+			display: none;
+	}
+	.navbar-custom-menu .navbar-nav > li > a {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+.main-header .sidebar-toggle {
+		padding: 15px 10px;
+}

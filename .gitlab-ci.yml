@@ -1,0 +1,7 @@
+deploy_production:
+  script:
+    - ssh thaiwater@web.thaiwater.net './pull.sh'
+    - ssh thaiwater@192.168.201.187 './pull.sh'    
+  only:
+    - demo
+  when: on_success

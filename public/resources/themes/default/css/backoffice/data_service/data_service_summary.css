@@ -1,0 +1,19 @@
+table th{
+    text-align: center;
+}
+
+#table th:nth-child(1),
+#table th:nth-child(2){
+    width: 50px;
+}
+#table th:nth-child(3){
+    width: 150px;
+}
+#table th:nth-child(5){
+    width: 250px;
+}
+
+#table td:nth-child(1),
+#table td:nth-child(2){
+    text-align: center;
+}

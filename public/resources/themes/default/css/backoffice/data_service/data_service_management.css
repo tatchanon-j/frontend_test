@@ -1,0 +1,38 @@
+table.dsm-table th{
+	text-align: center;
+}
+table.dsm-table td {
+	text-align: left;
+}
+table.dsm-table td:nth-child(1),
+table.dsm-table td:nth-child(2),
+table.dsm-table td:nth-child(6){
+	text-align: center;
+}
+table.dsm-table i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px;
+	padding: 0px 2px;
+}
+table.dsm-table i.btn+i.btn {
+	margin-left: 3px;
+}
+table.dsm-table i.btn-view:before {
+	content: '\f05a';
+}
+table.dsm-table i.btn-remove:before {
+    content: '\f014';
+}
+
+table.info-table th {
+	text-align: center
+}
+
+table.info-table td:nth-child(1){
+    text-align: center;
+}
+table.info-table td:nth-child(6){
+	word-break: break-word;
+}

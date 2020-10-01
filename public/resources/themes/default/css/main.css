@@ -1,0 +1,72 @@
+@CHARSET "ISO-8859-1";
+
+.main-header a.logo {
+	font-family: "Kanit";
+    font-weight: 600;
+}
+.main-header .site-name {
+	font-family: "Kanit";
+    font-weight: 600;
+}
+
+.main-header .navbar-custom-menu {
+	font-family: "Kanit";
+    font-weight: lighter;
+}
+
+.wrapper {
+	min-height: 580px;
+}
+
+.locale-switcher {
+	padding: 14px 8px 6px 8px;
+}
+
+.locale-switcher ul {
+	float: right;
+	right: 0px;
+	left: initial;
+}
+
+.locale-switcher img {
+	margin-right: 4px;
+}
+
+/*
+	Ajax Loading from
+	http://stackoverflow.com/questions/1964839/how-can-i-create-a-please-wait-loading-animation-using-jquery
+*/
+.ajax-loading-modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+	background: rgba( 255, 255, 255, .8 )
+                url('../images/ajax-loader-circle_32x32.gif')
+                50% 30%
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.ajax-loading {
+    overflow: hidden;
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.ajax-loading .ajax-loading-modal {
+    display: block;
+}
+/* Any tr in tbody in dataTable class vertical-align top */
+table.dataTable tbody tr {
+    vertical-align: top;
+}
+/* Change disable date in DatePicker */
+.datepicker table tr td.disabled,
+.datepicker table tr td.disabled:hover{
+	color: #ccc;
+}

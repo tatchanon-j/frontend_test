@@ -1,0 +1,570 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Kanit";
+font-weight: 200;
+font-style: normal;
+}
+
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+color: #033375;
+font-family: "Kanit";
+line-height: 1.4em;
+letter-spacing: 0.9px;
+}
+/*
+* {
+  font-family: Kanit;
+}
+*/
+
+.content{padding:0px;}
+
+.btn-outline-light {
+    border-color: #fff;
+}
+
+.btn-outline {
+    border: 1px solid #053375;
+    padding: 0px 13px;
+    margin: 0px;
+    border-radius: 20px;
+    position: relative;
+}
+.text-primary {
+    color: #03335d!important;
+}
+.text-muted {
+  font-family: "Kanit";
+font-size: 1em;
+font-style: normal;
+}
+
+.bg-primary {
+    color: #fff;
+    background-color: #0969e7;
+}
+
+
+img.logo {
+  height: 93px; }
+
+.no-padding {
+  padding: 0; }
+
+.main-header {
+  box-shadow: 1px 1px 2px 1px #bbb; }
+  .main-header .sidebar-toggle:before {
+    content: " "; }
+  .main-header > .navbar {
+    /*padding: 10px 15px;*/ }
+  .main-header > .navbar {
+    margin-left: 0; }
+
+.header {
+    display: block;
+    position: relative;
+    border-bottom: 1px solid #edecec;
+    margin-bottom: 15px;
+}
+
+.content-wrapper,
+.right-side,
+.main-footer {
+  margin-left: 0; }
+
+.skin-blue-light .main-header .navbar {
+  background-color: #033375; }
+  .skin-blue-light .main-header .navbar .sidebar-toggle,
+  .skin-blue-light .main-header .navbar .nav > li > a {
+      color: #D2E2ED;
+      font-weight: 200;
+      font-family: kanit;
+     }
+  .skin-blue-light .main-header .navbar .navbar-toggle .icon-bar {
+    background-color: white; }
+  .skin-blue-light .main-header .navbar .sidebar-toggle:hover,
+  .skin-blue-light .main-header .navbar .nav .open > a,
+  .skin-blue-light .main-header .navbar .nav .open > a:hover,
+  .skin-blue-light .main-header .navbar .nav .open > a:focus,
+  .skin-blue-light .main-header .navbar .nav > li > a:active,
+  .skin-blue-light .main-header .navbar .nav > li > a:focus,
+  .skin-blue-light .main-header .navbar .nav > li > a:hover,
+  .skin-blue-light .main-header .navbar .nav > .active > a {
+
+      color: #fff;
+      background: #0969E7;
+      font-weight: 200;
+      font-family: kanit;
+     }
+  .skin-blue-light .main-header .navbar .nav > li.username > a:hover {
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 0; }
+.skin-blue-light .main-footer {
+  background-color: #033375;
+  color: #ffffff; }
+.skin-blue-light .box-header.with-border {
+  border-bottom-color: #eee; }
+.skin-blue-light .box-footer.with-border {
+  border-top-color: #00a7e1; }
+.skin-blue-light .box-footer.text-right button {
+  margin-left: 10px; }
+
+.content-wrapper,
+.right-side {
+  background-color: #ffffff; }
+
+.breadcrumb, .content-header .breadcrumb {
+  right: 10px;
+  font-size: 1em;
+  background-color: inherit;
+
+}
+
+.content-header {
+    height: 30px;
+}
+.box-header > .fa, .box-header > .glyphicon, .box-header > .ion, .box-header .box-title {
+
+    display: inline-block;
+    font-size: 1.7em;
+    margin: 0;
+    line-height: 1;
+    font-weight: 300;
+
+}
+
+  .breadcrumb > li > a, .content-header .breadcrumb > li > a {
+    font-family: "Kanit";
+    font-weight: 200;
+    font-style: normal;
+    border-radius: 20px;
+    font-size: 1em;
+     }
+  .breadcrumb > li > a, .content-header .breadcrumb > li > a:hover {
+    font-family: "Kanit";
+    font-weight: 200;
+    font-style: normal;
+            border-radius: 20px;
+     }
+  .breadcrumb > li + li:before, .content-header .breadcrumb > li + li:before {
+    content: "|"; }
+
+.box {
+  border-top: inherit;
+  box-shadow: none; }
+
+.nav-stacked.nav-scrollspy {
+  display: none;
+  position: fixed;
+  text-align: right;
+  margin-left: -75px; }
+  .nav-stacked.nav-scrollspy a {
+    line-height: 1px; }
+    .nav-stacked.nav-scrollspy a label {
+      cursor: pointer; }
+
+@media (min-width: 768px) {
+  .nav-stacked.nav-scrollspy {
+    display: inherit; } }
+.box .nav-stacked > li {
+  border-radius: 0;
+  border: 0 solid transparent;
+  color: #033375; }
+  .box .nav-stacked > li > a {
+    border: none; }
+.box .nav-stacked > li + li {
+  margin-top: 0; }
+.box .nav-stacked li.active,
+.box .nav-stacked li.active:hover {
+  background: transparent;
+  color: #033375;
+  border-right: none; }
+
+.footer .breadcrumb {
+  text-align: center;
+  margin-bottom: 0;
+  font-size: 16px; }
+
+.leaflet-thailland .user-marker {
+  cursor: default; }
+
+div.user-marker {
+  width: 32px;
+  height: 32px; }
+  div.user-marker.user-marker-rain {
+    background-image: url("../../../../../images/thailand/marker/rain/default/s_15.png?v=1.1");
+    z-index: 1 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-red {
+      background-image: url("../../../../../images/thailand/marker/rain/red/s_15.png?v=1.1");
+      z-index: 8 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-tawny {
+      background-image: url("../../../../../images/thailand/marker/rain/tawny/s_15.png?v=1.1");
+      z-index: 7 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-orange {
+      background-image: url("../../../../../images/thailand/marker/rain/orange/s_15.png?v=1.1");
+      z-index: 6 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-gold {
+      background-image: url("../../../../../images/thailand/marker/rain/gold/s_15.png?v=1.1");
+      z-index: 5 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-green {
+      background-image: url("../../../../../images/thailand/marker/rain/green/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-celadon {
+      background-image: url("../../../../../images/thailand/marker/rain/celadon/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-blue {
+      background-image: url("../../../../../images/thailand/marker/rain/blue/s_15.png?v=1.1");
+      z-index: 2 !important; }
+
+    div.user-marker.user-marker-cctv.user-marker-cctv-img {
+      background-image: url("../../../../../images/thailand/marker/cctv/cctv_img.png?v=1.1");
+      z-index: 3 !important; }
+
+    div.user-marker.user-marker-cctv.user-marker-cctv-vdo {
+      background-image: url("../../../../../images/thailand/marker/cctv/cctv_animation.png?v=1.1");
+      z-index: 2 !important; }
+
+    div.user-marker.user-marker-cctv.user-marker-cctv-dam {
+      background-image: url("../../../../../images/thailand/marker/cctv/cctv_dam.png?v=1.1");
+      z-index: 1 !important; }
+
+
+  div.user-marker.user-marker-waterlevel {
+    background-image: url("../../../../../images/thailand/marker/waterlevel/default/s_15.png?v=1.1");
+    z-index: 1 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-red {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/red/s_15.png?v=1.1");
+      z-index: 7 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-blue {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/blue/s_15.png?v=1.1");
+      z-index: 6 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-green {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/green/s_15.png?v=1.1");
+      z-index: 5 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-yellow {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/yellow/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-gold {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gold/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-gray {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gray/s_15.png?v=1.1");
+      z-index: 2 !important; }
+  div.user-marker.user-marker-dam {
+    background-image: url("../../../../../images/thailand/marker/dam/default/s_15.png?v=1.1");
+    z-index: 1 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-yellow {
+      background-image: url("../../../../../images/thailand/marker/dam/yellow/s_15.png?v=1.1");
+      z-index: 2 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-green {
+      background-image: url("../../../../../images/thailand/marker/dam/green/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-blue {
+      background-image: url("../../../../../images/thailand/marker/dam/blue/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-red {
+      background-image: url("../../../../../images/thailand/marker/dam/red/s_15.png?v=1.1");
+      z-index: 5 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-min {
+      background-image: url("../../../../../images/thailand/marker/dam/min/s_15.png?v=1.1");
+      z-index: 6 !important; }
+  div.user-marker.user-marker-waterquality {
+    background-image: url("../../../../../images/thailand/marker/waterquality/default/s_15.png?v=1.1"); }
+    div.user-marker.user-marker-waterquality.user-marker-waterquality-green {
+      background-image: url("../../../../../images/thailand/marker/waterquality/green/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-waterquality.user-marker-waterquality-red {
+      background-image: url("../../../../../images/thailand/marker/waterquality/red/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-waterquality.user-marker-waterquality-gray {
+      background-image: url("../../../../../images/thailand/marker/waterquality/gray/s_15.png?v=1.1");
+      z-index: 2 !important; }
+  div.user-marker.user-marker-storm {
+    background-image: url("../../../../../images/thailand/marker/storm/storm_white_blue_32.png?v=1.1"); }
+  div.user-marker.user-marker-clock {
+    background-image: url("../../../../../images/thailand/marker/clock/clock_white_blue_32.png?v=1.1"); }
+  div.user-marker.user-marker-wave {
+    background-image: url("../../../../../images/thailand/marker/wave/default/s_32.png?v=1.1"); }
+    div.user-marker.user-marker-wave.user-marker-wave-red {
+      background-image: url("../../../../../images/thailand/marker/wave/red/s_15.png?v=1.1"); }
+  div.user-marker.user-marker-warning {
+    background-image: url("../../../../../images/thailand/marker/warning/warning_white_blue_32.png?v=1.1"); }
+
+div.user-icon, label.user-icon {
+  width: 32px;
+  height: 32px; }
+  div.user-icon.user-icon-rain, label.user-icon-rain.user-icon {
+    background-image: url("../../../../../images/thailand/marker/rain/default/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-waterlevel, label.user-icon-waterlevel.user-icon {
+    background-image: url("../../../../../images/thailand/marker/waterlevel/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-red, label.user-icon-waterlevel.user-icon-waterlevel-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/red/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-blue, label.user-icon-waterlevel.user-icon-waterlevel-blue.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/blue/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-green, label.user-icon-waterlevel.user-icon-waterlevel-green.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/green/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-yellow, label.user-icon-waterlevel.user-icon-waterlevel-yellow.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/yellow/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-gold, label.user-icon-waterlevel.user-icon-waterlevel-gold.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gold/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-gray, label.user-icon-waterlevel.user-icon-waterlevel-gray.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gray/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-dam, label.user-icon-dam.user-icon {
+    background-image: url("../../../../../images/thailand/marker/dam/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-yellow, label.user-icon-dam.user-icon-dam-yellow.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/yellow/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-green, label.user-icon-dam.user-icon-dam-green.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/green/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-blue, label.user-icon-dam.user-icon-dam-blue.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/blue/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-red, label.user-icon-dam.user-icon-dam-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/red/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-min, label.user-icon-dam.user-icon-dam-min.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/min/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-waterquality, label.user-icon-waterquality.user-icon {
+    background-image: url("../../../../../images/thailand/marker/waterquality/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterquality.user-icon-waterquality-green, label.user-icon-waterquality.user-icon-waterquality-green.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterquality/green/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterquality.user-icon-waterquality-red, label.user-icon-waterquality.user-icon-waterquality-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterquality/red/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-storm, label.user-icon-storm.user-icon {
+    background-image: url("../../../../../images/thailand/marker/storm/storm_white_blue_32.png?v=1.1"); }
+  div.user-icon.user-icon-clock, label.user-icon-clock.user-icon {
+    background-image: url("../../../../../images/thailand/marker/clock/clock_white_blue_32.png?v=1.1"); }
+  div.user-icon.user-icon-wave, label.user-icon-wave.user-icon {
+    background-image: url("../../../../../images/thailand/marker/wave/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-wave.user-icon-wave-red, label.user-icon-wave.user-icon-wave-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/wave/red/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-warning, label.user-icon-warning.user-icon {
+    background-image: url("../../../../../images/thailand/marker/warning/warning_white_blue_32.png?v=1.1"); }
+    div.user-icon.user-icon-cctv.user-icon-cctv-img {
+      background-image: url("../../../../../images/thailand/marker/cctv/cctv_img.png?v=1.1");
+    }
+    div.user-icon.user-icon-cctv.user-icon-cctv-vdo {
+      background-image: url("../../../../../images/thailand/marker/cctv/cctv_vdo.png?v=1.1");
+    }
+    div.user-icon.user-icon-cctv.user-icon-cctv-dam {
+      background-image: url("../../../../../images/thailand/marker/cctv/cctv_dams.png?v=1.1");
+    }
+
+label.user-icon {
+  margin: 0;
+  padding-right: 3px;
+  background-repeat: no-repeat;
+  vertical-align: middle; }
+
+table.normal-table {
+  width: 100%;
+  text-align: center; }
+  table.normal-table th, table.normal-table td {
+    text-align: inherit;
+    padding: 0 2px; }
+
+table.normal-table + table.normal-table {
+  margin-top: 10px; }
+
+.table-lowpad > thead > tr > th {
+  vertical-align: middle; }
+.table-lowpad > thead > tr > td, .table-lowpad > tbody > tr > td, .table-lowpad > tfoot > tr > td {
+  padding: 4px 5px; padding-right:20px; }
+
+table th.right,
+table td.right {
+  text-align: right !important;
+  padding-right: 5px !important; }
+
+  .content_waterlevel_table{padding:2px;}
+
+
+table#waterlevel_table_scale td, table#dam_table_scale td {
+  padding: 0 5px; }
+table#waterlevel_table_scale td:nth-child(n+2), table#dam_table_scale td:nth-child(n+2) {
+  color: white; }
+table#box-rain-table td {
+  padding: 0 5px;
+  color: white;
+  text-align: center; }
+
+table th {
+  text-align: center; }
+table.rain-table td:nth-child(3) {
+  text-align: center; }
+table.rain-table td:nth-child(4) {
+  text-align: right; }
+table.waterlevel-table {
+  font-size: 1em; }
+  table.waterlevel-table td:nth-child(2) {
+    text-align: center; }
+  table.waterlevel-table td:nth-child(3), table.waterlevel-table td:nth-child(4), table.waterlevel-table td:nth-child(5), table.waterlevel-table td:nth-child(6), table.waterlevel-table td:nth-child(7) {
+    text-align: right; }
+  table.waterlevel-table tbody th {
+    background-color: #d9dce1; }
+table.dam-table th:nth-child(1) {
+  min-width: 98px; }
+table.dam-table th:nth-child(2),
+table.dam-table th:nth-child(4) {
+  min-width: 96px; }
+table.dam-table th:nth-child(3) {
+  min-width: 103px; }
+table.dam-table th:nth-child(5) {
+  min-width: 85px; }
+table.dam-table td:nth-child(2),
+table.dam-table td:nth-child(3),
+table.dam-table td:nth-child(4),
+table.dam-table td:nth-child(5) {
+  text-align: right; }
+table.waterquality-table th:nth-child(1) {
+  min-width: 180px; }
+table.waterquality-table th:nth-child(2) {
+  min-width: 46px; }
+table.waterquality-table th:nth-child(3) {
+  min-width: 60px;
+  text-align: center;}
+table.waterquality-table th:nth-child(4) {
+  min-width: 50px; }
+table.waterquality-table th:nth-child(5),
+table.waterquality-table th:nth-child(6) {
+  min-width: 50px; }
+table.waterquality-table th:nth-child(7) {
+  min-width: 62px; }
+table.waterquality-table th:nth-child(8) {
+  min-width: 77px; }
+table.waterquality-table th:nth-child(10) {
+  min-width: 60px; }
+/*table.waterquality-table th:nth-child(12) {
+  min-width: 45px; }*/
+table.waterquality-table td:nth-child(3){
+  text-align: center;
+}
+table.waterquality-table td:nth-child(1n+4) {
+  text-align: center;
+  width:50px;
+}
+table.waterquality-table th:nth-child(1n+6),
+table.waterquality-table td:nth-child(1n+6){
+  display:none !important;
+}
+
+table.dataTable thead > tr > th.sorting, table.dataTable thead > tr > th.sorting_asc, table.dataTable thead > tr > th.sorting_desc, table.dataTable thead > tr > td.sorting, table.dataTable thead > tr > td.sorting_asc, table.dataTable thead > tr > td.sorting_desc {
+  padding: 10px 18px;
+font-family: Kanit;
+font-weight: 300;
+   }
+table.dataTable thead th, table.dataTable thead td {
+    padding: 10px 18px;
+    border-bottom: 1px solid #ede1e1;
+}
+table.waterlevel-table.dataTable thead > tr > th.sorting, table.waterlevel-table.dataTable thead > tr > th.sorting_asc, table.waterlevel-table.dataTable thead > tr > th.sorting_desc, table.waterlevel-table.dataTable thead > tr > td.sorting, table.waterlevel-table.dataTable thead > tr > td.sorting_asc, table.waterlevel-table.dataTable thead > tr > td.sorting_desc {
+  padding: 10px 0; }
+/*
+.img-thumbnail + .img-thumbnail {
+  margin-left: 15px; }
+*/
+
+/*Image trumbnail wave in main page*/
+  div#box-predict_wave-img2 img{
+    width:235px !important;
+  }
+
+.bgClass {
+  background-color: #FFFFCC; }
+
+.fontClass {
+  color: #000; }
+
+#overDiv, map {
+  z-index: 10001 !important; }
+
+.radarimg {
+  text-align: center;
+  height: 200px; }
+
+/*# sourceMappingURL=main.css.map */
+
+.row-map{ padding:5px !important;}
+.row-table{  padding:5px !important;}
+
+/*  Rain table */
+#rain_table th {text-align: center;}
+
+#rain_table th:nth-child(1) {
+	width: 200px !important;
+}
+#rain_table th:nth-child(2) {
+	width: 150px !important;
+}
+
+#rain_table th:nth-child(3) {
+	width: 100px !important;
+}
+#rain_table th:nth-child(4) {
+	width: 50px !important;
+}
+/* End Rain table */
+
+div#modal-radar-img div.row,
+div#modal-radar-img-2 div.row div.radarimg,
+.img-responsive{
+ /* margin-bottom:5%; */
+}
+
+div#modal-radar-img-2 div.row div.radarimg img,
+div#modal-radar-img div.row div.radarimg img{
+  width:110px;
+  display: block;
+  margin: 0 auto;
+}
+
+#waterquality_table th:nth-child(7) {
+	width: 50px !important;
+}
+
+/*#waterquality_table th { padding:10px 0px!important}
+
+#waterquality_table th {width:20px !important;}*/
+
+#waterquality_table th:nth-child(8),#waterquality_table td:nth-child(8),
+#waterquality_table th:nth-child(9),#waterquality_table td:nth-child(9),
+#waterquality_table th:nth-child(10),#waterquality_table td:nth-child(10){display: none;}
+
+
+
+/*  font icon */
+label.user-icon {
+    font-size: 2.5em;
+}
+
+
+ /*
+.nav-stacked > li.active > a, .nav-stacked > li.active > a:hover {
+  color: #033375;
+  color: #fefefe;
+border: 4px solid #033375;
+border-radius: 100%;
+padding: 9px 13px 13px 6px;
+background: #033375;
+}
+*/
+.nav-stacked > li.active > a, .nav-stacked > li.active > a:hover {
+  color: #033375;
+
+
+padding: 9px 13px 13px 6px;
+
+}
+
+
+.nav-stacked > li > a {
+    color: #bfbdbd;
+}
+
+.btn-outline-primary{
+  float:left;
+}
+
+#dam_table_wrapper {
+  height: 730px;
+}

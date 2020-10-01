@@ -1,0 +1,54 @@
+<!--by werawan 22/01/2018 -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>waterquality</title>
+	<link rel="stylesheet" type="text/css" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+	<div class="stackedit__html"><h1 id="ตรวจสอบข้อมูลคุณภาพน้ำ-กรณีที่ไม่แสดงข้อมูลคุณภาพน้ำ">ตรวจสอบข้อมูลคุณภาพน้ำ กรณีที่ไม่แสดงข้อมูลคุณภาพน้ำและข้อมูลไม่อัพเดท</h1>
+		<ol>
+			<li>ตรวจสอบข้อมูลจาก database เพื่อดูข้อมูลอัพเดทล่าสุด โดยไปที่</li>
+		</ol>
+		<ul>
+			<li>Host - 192.168.12.136</li>
+			<li>phpPgAdmin - <a href="https://192.168.12.136/phpPgAdmin">https://192.168.12.136/phpPgAdmin/</a></li>
+			<li>Schema - public</li>
+			<li>Table - waterquality</li>
+		</ul>
+		<ol start="2">
+			<li>
+				<p>รันคำสั่ง sql เพื่อดูข้อมูลล่าสุด</p>
+				<pre class="language-sql"><code class="prism language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> <span class="token string">"waterquality"</span> <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> <span class="token string">"waterquality_date"</span> <span class="token keyword">DESC</span></code></pre>
+				<p></p>
+			</li>
+			<li>
+				<p>ถ้าข้อมูลไม่อัพเดทถึงวันที่ปัจจุบัน ให้ตรวจสอบการเชื่อมโยงข้อมูลของ Thaiwater30 โดยเข้าไปที่ Browser - <a href="http://web.thaiwater.net/thaiwater30/login">http://web.thaiwater.net/thaiwater30/login</a> แล้ว login เข้าสู่ระบบ ไปที่ ระบบสนับสนุนการบริหารการทำงาน &gt; เมนูเชื่อมโยงข้อมูล &gt; ตั้งค่าการ download ค้นหา mwa-waterquality แล้วกด play เพื่อรัน download</p>
+				<p><img src="01.jpg" alt="ภาพที่ 1 "></p>
+			</li>
+			<li>
+				<p>เช็คว่าข้อมูลถูกอัพเดทเป็นวันที่ปัจจุบันแล้วหรือไม่ โดยตรวจสอบข้อมูลตามข้อที่ 1 และ 2</p>
+			</li>
+			<li>
+				<p>ถ้าข้อมูลยังไม่ถูกอัพเดทให้เช็ค error ในเครื่อง archive.thaiwater.net ที่ path: /data/thaiwaterdata/test1/dataset/mwa/waterquality/</p>
+				<p><img src="02.jpg" alt="ภาพที่ 2"></p>
+				<p>เข้าไปที่ไฟล์ im...-error.csv เพื่อดูว่ามี error อะไรอยู่</p>
+				<p><img src="03.jpg" alt="ภาพที่ 3"></p>
+			</li>
+			<li>
+				<p>จากภาพที่ 3 error คือ ไม่มี พาร์ทิชั่น ในปี 2015 ให้สร้าง พาร์ทิชั่น ใหม่โดยเข้าไปที่ Browser - http://web.thaiwater.net/thaiwater30/login แล้ว login เข้าสู่ระบบ ไปที่ ระบบสนับสนุนการบริหารการทำงาน &gt; จัดการฐานข้อมูล &gt; สร้างพาทิชั่น ให้กดเลือกตารางที่ต้องการสร้าง กดเลือกปีที่ต้องการสร้าง แล้วกดปุ่มสร้างพาร์ทชั่น จะได้พาร์ทิชั่นที่ต้องการสร้างแสดงตาม log การทำงาน</p>
+				<p><img src="04.jpg" alt="ภาพที่ 4"></p>
+			</li>
+			<li>
+				<p>ถ้าข้อมูลยังไม่ถูกอัพเดทให้เข้าไปที่ Browser - http://web.thaiwater.net/thaiwater30/login แล้ว login เข้าสู่ระบบ ไปที่ ระบบสนับสนุนการบริหารการทำงาน &gt; เมนูเชื่อมโยงข้อมูล &gt; ตั้งค่าการ download ค้นหา mwa-waterquality แล้วกด stop และเช็คการอัพเดทของข้อมูลอีกครั้ง</p>
+				<p><img src="05.jpg" alt="ภาพที่ 5"></p>
+			</li>
+		</ol>
+		
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+node_modules
+.env
+.buildpath
+.externalToolBuilders/
+.project
+.settings/
+/vendor
+/public/vendor/cim
+/public/import_csv
+/public/vendor/bower_components
+/public/products
+/resources/assets/js
+/resources/views/local
+._.DS_Store
+npm-debug.log

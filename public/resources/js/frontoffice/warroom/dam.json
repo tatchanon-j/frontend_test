@@ -1,0 +1,44 @@
+[{
+    "dam_id": "1",
+    "dam_name": "ภูมิพล",
+    "province_name": "จ.ตาก",
+    "dam_date": "1 พฤศจิกายน 59",
+    "dam_storage": "88333",
+    "dam_storage_percent": "60",
+    "dam_storage_status_color": "orange",
+    "dam_inflow": "50.11",
+    "dam_released": "3000"
+},
+{
+    "dam_id": "2",
+    "dam_name": "สิริกิติ์",
+    "province_name": "จ.ตาก",
+    "dam_date": "1 พฤศจิกายน 59",
+    "dam_storage": "77333",
+    "dam_storage_percent": "70",
+    "dam_storage_status_color": "red",
+    "dam_inflow": "400",
+    "dam_released": "1000"
+},
+{
+    "dam_id": "3",
+    "dam_name": "แควน้อย",
+    "province_name": "จ.ตาก",
+    "dam_date": "1 พฤศจิกายน 59",
+    "dam_storage": "66333",
+    "dam_storage_percent": "50",
+    "dam_storage_status_color": "green",
+    "dam_inflow": "9000",
+    "dam_released": "300"
+},
+{
+    "dam_id": "4",
+    "dam_name": "ป่าสัก",
+    "province_name": "จ.ตาก",
+    "dam_date": "1 พฤศจิกายน 59",
+    "dam_storage": "55333",
+    "dam_storage_percent": "44",
+    "dam_storage_status_color": "yellow",
+    "dam_inflow": "800",
+    "dam_released": "700"
+}]

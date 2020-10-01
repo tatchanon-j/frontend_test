@@ -1,0 +1,148 @@
+div.user-marker {
+  width: 32px;
+  height: 32px; }
+  div.user-marker.user-marker-rain {
+    background-image: url("../../../../../images/thailand/marker/rain/default/s_15.png?v=1.1");
+    z-index: 1 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-red {
+      background-image: url("../../../../../images/thailand/marker/rain/red/s_15.png?v=1.1");
+      z-index: 8 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-tawny {
+      background-image: url("../../../../../images/thailand/marker/rain/tawny/s_15.png?v=1.1");
+      z-index: 7 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-orange {
+      background-image: url("../../../../../images/thailand/marker/rain/orange/s_15.png?v=1.1");
+      z-index: 6 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-gold {
+      background-image: url("../../../../../images/thailand/marker/rain/gold/s_15.png?v=1.1");
+      z-index: 5 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-green {
+      background-image: url("../../../../../images/thailand/marker/rain/green/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-celadon {
+      background-image: url("../../../../../images/thailand/marker/rain/celadon/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-rain.user-marker-rain-blue {
+      background-image: url("../../../../../images/thailand/marker/rain/blue/s_15.png?v=1.1");
+      z-index: 2 !important; }
+  div.user-marker.user-marker-waterlevel {
+    background-image: url("../../../../../images/thailand/marker/waterlevel/default/s_15.png?v=1.1");
+    z-index: 1 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-red {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/red/s_15.png?v=1.1");
+      z-index: 7 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-blue {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/blue/s_15.png?v=1.1");
+      z-index: 6 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-green {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/green/s_15.png?v=1.1");
+      z-index: 5 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-yellow {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/yellow/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-gold {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gold/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-waterlevel.user-marker-waterlevel-gray {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gray/s_15.png?v=1.1");
+      z-index: 2 !important; }
+  div.user-marker.user-marker-dam {
+    background-image: url("../../../../../images/thailand/marker/dam/default/s_15.png?v=1.1");
+    z-index: 1 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-yellow {
+      background-image: url("../../../../../images/thailand/marker/dam/yellow/s_15.png?v=1.1");
+      z-index: 2 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-green {
+      background-image: url("../../../../../images/thailand/marker/dam/green/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-blue {
+      background-image: url("../../../../../images/thailand/marker/dam/blue/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-red {
+      background-image: url("../../../../../images/thailand/marker/dam/red/s_15.png?v=1.1");
+      z-index: 5 !important; }
+    div.user-marker.user-marker-dam.user-marker-dam-min {
+      background-image: url("../../../../../images/thailand/marker/dam/min/s_15.png?v=1.1");
+      z-index: 6 !important; }
+  div.user-marker.user-marker-waterquality {
+    background-image: url("../../../../../images/thailand/marker/waterquality/default/s_15.png?v=1.1"); }
+    div.user-marker.user-marker-waterquality.user-marker-waterquality-green {
+      background-image: url("../../../../../images/thailand/marker/waterquality/green/s_15.png?v=1.1");
+      z-index: 3 !important; }
+    div.user-marker.user-marker-waterquality.user-marker-waterquality-red {
+      background-image: url("../../../../../images/thailand/marker/waterquality/red/s_15.png?v=1.1");
+      z-index: 4 !important; }
+    div.user-marker.user-marker-waterquality.user-marker-waterquality-gray {
+      background-image: url("../../../../../images/thailand/marker/waterquality/gray/s_15.png?v=1.1");
+      z-index: 2 !important; }
+  div.user-marker.user-marker-storm {
+    background-image: url("../../../../../images/thailand/marker/storm/storm_white_blue_32.png?v=1.1"); }
+  div.user-marker.user-marker-clock {
+    background-image: url("../../../../../images/thailand/marker/clock/clock_white_blue_32.png?v=1.1"); }
+  div.user-marker.user-marker-wave {
+    background-image: url("../../../../../images/thailand/marker/wave/default/s_32.png?v=1.1"); }
+    div.user-marker.user-marker-wave.user-marker-wave-red {
+      background-image: url("../../../../../images/thailand/marker/wave/red/s_15.png?v=1.1"); }
+  div.user-marker.user-marker-warning {
+    background-image: url("../../../../../images/thailand/marker/warning/warning_white_blue_32.png?v=1.1"); }
+
+div.user-icon, label.user-icon {
+  width: 32px;
+  height: 32px; }
+  div.user-icon.user-icon-rain, label.user-icon-rain.user-icon {
+    background-image: url("../../../../../images/thailand/marker/rain/default/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-waterlevel, label.user-icon-waterlevel.user-icon {
+    background-image: url("../../../../../images/thailand/marker/waterlevel/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-red, label.user-icon-waterlevel.user-icon-waterlevel-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/red/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-blue, label.user-icon-waterlevel.user-icon-waterlevel-blue.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/blue/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-green, label.user-icon-waterlevel.user-icon-waterlevel-green.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/green/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-yellow, label.user-icon-waterlevel.user-icon-waterlevel-yellow.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/yellow/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-gold, label.user-icon-waterlevel.user-icon-waterlevel-gold.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gold/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterlevel.user-icon-waterlevel-gray, label.user-icon-waterlevel.user-icon-waterlevel-gray.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterlevel/gray/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-dam, label.user-icon-dam.user-icon {
+    background-image: url("../../../../../images/thailand/marker/dam/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-yellow, label.user-icon-dam.user-icon-dam-yellow.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/yellow/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-green, label.user-icon-dam.user-icon-dam-green.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/green/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-blue, label.user-icon-dam.user-icon-dam-blue.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/blue/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-red, label.user-icon-dam.user-icon-dam-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/red/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-dam.user-icon-dam-min, label.user-icon-dam.user-icon-dam-min.user-icon {
+      background-image: url("../../../../../images/thailand/marker/dam/min/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-waterquality, label.user-icon-waterquality.user-icon {
+    background-image: url("../../../../../images/thailand/marker/waterquality/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterquality.user-icon-waterquality-green, label.user-icon-waterquality.user-icon-waterquality-green.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterquality/green/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-waterquality.user-icon-waterquality-red, label.user-icon-waterquality.user-icon-waterquality-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/waterquality/red/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-storm, label.user-icon-storm.user-icon {
+    background-image: url("../../../../../images/thailand/marker/storm/storm_white_blue_32.png?v=1.1"); }
+  div.user-icon.user-icon-clock, label.user-icon-clock.user-icon {
+    background-image: url("../../../../../images/thailand/marker/clock/clock_white_blue_32.png?v=1.1"); }
+  div.user-icon.user-icon-wave, label.user-icon-wave.user-icon {
+    background-image: url("../../../../../images/thailand/marker/wave/default/c_32.png?v=1.1"); }
+    div.user-icon.user-icon-wave.user-icon-wave-red, label.user-icon-wave.user-icon-wave-red.user-icon {
+      background-image: url("../../../../../images/thailand/marker/wave/red/c_32.png?v=1.1"); }
+  div.user-icon.user-icon-warning, label.user-icon-warning.user-icon {
+    background-image: url("../../../../../images/thailand/marker/warning/warning_white_blue_32.png?v=1.1"); }
+
+label.user-icon {
+  margin: 0;
+  padding-right: 3px;
+  background-repeat: no-repeat;
+  vertical-align: middle; }
+
+  table.dataTable thead > tr > th.sorting, table.dataTable thead > tr > th.sorting_asc, table.dataTable thead > tr > th.sorting_desc, table.dataTable thead > tr > td.sorting, table.dataTable thead > tr > td.sorting_asc, table.dataTable thead > tr > td.sorting_desc {
+    padding: 10px 18px;
+    font-family: Kanit;
+    font-weight: 300;
+    color : white;
+}

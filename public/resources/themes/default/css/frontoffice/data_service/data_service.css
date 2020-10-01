@@ -1,0 +1,37 @@
+.data_service-cart{
+    text-align: center;
+    position: fixed;
+    right: 0;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.125);
+    padding: 3px 5px;
+    border: 1px solid #e6e7e8;
+    width: 100px;
+}
+table.table-data_service i.btn{
+    font-family: FontAwesome;
+    font-style: normal;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+}
+i.btn-data_service-cart:before {
+    content: "\f07a";
+}
+i.btn-data_service-remove:before {
+    content: "\f00d";
+    color: red;
+}
+i.btn-data_service-edit:before {
+    content: '\f044';
+}
+table.table-count td:nth-child(1){
+    text-align: center;
+}
+.hide-native-select .btn-group,
+.hide-native-select .btn-group button{
+    width: 100%
+}
+#cart-table td:nth-child(6),
+#cart-table td:nth-child(7){
+    word-break: break-word;
+}

@@ -1,0 +1,22 @@
+[{
+    "station_id" : "1",
+    "station_date": "1 พฤศจิกายน 59",
+    "station_name" : "สำแล ",
+    "salinity" : "0.16",
+    "salinity_color" : "green"
+},
+{
+    "station_id" : "2",
+    "station_date": "1 พฤศจิกายน 59",
+    "station_name" : "ศิริราช ",
+    "salinity" : "2",
+    "salinity_color" : "yellow"
+},
+{
+    "station_id" : "3",
+    "station_date": "1 พฤศจิกายน 59",
+    "station_name" : "สะพานกรุงเทพ ",
+    "salinity" : "3",
+    "salinity_color" : "red"
+}
+]

@@ -1,0 +1,103 @@
+@CHARSET "ISO-8859-1";
+
+
+table.admin-datatables th {
+	text-align: center
+}
+
+table.admin-datatables th:nth-child(1) {
+	width: 5%;
+}
+
+table.admin-datatables th:nth-child(2),
+table.admin-datatables th:nth-child(3){
+	width: 30%;
+}
+
+table.admin-datatables th:nth-child(4){
+	width:15%;
+}
+
+
+
+table.admin-datatables td:nth-child(1),
+table.admin-datatables td:nth-child(4){
+    text-align: center;
+}
+
+table.admin-datatables td:nth-child(2),
+table.admin-datatables td:nth-child(3) {
+    text-align: left;
+}
+
+table.admin-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}
+
+table.admin-datatables i.btn-edit:before {
+	content: '\f044';
+}
+
+table.admin-datatables i.btn-users:before {
+    content: '\f0c0';
+}
+
+table.admin-datatables i.btn-delete:before {
+	content: '\f014';
+}
+
+table.admin-datatables i.btn-undelete:before {
+	content: '\f0e2';
+}
+
+a.dt-button {
+	font-size: 14px;
+}
+
+div.checkbox-list {
+	border: 1px solid #ccc;
+	max-height: 100px;
+	overflow: auto;
+}
+
+div.checkbox-list ul {
+	list-style-type: none;
+}
+
+div.checkbox-list li {
+	margin: 2px 0px 2px -20px;
+}
+
+div.checkbox-list input[type=checkbox] {
+	top: 2px;
+	position: relative;
+	margin: 4px 4px 0px 0px;
+}
+
+.btn-sync-ldap span:before {
+	font-family: FontAwesome;
+	font-style: normal;
+	content: '\f021';
+	padding-right: 4px;
+}
+
+.data-filters {
+	padding-bottom: 10px;
+}
+
+div.dlgAddUser-user {
+    max-height: 200px;
+    overflow: auto;
+}
+
+div.dataTables_wrapper div.dataTables_filter{
+  float: left;
+}
+
+div.dt-buttons {
+    float: right;
+}

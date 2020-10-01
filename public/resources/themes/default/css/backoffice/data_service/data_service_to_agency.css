@@ -1,0 +1,21 @@
+@CHARSET "ISO-8859-1";
+
+table{
+	text-align: center;
+}
+table th {
+	text-align: center
+}
+table.dsta-table td:nth-child(1) {
+	text-align: center;
+}
+
+table#table-info th:nth-child(3){
+	min-width: 125px;
+}
+table#table-info th:nth-child(4),
+table#table-info td:nth-child(4){
+	max-width: 300px;
+	min-width: 38px;
+	word-break: break-all;
+}

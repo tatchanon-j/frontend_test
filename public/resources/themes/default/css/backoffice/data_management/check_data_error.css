@@ -1,0 +1,24 @@
+@CHARSET "ISO-8859-1";
+
+
+table.admin-datatables th {
+	text-align: center
+}
+
+table.admin-datatables th:nth-child(1) {
+	width: 10px;
+}
+
+table.admin-datatables th:nth-child(2) {
+	width: auto;
+  text-align: center;
+}
+
+
+table.admin-datatables td:nth-child(1) {
+    text-align: center;
+}
+
+table.admin-datatables td {
+    text-align: left;
+}

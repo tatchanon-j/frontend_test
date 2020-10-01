@@ -1,0 +1,24 @@
+@CHARSET "ISO-8859-1";
+
+
+table.dsa-table th {
+	text-align: center
+}
+table.dsa-table th:nth-child(1){
+	width: 50px;
+}
+table.dsa-table th:nth-child(2),
+table.dsa-table th:nth-child(7){
+	width: 100px;
+}
+table.dsa-table th:nth-child(8){
+	width: 60px;
+}
+
+table.dsa-table td:nth-child(1),
+table.dsa-table td:nth-child(7) {
+    text-align: center;
+}
+table.dsa-table .radio{
+	display: block
+}

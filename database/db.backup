@@ -1,0 +1,4478 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.1
+-- Dumped by pg_dump version 9.5.1
+
+-- Started on 2016-05-30 05:39:35
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 7 (class 2615 OID 27887)
+-- Name: api; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA api;
+
+
+--
+-- TOC entry 1 (class 3079 OID 13223)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 3616 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = api, pg_catalog;
+
+--
+-- TOC entry 243 (class 1255 OID 27888)
+-- Name: notify_update_id(); Type: FUNCTION; Schema: api; Owner: -
+--
+
+CREATE FUNCTION notify_update_id() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$DECLARE
+update_id integer;
+return_new boolean;
+BEGIN
+	return_new = true;
+	IF (TG_OP = 'DELETE') THEN
+		update_id = OLD.id;
+		return_new = false;
+	ELSIF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE' ) THEN
+		update_id = NEW.id;
+	END IF;
+	
+	perform pg_notify('NHCAPI_DATA_UPDATE',TG_TABLE_SCHEMA || '.' || TG_TABLE_NAME || ',' || TG_OP || ',' || CAST(update_id AS text));
+
+	IF (return_new) THEN
+		return NEW;
+	ELSE
+		return OLD;
+	END IF;
+END;
+$$;
+
+
+--
+-- TOC entry 242 (class 1255 OID 27889)
+-- Name: notify_update_no_id(); Type: FUNCTION; Schema: api; Owner: -
+--
+
+CREATE FUNCTION notify_update_no_id() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$DECLARE
+return_new boolean;
+BEGIN
+	return_new = true;
+	
+	IF (TG_OP = 'DELETE') THEN
+		return_new = false;
+	END IF;
+	
+	perform pg_notify('NHCAPI_DATA_UPDATE',TG_TABLE_SCHEMA || '.' || TG_TABLE_NAME || ',' || TG_OP || ',0');
+
+	IF (return_new) THEN
+		return NEW;
+	ELSE
+		return OLD;
+	END IF;
+END;
+$$;
+
+
+--
+-- TOC entry 244 (class 1255 OID 27890)
+-- Name: sync_modified_at(); Type: FUNCTION; Schema: api; Owner: -
+--
+
+CREATE FUNCTION sync_modified_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  NEW.modified_at := NOW();
+
+  RETURN NEW;
+END;
+$$;
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 182 (class 1259 OID 27891)
+-- Name: access_log; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE access_log (
+    id bigint NOT NULL,
+    server_id integer,
+    session_id bigint,
+    agent_id integer,
+    user_id integer,
+    service_id integer,
+    access_time timestamp with time zone DEFAULT now() NOT NULL,
+    access_duration bigint,
+    host text,
+    client_ip inet,
+    request_url text,
+    request_body_size integer,
+    request_params json,
+    reply_size integer,
+    reply_code integer,
+    reply_reason text,
+    remark text
+);
+
+
+--
+-- TOC entry 183 (class 1259 OID 27898)
+-- Name: access_log_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE access_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3617 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: access_log_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE access_log_id_seq OWNED BY access_log.id;
+
+
+--
+-- TOC entry 184 (class 1259 OID 27900)
+-- Name: agent; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE agent (
+    user_id integer NOT NULL,
+    callback_url text,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    origin text,
+    secret_key bytea,
+    agent_type integer NOT NULL,
+    login_perm_service_id integer
+);
+
+
+--
+-- TOC entry 185 (class 1259 OID 27907)
+-- Name: agent_type; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE agent_type (
+    id integer NOT NULL,
+    name text,
+    description text
+);
+
+
+--
+-- TOC entry 186 (class 1259 OID 27913)
+-- Name: agent_type_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE agent_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3618 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: agent_type_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE agent_type_id_seq OWNED BY agent_type.id;
+
+
+--
+-- TOC entry 187 (class 1259 OID 27915)
+-- Name: version; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE version (
+    id integer NOT NULL,
+    name text,
+    description text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer
+);
+
+
+--
+-- TOC entry 188 (class 1259 OID 27923)
+-- Name: api_version_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE api_version_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3619 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: api_version_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE api_version_id_seq OWNED BY version.id;
+
+
+--
+-- TOC entry 189 (class 1259 OID 27925)
+-- Name: event_code; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE event_code (
+    id integer NOT NULL,
+    code text NOT NULL,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 191 (class 1259 OID 27939)
+-- Name: event_code_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE event_code_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3620 (class 0 OID 0)
+-- Dependencies: 191
+-- Name: event_code_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE event_code_id_seq OWNED BY event_code.id;
+
+
+--
+-- TOC entry 190 (class 1259 OID 27932)
+-- Name: event_code_tr; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE event_code_tr (
+    id integer NOT NULL,
+    event_id integer NOT NULL,
+    language_id integer NOT NULL,
+    description text,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 192 (class 1259 OID 27941)
+-- Name: event_code_tr_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE event_code_tr_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3621 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: event_code_tr_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE event_code_tr_id_seq OWNED BY event_code_tr.id;
+
+
+--
+-- TOC entry 193 (class 1259 OID 27943)
+-- Name: eventlog; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog (
+    id bigint NOT NULL,
+    channel_id integer NOT NULL,
+    category_id integer NOT NULL,
+    service_id integer,
+    agent_id integer,
+    user_id integer,
+    accesslog_id integer,
+    event_message text,
+    event_data json,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    event_id integer
+);
+
+
+--
+-- TOC entry 194 (class 1259 OID 27950)
+-- Name: eventlog_category; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_category (
+    id integer NOT NULL,
+    name text,
+    description text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    delated_by integer
+);
+
+
+--
+-- TOC entry 195 (class 1259 OID 27958)
+-- Name: eventlog_category_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_category_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3622 (class 0 OID 0)
+-- Dependencies: 195
+-- Name: eventlog_category_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_category_id_seq OWNED BY eventlog_category.id;
+
+
+--
+-- TOC entry 196 (class 1259 OID 27960)
+-- Name: eventlog_channel; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_channel (
+    id integer NOT NULL,
+    name text,
+    description text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    delated_by integer
+);
+
+
+--
+-- TOC entry 197 (class 1259 OID 27968)
+-- Name: eventlog_channel_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_channel_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3623 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: eventlog_channel_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_channel_id_seq OWNED BY eventlog_channel.id;
+
+
+--
+-- TOC entry 198 (class 1259 OID 27970)
+-- Name: eventlog_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3624 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: eventlog_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_id_seq OWNED BY eventlog.id;
+
+
+--
+-- TOC entry 199 (class 1259 OID 27972)
+-- Name: eventlog_sink; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_sink (
+    id integer NOT NULL,
+    description text,
+    channel_id integer,
+    category_id integer,
+    event_id integer,
+    service_id integer,
+    agent_id integer,
+    user_id integer,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    delated_by integer,
+    template_id integer,
+    language_id integer
+);
+
+
+--
+-- TOC entry 200 (class 1259 OID 27980)
+-- Name: eventlog_sink_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_sink_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3625 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: eventlog_sink_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_sink_id_seq OWNED BY eventlog_sink.id;
+
+
+--
+-- TOC entry 201 (class 1259 OID 27982)
+-- Name: eventlog_sink_method; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_sink_method (
+    id integer NOT NULL,
+    method text,
+    description text,
+    sink_params json,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    delated_by integer
+);
+
+
+--
+-- TOC entry 202 (class 1259 OID 27990)
+-- Name: eventlog_sink_method_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_sink_method_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3626 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: eventlog_sink_method_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_sink_method_id_seq OWNED BY eventlog_sink_method.id;
+
+
+--
+-- TOC entry 203 (class 1259 OID 27992)
+-- Name: eventlog_sink_queue; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_sink_queue (
+    id bigint NOT NULL,
+    sink_target_id integer NOT NULL,
+    message_subject text,
+    message_body text,
+    remark text,
+    eventlog_id bigint,
+    message_sha1 bytea,
+    retry_count integer DEFAULT 0 NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    tried_at timestamp with time zone,
+    sent_at timestamp with time zone,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    deleted_at timestamp with time zone,
+    sender_agent_id integer
+);
+
+
+--
+-- TOC entry 204 (class 1259 OID 28001)
+-- Name: eventlog_sink_queue_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_sink_queue_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3627 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: eventlog_sink_queue_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_sink_queue_id_seq OWNED BY eventlog_sink_queue.id;
+
+
+--
+-- TOC entry 205 (class 1259 OID 28003)
+-- Name: eventlog_sink_target; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_sink_target (
+    id integer NOT NULL,
+    sink_id integer NOT NULL,
+    sink_method_id integer NOT NULL,
+    target text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    delated_by integer
+);
+
+
+--
+-- TOC entry 206 (class 1259 OID 28011)
+-- Name: eventlog_sink_target_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_sink_target_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3628 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: eventlog_sink_target_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_sink_target_id_seq OWNED BY eventlog_sink_target.id;
+
+
+--
+-- TOC entry 207 (class 1259 OID 28013)
+-- Name: eventlog_sink_template; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_sink_template (
+    id integer NOT NULL,
+    name text NOT NULL,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 208 (class 1259 OID 28020)
+-- Name: eventlog_sink_template_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE eventlog_sink_template_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3629 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: eventlog_sink_template_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE eventlog_sink_template_id_seq OWNED BY eventlog_sink_template.id;
+
+
+--
+-- TOC entry 209 (class 1259 OID 28022)
+-- Name: eventlog_sink_template_tr; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE eventlog_sink_template_tr (
+    language_id integer NOT NULL,
+    template_id integer NOT NULL,
+    message_subject text,
+    message_body text,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 210 (class 1259 OID 28029)
+-- Name: language; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE language (
+    id integer NOT NULL,
+    code text,
+    description text,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer
+);
+
+
+--
+-- TOC entry 211 (class 1259 OID 28037)
+-- Name: language_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE language_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3630 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: language_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE language_id_seq OWNED BY language.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 28039)
+-- Name: perm_group; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE perm_group (
+    id integer NOT NULL,
+    realm_id integer NOT NULL,
+    category text DEFAULT ''::text NOT NULL,
+    name text,
+    description text,
+    active boolean DEFAULT true NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 213 (class 1259 OID 28049)
+-- Name: perm_group_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE perm_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3631 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: perm_group_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE perm_group_id_seq OWNED BY perm_group.id;
+
+
+--
+-- TOC entry 214 (class 1259 OID 28051)
+-- Name: perm_group_member; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE perm_group_member (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    user_id integer NOT NULL,
+    modified_at timestamp with time zone,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 215 (class 1259 OID 28054)
+-- Name: perm_group_member_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE perm_group_member_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3632 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: perm_group_member_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE perm_group_member_id_seq OWNED BY perm_group_member.id;
+
+
+--
+-- TOC entry 216 (class 1259 OID 28056)
+-- Name: perm_group_permission; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE perm_group_permission (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    service_id integer NOT NULL,
+    is_allow boolean DEFAULT true NOT NULL,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 217 (class 1259 OID 28061)
+-- Name: perm_group_permission_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE perm_group_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3633 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: perm_group_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE perm_group_permission_id_seq OWNED BY perm_group_permission.id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 28063)
+-- Name: perm_group_subgroup; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE perm_group_subgroup (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    subgroup_id integer NOT NULL,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 219 (class 1259 OID 28067)
+-- Name: perm_group_subgroup_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE perm_group_subgroup_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3634 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: perm_group_subgroup_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE perm_group_subgroup_id_seq OWNED BY perm_group_subgroup.id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 28069)
+-- Name: perm_realm; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE perm_realm (
+    id integer NOT NULL,
+    name text,
+    description text,
+    admin_group integer,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    config json
+);
+
+
+--
+-- TOC entry 221 (class 1259 OID 28077)
+-- Name: perm_realm_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE perm_realm_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3635 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: perm_realm_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE perm_realm_id_seq OWNED BY perm_realm.id;
+
+
+--
+-- TOC entry 222 (class 1259 OID 28079)
+-- Name: service_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE service_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 223 (class 1259 OID 28081)
+-- Name: service; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE service (
+    id integer DEFAULT nextval('service_id_seq'::regclass) NOT NULL,
+    version integer NOT NULL,
+    module_id integer NOT NULL,
+    name text NOT NULL,
+    method integer NOT NULL,
+    url text,
+    description text,
+    auth_type integer NOT NULL,
+    endpoint_id integer,
+    created_at timestamp with time zone DEFAULT now(),
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer
+);
+
+
+--
+-- TOC entry 224 (class 1259 OID 28090)
+-- Name: service_auth_type_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE service_auth_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 225 (class 1259 OID 28092)
+-- Name: service_auth_type; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE service_auth_type (
+    id integer DEFAULT nextval('service_auth_type_id_seq'::regclass) NOT NULL,
+    name text NOT NULL,
+    description text
+);
+
+
+--
+-- TOC entry 226 (class 1259 OID 28099)
+-- Name: service_endpoint; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE service_endpoint (
+    id integer NOT NULL,
+    endpoint_type integer NOT NULL,
+    service_agent_id integer NOT NULL,
+    server text,
+    refered_endpoint integer,
+    description text,
+    created_at timestamp with time zone DEFAULT now(),
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer
+);
+
+
+--
+-- TOC entry 227 (class 1259 OID 28107)
+-- Name: service_endpoint_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE service_endpoint_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3636 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: service_endpoint_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE service_endpoint_id_seq OWNED BY service_endpoint.id;
+
+
+--
+-- TOC entry 228 (class 1259 OID 28109)
+-- Name: service_endpoint_type_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE service_endpoint_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 229 (class 1259 OID 28111)
+-- Name: service_endpoint_type; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE service_endpoint_type (
+    id integer DEFAULT nextval('service_endpoint_type_id_seq'::regclass) NOT NULL,
+    name text NOT NULL,
+    description text
+);
+
+
+--
+-- TOC entry 230 (class 1259 OID 28118)
+-- Name: service_method_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE service_method_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 231 (class 1259 OID 28120)
+-- Name: service_method; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE service_method (
+    id integer DEFAULT nextval('service_method_id_seq'::regclass) NOT NULL,
+    method text NOT NULL,
+    description text
+);
+
+
+--
+-- TOC entry 232 (class 1259 OID 28127)
+-- Name: service_module; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE service_module (
+    id integer NOT NULL,
+    name text NOT NULL,
+    description text,
+    created_at timestamp with time zone DEFAULT now(),
+    created_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer
+);
+
+
+--
+-- TOC entry 233 (class 1259 OID 28135)
+-- Name: service_module_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE service_module_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3637 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: service_module_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE service_module_id_seq OWNED BY service_module.id;
+
+
+--
+-- TOC entry 234 (class 1259 OID 28137)
+-- Name: session; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE session (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    agent_id integer,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    deleted_at timestamp with time zone
+);
+
+
+--
+-- TOC entry 235 (class 1259 OID 28141)
+-- Name: session_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE session_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3638 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: session_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE session_id_seq OWNED BY session.id;
+
+
+--
+-- TOC entry 236 (class 1259 OID 28143)
+-- Name: setting; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE setting (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    is_public boolean DEFAULT false NOT NULL,
+    name text NOT NULL,
+    value text,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 237 (class 1259 OID 28151)
+-- Name: setting_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE setting_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3639 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: setting_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE setting_id_seq OWNED BY setting.id;
+
+
+--
+-- TOC entry 238 (class 1259 OID 28153)
+-- Name: user; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE "user" (
+    id integer NOT NULL,
+    account text NOT NULL,
+    email text,
+    full_name text,
+    user_type integer NOT NULL,
+    password text,
+    realm_id integer,
+    active boolean DEFAULT false NOT NULL,
+    account_expired timestamp with time zone,
+    password_lifespan_days integer,
+    password_modified_at timestamp with time zone DEFAULT now(),
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by integer,
+    deleted_at timestamp with time zone,
+    deleted_by integer,
+    modified_at timestamp with time zone DEFAULT now() NOT NULL,
+    modified_by integer
+);
+
+
+--
+-- TOC entry 239 (class 1259 OID 28163)
+-- Name: user_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3640 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE user_id_seq OWNED BY "user".id;
+
+
+--
+-- TOC entry 240 (class 1259 OID 28165)
+-- Name: user_type; Type: TABLE; Schema: api; Owner: -
+--
+
+CREATE TABLE user_type (
+    id integer NOT NULL,
+    name text NOT NULL,
+    description text
+);
+
+
+--
+-- TOC entry 241 (class 1259 OID 28171)
+-- Name: user_type_id_seq; Type: SEQUENCE; Schema: api; Owner: -
+--
+
+CREATE SEQUENCE user_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 3641 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: user_type_id_seq; Type: SEQUENCE OWNED BY; Schema: api; Owner: -
+--
+
+ALTER SEQUENCE user_type_id_seq OWNED BY user_type.id;
+
+
+--
+-- TOC entry 3055 (class 2604 OID 28173)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY access_log ALTER COLUMN id SET DEFAULT nextval('access_log_id_seq'::regclass);
+
+
+--
+-- TOC entry 3057 (class 2604 OID 28174)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY agent_type ALTER COLUMN id SET DEFAULT nextval('agent_type_id_seq'::regclass);
+
+
+--
+-- TOC entry 3062 (class 2604 OID 28175)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code ALTER COLUMN id SET DEFAULT nextval('event_code_id_seq'::regclass);
+
+
+--
+-- TOC entry 3064 (class 2604 OID 28176)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code_tr ALTER COLUMN id SET DEFAULT nextval('event_code_tr_id_seq'::regclass);
+
+
+--
+-- TOC entry 3066 (class 2604 OID 28177)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog ALTER COLUMN id SET DEFAULT nextval('eventlog_id_seq'::regclass);
+
+
+--
+-- TOC entry 3069 (class 2604 OID 28178)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_category ALTER COLUMN id SET DEFAULT nextval('eventlog_category_id_seq'::regclass);
+
+
+--
+-- TOC entry 3072 (class 2604 OID 28179)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_channel ALTER COLUMN id SET DEFAULT nextval('eventlog_channel_id_seq'::regclass);
+
+
+--
+-- TOC entry 3075 (class 2604 OID 28180)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink ALTER COLUMN id SET DEFAULT nextval('eventlog_sink_id_seq'::regclass);
+
+
+--
+-- TOC entry 3078 (class 2604 OID 28181)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_method ALTER COLUMN id SET DEFAULT nextval('eventlog_sink_method_id_seq'::regclass);
+
+
+--
+-- TOC entry 3082 (class 2604 OID 28182)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_queue ALTER COLUMN id SET DEFAULT nextval('eventlog_sink_queue_id_seq'::regclass);
+
+
+--
+-- TOC entry 3085 (class 2604 OID 28183)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target ALTER COLUMN id SET DEFAULT nextval('eventlog_sink_target_id_seq'::regclass);
+
+
+--
+-- TOC entry 3087 (class 2604 OID 28184)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template ALTER COLUMN id SET DEFAULT nextval('eventlog_sink_template_id_seq'::regclass);
+
+
+--
+-- TOC entry 3091 (class 2604 OID 28185)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY language ALTER COLUMN id SET DEFAULT nextval('language_id_seq'::regclass);
+
+
+--
+-- TOC entry 3096 (class 2604 OID 28186)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group ALTER COLUMN id SET DEFAULT nextval('perm_group_id_seq'::regclass);
+
+
+--
+-- TOC entry 3097 (class 2604 OID 28187)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_member ALTER COLUMN id SET DEFAULT nextval('perm_group_member_id_seq'::regclass);
+
+
+--
+-- TOC entry 3100 (class 2604 OID 28188)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_permission ALTER COLUMN id SET DEFAULT nextval('perm_group_permission_id_seq'::regclass);
+
+
+--
+-- TOC entry 3102 (class 2604 OID 28189)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_subgroup ALTER COLUMN id SET DEFAULT nextval('perm_group_subgroup_id_seq'::regclass);
+
+
+--
+-- TOC entry 3105 (class 2604 OID 28190)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_realm ALTER COLUMN id SET DEFAULT nextval('perm_realm_id_seq'::regclass);
+
+
+--
+-- TOC entry 3112 (class 2604 OID 28191)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint ALTER COLUMN id SET DEFAULT nextval('service_endpoint_id_seq'::regclass);
+
+
+--
+-- TOC entry 3117 (class 2604 OID 28192)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_module ALTER COLUMN id SET DEFAULT nextval('service_module_id_seq'::regclass);
+
+
+--
+-- TOC entry 3119 (class 2604 OID 28193)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY session ALTER COLUMN id SET DEFAULT nextval('session_id_seq'::regclass);
+
+
+--
+-- TOC entry 3122 (class 2604 OID 28194)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY setting ALTER COLUMN id SET DEFAULT nextval('setting_id_seq'::regclass);
+
+
+--
+-- TOC entry 3127 (class 2604 OID 28195)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user" ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regclass);
+
+
+--
+-- TOC entry 3128 (class 2604 OID 28196)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY user_type ALTER COLUMN id SET DEFAULT nextval('user_type_id_seq'::regclass);
+
+
+--
+-- TOC entry 3060 (class 2604 OID 28197)
+-- Name: id; Type: DEFAULT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY version ALTER COLUMN id SET DEFAULT nextval('api_version_id_seq'::regclass);
+
+
+--
+-- TOC entry 3549 (class 0 OID 27891)
+-- Dependencies: 182
+-- Data for Name: access_log; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY access_log (id, server_id, session_id, agent_id, user_id, service_id, access_time, access_duration, host, client_ip, request_url, request_body_size, request_params, reply_size, reply_code, reply_reason, remark) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3642 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: access_log_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('access_log_id_seq', 2189, true);
+
+
+--
+-- TOC entry 3551 (class 0 OID 27900)
+-- Dependencies: 184
+-- Data for Name: agent; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY agent (user_id, callback_url, modified_at, modified_by, origin, secret_key, agent_type, login_perm_service_id) FROM stdin;
+2	\N	2016-04-01 02:48:59.080241+07	\N	\N	\\xa2b9fa34882312ab788211de3e49bf71d3b215172934879a1b2c56571192a51f	1	\N
+3	\N	2016-04-01 03:01:34.374982+07	\N	\N	\\x7912ac54dd694247543ff3456dc56875eba3245713985265cc361bd3548e1f32	1	\N
+1	\N	2016-04-14 01:06:03.187413+07	\N	\N	\\xa2b9fa34882312ab788211de3e49bf71d3b215172934879a1b2c56571192a51f	1	\N
+6	http://haii-system-report.test/apicb	2016-04-21 03:16:33.762714+07	\N	http://haii-system-report.test	\\xa21783549211be3479086438c34e551678913620a8b37f966351b7d63e901f86	2	3
+9	\N	2016-05-07 01:12:17.585598+07	\N	\N	\\xa2b9fa34882312ab788211de3e49bf71d3b215172934879a1b2c56571192a51f	1	\N
+\.
+
+
+--
+-- TOC entry 3552 (class 0 OID 27907)
+-- Dependencies: 185
+-- Data for Name: agent_type; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY agent_type (id, name, description) FROM stdin;
+1	service	Service Provider Agent
+3	data_import	Data Importer Agent
+2	www	WWW Owner Agent
+\.
+
+
+--
+-- TOC entry 3643 (class 0 OID 0)
+-- Dependencies: 186
+-- Name: agent_type_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('agent_type_id_seq', 3, true);
+
+
+--
+-- TOC entry 3644 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: api_version_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('api_version_id_seq', 1, true);
+
+
+--
+-- TOC entry 3556 (class 0 OID 27925)
+-- Dependencies: 189
+-- Data for Name: event_code; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY event_code (id, code, modified_at, modified_by) FROM stdin;
+1	E_GENERIC	2016-04-01 12:03:33.168534+07	\N
+2	I_SERVICE_START	2016-04-01 12:03:39.285004+07	\N
+3	I_SERVICE_STOP	2016-04-01 12:03:44.96522+07	\N
+4	E_SERVICE_ERROR	2016-04-01 12:03:54.556922+07	\N
+\.
+
+
+--
+-- TOC entry 3645 (class 0 OID 0)
+-- Dependencies: 191
+-- Name: event_code_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('event_code_id_seq', 4, true);
+
+
+--
+-- TOC entry 3557 (class 0 OID 27932)
+-- Dependencies: 190
+-- Data for Name: event_code_tr; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY event_code_tr (id, event_id, language_id, description, modified_at, modified_by) FROM stdin;
+1	1	1	เกิดข้อผิดผลาดจากการเขียนโปรแกรม	2016-04-01 12:06:53.020739+07	\N
+2	2	1	Service agent เริ่มทำงาน	2016-04-01 12:11:14.896043+07	\N
+3	3	1	Service agent หยุดทำงาน	2016-04-01 12:11:26.750126+07	\N
+4	4	1	เกิดความผิดผลาดในการทำงานของ Service agent 	2016-04-01 12:12:23.584172+07	\N
+5	2	2	Service agent started	2016-04-01 12:13:05.521407+07	\N
+6	3	2	Service agent stopped	2016-04-01 12:13:21.307775+07	\N
+7	4	2	Error from service agent	2016-04-01 12:13:44.624118+07	\N
+8	1	2	Generic programming logic error	2016-04-01 12:15:27.045569+07	\N
+\.
+
+
+--
+-- TOC entry 3646 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: event_code_tr_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('event_code_tr_id_seq', 8, true);
+
+
+--
+-- TOC entry 3560 (class 0 OID 27943)
+-- Dependencies: 193
+-- Data for Name: eventlog; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog (id, channel_id, category_id, service_id, agent_id, user_id, accesslog_id, event_message, event_data, created_at, event_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3561 (class 0 OID 27950)
+-- Dependencies: 194
+-- Data for Name: eventlog_category; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_category (id, name, description, created_at, created_by, modified_at, modified_by, deleted_at, delated_by) FROM stdin;
+1	SUCCESS	Operation completed successfully	2016-01-22 15:14:15.865195+07	1	2016-01-22 15:18:42.49738+07	1	\N	\N
+2	AUDIT_SUCCESS	Success Audit event	2016-01-22 15:15:26.970782+07	1	2016-01-22 15:18:43.383988+07	1	\N	\N
+3	AUDIT_FAILURE	Failure Audit event	2016-01-22 15:15:51.669406+07	1	2016-01-22 15:18:44.114536+07	1	\N	\N
+4	ERROR	Error event	2016-01-22 15:16:26.236274+07	1	2016-01-22 15:18:44.782471+07	1	\N	\N
+5	INFORMATION	Information event	2016-01-22 15:16:48.876734+07	1	2016-01-22 15:18:45.434985+07	1	\N	\N
+6	WARNING	Warning event	2016-01-22 15:18:25.171061+07	1	2016-01-22 15:18:49.606106+07	1	\N	\N
+\.
+
+
+--
+-- TOC entry 3647 (class 0 OID 0)
+-- Dependencies: 195
+-- Name: eventlog_category_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_category_id_seq', 6, true);
+
+
+--
+-- TOC entry 3563 (class 0 OID 27960)
+-- Dependencies: 196
+-- Data for Name: eventlog_channel; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_channel (id, name, description, created_at, created_by, modified_at, modified_by, deleted_at, delated_by) FROM stdin;
+1	SYSTEM	System message	2016-01-22 15:58:29.675223+07	\N	2016-01-22 15:58:29.675223+07	\N	\N	\N
+2	SERVICE	Service message	2016-01-22 15:58:46.59165+07	\N	2016-01-22 15:58:46.59165+07	\N	\N	\N
+3	AUTH	Authorize and authentication message	2016-01-22 15:59:51.605778+07	\N	2016-01-22 15:59:51.605778+07	\N	\N	\N
+4	DATA_IMPORT	Data import message	2016-01-22 16:00:36.20069+07	\N	2016-01-22 16:00:36.20069+07	\N	\N	\N
+5	MISC	Miscellaneous message	2016-03-03 04:42:53.74514+07	\N	2016-03-03 04:42:53.74514+07	\N	\N	\N
+\.
+
+
+--
+-- TOC entry 3648 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: eventlog_channel_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_channel_id_seq', 5, true);
+
+
+--
+-- TOC entry 3649 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: eventlog_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_id_seq', 367, true);
+
+
+--
+-- TOC entry 3566 (class 0 OID 27972)
+-- Dependencies: 199
+-- Data for Name: eventlog_sink; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_sink (id, description, channel_id, category_id, event_id, service_id, agent_id, user_id, created_at, created_by, modified_at, modified_by, deleted_at, delated_by, template_id, language_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3650 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: eventlog_sink_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_sink_id_seq', 1, false);
+
+
+--
+-- TOC entry 3568 (class 0 OID 27982)
+-- Dependencies: 201
+-- Data for Name: eventlog_sink_method; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_sink_method (id, method, description, sink_params, created_at, created_by, modified_at, modified_by, deleted_at, delated_by) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3651 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: eventlog_sink_method_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_sink_method_id_seq', 1, false);
+
+
+--
+-- TOC entry 3570 (class 0 OID 27992)
+-- Dependencies: 203
+-- Data for Name: eventlog_sink_queue; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_sink_queue (id, sink_target_id, message_subject, message_body, remark, eventlog_id, message_sha1, retry_count, created_at, tried_at, sent_at, modified_at, deleted_at, sender_agent_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3652 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: eventlog_sink_queue_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_sink_queue_id_seq', 1, false);
+
+
+--
+-- TOC entry 3572 (class 0 OID 28003)
+-- Dependencies: 205
+-- Data for Name: eventlog_sink_target; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_sink_target (id, sink_id, sink_method_id, target, created_at, created_by, modified_at, modified_by, deleted_at, delated_by) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3653 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: eventlog_sink_target_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_sink_target_id_seq', 1, false);
+
+
+--
+-- TOC entry 3574 (class 0 OID 28013)
+-- Dependencies: 207
+-- Data for Name: eventlog_sink_template; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_sink_template (id, name, modified_at, modified_by) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3654 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: eventlog_sink_template_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('eventlog_sink_template_id_seq', 1, false);
+
+
+--
+-- TOC entry 3576 (class 0 OID 28022)
+-- Dependencies: 209
+-- Data for Name: eventlog_sink_template_tr; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY eventlog_sink_template_tr (language_id, template_id, message_subject, message_body, modified_at, modified_by) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3577 (class 0 OID 28029)
+-- Dependencies: 210
+-- Data for Name: language; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY language (id, code, description, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by) FROM stdin;
+3	jp	Japanese	2016-04-01 12:04:49.919484+07	\N	2016-04-01 12:04:49.919484+07	\N	\N	\N
+1	th	Thai	2016-04-01 12:04:25.527857+07	\N	2016-04-01 12:05:00.042569+07	\N	\N	\N
+2	en	English	2016-04-01 12:04:40.635654+07	\N	2016-04-01 12:05:04.894185+07	\N	\N	\N
+\.
+
+
+--
+-- TOC entry 3655 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: language_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('language_id_seq', 3, true);
+
+
+--
+-- TOC entry 3579 (class 0 OID 28039)
+-- Dependencies: 212
+-- Data for Name: perm_group; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY perm_group (id, realm_id, category, name, description, active, created_at, created_by, deleted_at, deleted_by, modified_at, modified_by) FROM stdin;
+1	1		www-agent	WWW Site	t	2016-04-04 03:08:31.46481+07	\N	\N	\N	2016-04-24 23:16:26.221794+07	\N
+2	1		www-user	WWW User	t	2016-04-04 03:09:10.740846+07	\N	\N	\N	2016-04-24 23:16:28.853866+07	\N
+4	2	srv	export	Export ข้อมูล	t	2016-04-19 02:30:20.462318+07	\N	\N	\N	2016-04-25 16:29:43.83584+07	\N
+5	2	srv	import	Import ข้อมูล	t	2016-04-19 02:31:41.064992+07	\N	\N	\N	2016-04-25 16:29:57.795146+07	\N
+6	2	srv	support	สนับสนุนการจัดทำรายงาน	t	2016-04-19 02:35:11.626328+07	\N	\N	\N	2016-04-25 16:30:30.510184+07	\N
+7	2	srv	autoreport	รายงานอัตโนมัติ	t	2016-04-19 02:38:03.50913+07	\N	\N	\N	2016-04-25 16:31:01.685484+07	\N
+20	2	user	test7	te	t	2016-04-30 02:17:06.319454+07	7	2016-04-30 02:22:26.272014+07	7	2016-04-30 02:22:26.272014+07	7
+19	2	user	test6	te	t	2016-04-30 02:16:20.002154+07	7	2016-04-30 02:27:58.109676+07	7	2016-04-30 02:27:58.109676+07	7
+13	2	user	test2	Test Group #2	f	2016-04-27 03:17:16.208648+07	7	\N	\N	2016-04-30 02:30:23.484482+07	7
+18	2	user	test5	Test Group #5	t	2016-04-30 02:15:21.354058+07	7	2016-04-30 02:38:21.934657+07	7	2016-04-30 02:38:21.934657+07	7
+21	2	user	test8	Test Group	t	2016-04-30 02:18:53.729635+07	7	2016-04-30 02:20:52.440241+07	7	2016-04-30 02:20:52.440241+07	7
+10	2	user	login	HAII System Report Loginable User	t	2016-04-22 01:12:40.520972+07	\N	\N	\N	2016-04-30 22:30:23.285318+07	\N
+14	2	user	test 3	Test Group #3	f	2016-04-27 03:25:08.51557+07	7	\N	\N	2016-04-30 23:09:58.718968+07	7
+17	2	user	test3	Test 3	f	2016-04-27 03:52:39.378065+07	7	\N	\N	2016-04-30 23:10:02.316565+07	7
+15	2	user	test4	Test Group #4.1	f	2016-04-27 03:26:54.069005+07	7	\N	\N	2016-04-30 23:10:06.008372+07	7
+3	2	user	admin	ผู้ดูแลระบบ	t	2016-04-16 14:27:06.699579+07	\N	\N	\N	2016-04-30 23:14:33.705565+07	7
+9	2	user	client	ผู้ใช้งานทั่วไป	t	2016-04-22 00:43:38.519762+07	\N	\N	\N	2016-04-30 23:14:50.591939+07	7
+8	2	user	operator	เจ้าหน้าที่ผู้ปฏิบัติการ	t	2016-04-19 21:26:38.801387+07	\N	\N	\N	2016-04-30 23:17:08.045486+07	7
+11	2	srv	admin	บริหารจัดการสิทธิ์	t	2016-04-22 01:55:44.802495+07	\N	\N	\N	2016-05-02 05:01:36.865751+07	\N
+12	2	user	test	Test Group	t	2016-04-27 03:14:09.559864+07	7	\N	\N	2016-05-12 04:01:00.564707+07	7
+\.
+
+
+--
+-- TOC entry 3656 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: perm_group_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('perm_group_id_seq', 21, true);
+
+
+--
+-- TOC entry 3581 (class 0 OID 28051)
+-- Dependencies: 214
+-- Data for Name: perm_group_member; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY perm_group_member (id, group_id, user_id, modified_at, modified_by) FROM stdin;
+1	1	6	2016-05-07 01:16:36.192746+07	1
+4	3	6	2016-05-07 01:16:40.041389+07	1
+2	8	8	2016-05-07 01:16:41.784282+07	1
+6	10	4	2016-05-07 01:16:44.096444+07	1
+8	10	7	2016-05-11 01:52:29.51627+07	7
+9	3	7	2016-05-11 03:12:24.524347+07	7
+11	10	5	2016-05-11 03:13:34.35836+07	7
+12	9	5	2016-05-11 03:13:34.35836+07	7
+19	10	8	2016-05-13 00:53:12.502213+07	7
+20	8	15	2016-05-13 00:54:09.747102+07	7
+21	10	15	2016-05-13 00:54:09.747102+07	7
+22	10	16	2016-05-13 00:55:16.676658+07	7
+23	9	16	2016-05-13 00:55:16.676658+07	7
+24	10	17	2016-05-13 00:55:16.697422+07	7
+25	9	17	2016-05-13 00:55:16.697422+07	7
+26	10	18	2016-05-13 00:57:18.898036+07	7
+27	9	18	2016-05-13 00:57:18.898036+07	7
+28	10	19	2016-05-13 01:00:20.914074+07	7
+29	9	19	2016-05-13 01:00:20.914074+07	7
+30	10	25	2016-05-13 01:00:43.526605+07	7
+31	8	25	2016-05-13 01:00:43.526605+07	7
+32	10	26	2016-05-13 01:01:46.171968+07	7
+33	8	26	2016-05-13 01:01:46.171968+07	7
+34	10	27	2016-05-13 01:07:02.103346+07	7
+35	8	27	2016-05-13 01:07:02.103346+07	7
+36	10	28	2016-05-13 01:07:39.100348+07	7
+37	12	28	2016-05-13 01:08:16.551487+07	7
+38	10	29	2016-05-13 01:09:42.295368+07	7
+39	12	29	2016-05-13 01:09:42.295368+07	7
+40	10	30	2016-05-13 01:09:59.264476+07	7
+41	10	32	2016-05-13 01:12:00.423189+07	7
+42	12	33	2016-05-13 01:16:47.649753+07	7
+43	10	33	2016-05-13 01:16:47.649753+07	7
+44	10	34	2016-05-13 01:22:00.15942+07	7
+45	12	34	2016-05-13 01:22:00.15942+07	7
+46	12	35	2016-05-13 01:22:00.184295+07	7
+47	10	35	2016-05-13 01:22:00.184295+07	7
+\.
+
+
+--
+-- TOC entry 3657 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: perm_group_member_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('perm_group_member_id_seq', 47, true);
+
+
+--
+-- TOC entry 3583 (class 0 OID 28056)
+-- Dependencies: 216
+-- Data for Name: perm_group_permission; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY perm_group_permission (id, group_id, service_id, is_allow, modified_at, modified_by) FROM stdin;
+1	2	1	t	2016-05-07 02:20:01.636151+07	\N
+2	2	2	t	2016-05-07 02:20:03.165934+07	\N
+3	2	4	t	2016-05-07 02:20:04.53181+07	\N
+4	10	3	t	2016-05-07 02:20:05.867738+07	\N
+5	11	5	t	2016-05-07 02:20:07.476137+07	\N
+6	11	6	t	2016-05-07 02:20:08.703963+07	\N
+7	11	7	t	2016-05-07 02:20:10.027987+07	\N
+8	11	8	t	2016-05-07 02:20:11.47109+07	\N
+9	11	9	t	2016-05-07 02:20:13.123942+07	\N
+10	11	10	t	2016-05-07 02:20:14.568578+07	\N
+11	11	11	t	2016-05-07 02:20:16.705941+07	\N
+12	11	12	t	2016-05-07 02:20:18.865967+07	\N
+13	7	14	t	2016-05-28 17:28:21.38596+07	\N
+\.
+
+
+--
+-- TOC entry 3658 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: perm_group_permission_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('perm_group_permission_id_seq', 13, true);
+
+
+--
+-- TOC entry 3585 (class 0 OID 28063)
+-- Dependencies: 218
+-- Data for Name: perm_group_subgroup; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY perm_group_subgroup (id, group_id, subgroup_id, modified_at, modified_by) FROM stdin;
+1	1	2	2016-04-19 02:38:29.52321+07	\N
+2	8	10	2016-04-22 01:18:57.669937+07	\N
+3	9	10	2016-04-22 01:19:03.541865+07	\N
+4	3	8	2016-04-22 01:22:59.267653+07	\N
+5	8	4	2016-04-22 01:25:16.016455+07	\N
+6	8	5	2016-04-22 01:25:19.978341+07	\N
+7	8	6	2016-04-22 01:25:26.808409+07	\N
+8	8	7	2016-04-22 01:25:30.586571+07	\N
+9	9	4	2016-04-22 01:27:45.633279+07	\N
+10	3	11	2016-04-22 01:56:29.328416+07	\N
+11	12	7	2016-04-29 04:09:01.291206+07	7
+12	15	4	2016-04-30 02:40:29.783204+07	7
+13	15	5	2016-04-30 02:40:29.783204+07	7
+14	17	4	2016-04-30 21:16:31.750512+07	7
+15	17	5	2016-04-30 21:16:31.750512+07	7
+16	10	2	2016-04-22 01:19:14.413588+07	7
+17	3	5	2016-04-30 23:14:33.705565+07	7
+18	3	7	2016-04-30 23:14:33.705565+07	7
+19	3	6	2016-04-30 23:14:33.705565+07	7
+20	3	4	2016-04-30 23:14:33.705565+07	7
+\.
+
+
+--
+-- TOC entry 3659 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: perm_group_subgroup_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('perm_group_subgroup_id_seq', 20, true);
+
+
+--
+-- TOC entry 3587 (class 0 OID 28069)
+-- Dependencies: 220
+-- Data for Name: perm_realm; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY perm_realm (id, name, description, admin_group, created_at, created_by, deleted_at, deleted_by, modified_at, modified_by, config) FROM stdin;
+1	system	System Realm	\N	2016-04-23 02:04:13.63283+07	\N	\N	\N	2016-05-02 06:23:09.08251+07	\N	\N
+2	haii-system-report	HAII System Report	2	2016-04-23 02:04:33.974513+07	\N	\N	\N	2016-05-02 06:45:18.189429+07	\N	{"ldap_server":"192.168.12.10:389","ldap_dn":"ou=corporate,dc=haii,dc=or,dc=th","ldap_auth_uid":"uid=%s","ldap_admin_user":"","ldap_admin_password":""}
+\.
+
+
+--
+-- TOC entry 3660 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: perm_realm_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('perm_realm_id_seq', 2, true);
+
+
+--
+-- TOC entry 3590 (class 0 OID 28081)
+-- Dependencies: 223
+-- Data for Name: service; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY service (id, version, module_id, name, method, url, description, auth_type, endpoint_id, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by) FROM stdin;
+4	1	1	login	2	\N	\N	2	\N	2016-04-13 23:40:08.005545+07	\N	2016-04-13 23:40:08.005545+07	\N	\N	\N
+3	1	2	login-haii-system-report	6	\N	\N	1	\N	2016-04-04 03:18:01.242288+07	\N	2016-04-16 14:30:40.267191+07	\N	\N	\N
+1	1	1	account-info	1	\N	\N	2	\N	2016-04-04 02:41:49.466542+07	\N	2016-04-19 20:40:46.079749+07	\N	\N	\N
+2	1	1	logout	2	\N	\N	2	\N	2016-04-04 02:42:24.308311+07	\N	2016-04-21 16:20:02.573717+07	\N	\N	\N
+5	1	3	group	1	{realm_id}/group/{id	\N	1	\N	2016-04-23 15:27:37.037708+07	\N	2016-04-29 23:51:18.375601+07	\N	\N	\N
+6	1	3	group	2	{realm_id}/group/{id}	\N	1	\N	2016-04-27 00:33:15.855781+07	\N	2016-04-29 23:51:23.860606+07	\N	\N	\N
+7	1	3	group	3	{realm_id}/group/{id}	\N	1	\N	2016-04-27 00:33:46.567958+07	\N	2016-04-29 23:51:31.044851+07	\N	\N	\N
+8	1	3	group	5	{realm_id}/group/{id}	\N	1	\N	2016-04-27 00:33:58.805784+07	\N	2016-04-29 23:51:37.740426+07	\N	\N	\N
+9	1	3	user	1	{realm_id}/user/{id}	\N	1	\N	2016-04-28 01:42:38.377099+07	\N	2016-04-29 23:51:42.668447+07	\N	\N	\N
+10	1	3	user	2	{realm_id}/user/{id}	\N	1	\N	2016-04-28 01:43:29.056482+07	\N	2016-04-29 23:51:48.364319+07	\N	\N	\N
+11	1	3	user	3	{realm_id}/user/{id}	\N	1	\N	2016-04-28 01:42:57.424633+07	\N	2016-04-29 23:51:54.236439+07	\N	\N	\N
+12	1	3	user-ldap	1	{realm_id}/user-ldap	\N	1	\N	2016-05-02 05:00:18.23764+07	\N	2016-05-02 05:01:04.133677+07	\N	\N	\N
+14	1	4	autoreport/data	1	autoreport/data/{id}	\N	1	\N	2016-05-28 17:22:43.728635+07	\N	2016-05-28 17:22:43.728635+07	\N	\N	\N
+\.
+
+
+--
+-- TOC entry 3592 (class 0 OID 28092)
+-- Dependencies: 225
+-- Data for Name: service_auth_type; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY service_auth_type (id, name, description) FROM stdin;
+2	NOAUTH	No authentication or authorization is required. 
+1	STD	Require both authentication and authorization to access the service
+4	DISABLED	Service is disabled. The athorized user will get 403 "Unauthorized"
+3	ALLUSER	Only authentication is  required, any valid user is allow to access the service
+\.
+
+
+--
+-- TOC entry 3661 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: service_auth_type_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('service_auth_type_id_seq', 1, false);
+
+
+--
+-- TOC entry 3593 (class 0 OID 28099)
+-- Dependencies: 226
+-- Data for Name: service_endpoint; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY service_endpoint (id, endpoint_type, service_agent_id, server, refered_endpoint, description, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3662 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: service_endpoint_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('service_endpoint_id_seq', 1, false);
+
+
+--
+-- TOC entry 3596 (class 0 OID 28111)
+-- Dependencies: 229
+-- Data for Name: service_endpoint_type; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY service_endpoint_type (id, name, description) FROM stdin;
+1	RPC	Go remote RPC server using gob
+2	RPCS	Go remote RPC over SSL server using gob
+3	HTTP	Remote HTTP service using REST/JSON
+4	HTTPS	Remote HTTPS service using REST/JSON
+5	CACHE	In memory cache for service
+\.
+
+
+--
+-- TOC entry 3663 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: service_endpoint_type_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('service_endpoint_type_id_seq', 1, false);
+
+
+--
+-- TOC entry 3664 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: service_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('service_id_seq', 14, true);
+
+
+--
+-- TOC entry 3598 (class 0 OID 28120)
+-- Dependencies: 231
+-- Data for Name: service_method; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY service_method (id, method, description) FROM stdin;
+1	GET	\N
+2	POST	\N
+3	PUT	\N
+4	DELETE	\N
+5	PATCH	\N
+6	*PERM	Pseudo method for store non-service permission
+\.
+
+
+--
+-- TOC entry 3665 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: service_method_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('service_method_id_seq', 6, true);
+
+
+--
+-- TOC entry 3599 (class 0 OID 28127)
+-- Dependencies: 232
+-- Data for Name: service_module; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY service_module (id, name, description, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by) FROM stdin;
+1	auth	\N	2016-04-04 02:40:11.719084+07	\N	2016-04-04 02:40:11.719084+07	\N	\N	\N
+2	www_login	Pseudo placeholder module  to allow user to login to specified www	2016-04-04 03:14:25.463464+07	\N	2016-04-04 03:14:48.272596+07	\N	\N	\N
+3	realm	\N	2016-04-23 15:26:54.886326+07	\N	2016-04-26 23:26:03.410579+07	\N	\N	\N
+4	haii-system-report	haii-system-report	2016-05-28 17:21:20.781927+07	\N	2016-05-28 17:21:20.781927+07	\N	\N	\N
+\.
+
+
+--
+-- TOC entry 3666 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: service_module_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('service_module_id_seq', 4, true);
+
+
+--
+-- TOC entry 3601 (class 0 OID 28137)
+-- Dependencies: 234
+-- Data for Name: session; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY session (id, user_id, agent_id, created_at, deleted_at) FROM stdin;
+\.
+
+
+--
+-- TOC entry 3667 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: session_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('session_id_seq', 128, true);
+
+
+--
+-- TOC entry 3603 (class 0 OID 28143)
+-- Dependencies: 236
+-- Data for Name: setting; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY setting (id, user_id, is_public, name, value, modified_at, modified_by) FROM stdin;
+1	2	f	listen_addrs	172.24.128.1:9200	2016-05-07 01:00:07.169859+07	\N
+3	9	f	listen_addrs	172.24.128.65:9200	2016-05-07 03:15:57.372548+07	\N
+\.
+
+
+--
+-- TOC entry 3668 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: setting_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('setting_id_seq', 3, true);
+
+
+--
+-- TOC entry 3605 (class 0 OID 28153)
+-- Dependencies: 238
+-- Data for Name: user; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY "user" (id, account, email, full_name, user_type, password, realm_id, active, account_expired, password_lifespan_days, password_modified_at, created_at, created_by, deleted_at, deleted_by, modified_at, modified_by) FROM stdin;
+1	(system)	\N	System User	1	\N	\N	t	\N	\N	2016-04-01 01:59:31.139582+07	2016-04-01 01:59:31.139582+07	\N	\N	\N	2016-04-01 02:00:32.838928+07	\N
+3	haii-system-report-service	\N	HAII System Report service provider agent	1	\N	\N	t	\N	\N	2016-04-01 02:02:09.79981+07	2016-04-01 02:02:09.79981+07	\N	\N	\N	2016-04-16 14:08:34.542862+07	\N
+6	haii-system-report-www	\N	HAII System Report Frontend	1	\N	\N	t	\N	\N	2016-04-01 02:20:53.745408+07	2016-04-01 02:20:53.745408+07	\N	\N	\N	2016-04-22 01:21:35.916858+07	\N
+4	cimer	cimer	Test_local Pwd_abcdx	2	$2a$10$zLSea082oQuSOmbBEZzKq.NWoc6aFtuORMdIidPrBZqnCNYbHL4Hu	2	t	\N	\N	2016-04-01 02:02:53.285768+07	2016-04-01 02:02:53.285768+07	\N	\N	\N	2016-04-30 23:47:23.16029+07	7
+2	server1	\N	API Server#1 on 172.24.128.1	1	\N	\N	t	\N	\N	2016-04-01 02:00:23.442835+07	2016-04-01 02:00:23.442835+07	\N	\N	\N	2016-05-07 01:09:43.085561+07	\N
+9	server2	\N	Test server on 172.24.128.65	1	\N	\N	f	\N	\N	2016-05-07 01:09:19.414018+07	2016-05-07 01:09:19.414018+07	\N	\N	\N	2016-05-07 01:09:54.238716+07	\N
+7	admin	admin	HAII-admin Pwd_abcd	2	$2a$08$QXLnawnQjkmHWgNt0HhSNuVVf1tcdC76wqvfBCJZdSco9n1zSBrHe	2	t	\N	\N	2016-04-04 02:24:35.510953+07	2016-04-04 02:24:35.510953+07	\N	\N	\N	2016-05-11 01:52:29.51627+07	7
+5	cim@haii.or.th	cim@haii.or.th	Cim LDAP User	3	\N	2	t	\N	\N	2016-04-01 02:16:58.958628+07	2016-04-01 02:16:58.958628+07	\N	\N	\N	2016-05-11 03:13:34.502571+07	7
+8	operator	operator	HAII-Operator Pwd_abcd	2	$2a$10$zLSea082oQuSOmbBEZzKq.NWoc6aFtuORMdIidPrBZqnCNYbHL4Hu	2	t	\N	\N	2016-04-22 00:46:12.168257+07	2016-04-22 00:46:12.168257+07	\N	\N	\N	2016-05-13 00:53:16.613683+07	7
+16	amnat@haii.or.th	amnat@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 00:55:16.676658+07	2016-05-13 00:55:16.676658+07	7	\N	\N	2016-05-13 00:55:16.676658+07	7
+17	anuphong@haii.or.th	anuphong@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 00:55:16.697422+07	2016-05-13 00:55:16.697422+07	7	\N	\N	2016-05-13 00:55:16.697422+07	7
+18	atip@haii.or.th	atip@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 00:57:18.898036+07	2016-05-13 00:57:18.898036+07	7	\N	\N	2016-05-13 00:57:18.898036+07	7
+19	apimook@haii.or.th	apimook@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 01:00:20.914074+07	2016-05-13 01:00:20.914074+07	7	\N	\N	2016-05-13 01:00:20.914074+07	7
+25	araya@haii.or.th	araya@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 01:00:43.526605+07	2016-05-13 01:00:43.526605+07	7	\N	\N	2016-05-13 01:00:43.526605+07	7
+26	aungkana@haii.or.th	aungkana@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 01:01:46.171968+07	2016-05-13 01:01:46.171968+07	7	\N	\N	2016-05-13 01:01:46.171968+07	7
+27	bigdam@haii.or.th	bigdam@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 01:07:02.103346+07	2016-05-13 01:07:02.103346+07	7	\N	\N	2016-05-13 01:07:02.103346+07	7
+28	boonsuab@haii.or.th	boonsuab@haii.or.th	Test	3	\N	2	t	\N	\N	2016-05-13 01:07:39.100348+07	2016-05-13 01:07:39.100348+07	7	\N	\N	2016-05-13 01:08:16.551487+07	7
+29	info_thaiwater@haii.or.th	info_thaiwater@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 01:09:42.295368+07	2016-05-13 01:09:42.295368+07	7	\N	\N	2016-05-13 01:09:42.295368+07	7
+30	dailyreport@haii.or.th	dailyreport@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 01:09:59.264476+07	2016-05-13 01:09:59.264476+07	7	\N	\N	2016-05-13 01:09:59.264476+07	7
+32	haiiadobe@haii.or.th	haiiadobe@haii.or.th		3	\N	2	t	\N	\N	2016-05-13 01:12:00.423189+07	2016-05-13 01:12:00.423189+07	7	\N	\N	2016-05-13 01:12:00.423189+07	7
+33	chawin@haii.or.th	chawin@haii.or.th	Chawin Kanyawararak(haii)	3	\N	2	f	\N	\N	2016-05-13 01:16:47.649753+07	2016-05-13 01:16:47.649753+07	7	\N	\N	2016-05-13 01:17:00.274606+07	7
+34	atthanat@haii.or.th	atthanat@haii.or.th	Atthanat Khurat(HAII User)	3	\N	2	t	\N	\N	2016-05-13 01:22:00.15942+07	2016-05-13 01:22:00.15942+07	7	\N	\N	2016-05-13 01:22:00.15942+07	7
+35	ccomm@haii.or.th	ccomm@haii.or.th	Ccomm Haii(ccomm group)	3	\N	2	t	\N	\N	2016-05-13 01:22:00.184295+07	2016-05-13 01:22:00.184295+07	7	\N	\N	2016-05-13 01:22:00.184295+07	7
+15	admin@haii.or.th	admin@haii.or.th	test	3	\N	2	t	\N	\N	2016-05-13 00:54:09.747102+07	2016-05-13 00:54:09.747102+07	7	\N	\N	2016-05-13 01:28:33.887299+07	7
+\.
+
+
+--
+-- TOC entry 3669 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('user_id_seq', 35, true);
+
+
+--
+-- TOC entry 3607 (class 0 OID 28165)
+-- Dependencies: 240
+-- Data for Name: user_type; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY user_type (id, name, description) FROM stdin;
+1	agent	Agent User
+2	local	Local User
+3	ldap	LDAP user
+\.
+
+
+--
+-- TOC entry 3670 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: user_type_id_seq; Type: SEQUENCE SET; Schema: api; Owner: -
+--
+
+SELECT pg_catalog.setval('user_type_id_seq', 3, true);
+
+
+--
+-- TOC entry 3554 (class 0 OID 27915)
+-- Dependencies: 187
+-- Data for Name: version; Type: TABLE DATA; Schema: api; Owner: -
+--
+
+COPY version (id, name, description, created_at, created_by, modified_at, modified_by, deleted_at, deleted_by) FROM stdin;
+1	v1	version 1.0	2016-04-04 02:41:18.480453+07	\N	2016-04-04 02:41:18.480453+07	\N	\N	\N
+\.
+
+
+--
+-- TOC entry 3134 (class 2606 OID 28199)
+-- Name: pk_access_log; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY access_log
+    ADD CONSTRAINT pk_access_log PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3139 (class 2606 OID 28201)
+-- Name: pk_agent; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY agent
+    ADD CONSTRAINT pk_agent PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 3141 (class 2606 OID 28203)
+-- Name: pk_agent_type; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY agent_type
+    ADD CONSTRAINT pk_agent_type PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3151 (class 2606 OID 28205)
+-- Name: pk_event_code; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code
+    ADD CONSTRAINT pk_event_code PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3158 (class 2606 OID 28207)
+-- Name: pk_event_code_tr; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code_tr
+    ADD CONSTRAINT pk_event_code_tr PRIMARY KEY (event_id, language_id);
+
+
+--
+-- TOC entry 3161 (class 2606 OID 28209)
+-- Name: pk_eventlog; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT pk_eventlog PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3166 (class 2606 OID 28211)
+-- Name: pk_eventlog_category; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_category
+    ADD CONSTRAINT pk_eventlog_category PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3173 (class 2606 OID 28213)
+-- Name: pk_eventlog_channel; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_channel
+    ADD CONSTRAINT pk_eventlog_channel PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3188 (class 2606 OID 28215)
+-- Name: pk_eventlog_sink; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT pk_eventlog_sink PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3193 (class 2606 OID 28217)
+-- Name: pk_eventlog_sink_method; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_method
+    ADD CONSTRAINT pk_eventlog_sink_method PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3201 (class 2606 OID 28219)
+-- Name: pk_eventlog_sink_queue; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_queue
+    ADD CONSTRAINT pk_eventlog_sink_queue PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3208 (class 2606 OID 28221)
+-- Name: pk_eventlog_sink_target; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target
+    ADD CONSTRAINT pk_eventlog_sink_target PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3213 (class 2606 OID 28223)
+-- Name: pk_eventlog_sink_template; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template
+    ADD CONSTRAINT pk_eventlog_sink_template PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3219 (class 2606 OID 28225)
+-- Name: pk_eventlog_sink_template_tr; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template_tr
+    ADD CONSTRAINT pk_eventlog_sink_template_tr PRIMARY KEY (template_id, language_id);
+
+
+--
+-- TOC entry 3224 (class 2606 OID 28227)
+-- Name: pk_language; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY language
+    ADD CONSTRAINT pk_language PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3232 (class 2606 OID 28229)
+-- Name: pk_perm_group; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group
+    ADD CONSTRAINT pk_perm_group PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3237 (class 2606 OID 28231)
+-- Name: pk_perm_group_member; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_member
+    ADD CONSTRAINT pk_perm_group_member PRIMARY KEY (group_id, user_id);
+
+
+--
+-- TOC entry 3242 (class 2606 OID 28233)
+-- Name: pk_perm_group_permission; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_permission
+    ADD CONSTRAINT pk_perm_group_permission PRIMARY KEY (group_id, service_id);
+
+
+--
+-- TOC entry 3247 (class 2606 OID 28235)
+-- Name: pk_perm_group_subgroup; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_subgroup
+    ADD CONSTRAINT pk_perm_group_subgroup PRIMARY KEY (group_id, subgroup_id);
+
+
+--
+-- TOC entry 3253 (class 2606 OID 28237)
+-- Name: pk_perm_realm; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_realm
+    ADD CONSTRAINT pk_perm_realm PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3262 (class 2606 OID 28239)
+-- Name: pk_service; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT pk_service PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3266 (class 2606 OID 28241)
+-- Name: pk_service_auth_type; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_auth_type
+    ADD CONSTRAINT pk_service_auth_type PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3270 (class 2606 OID 28243)
+-- Name: pk_service_endpoint; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint
+    ADD CONSTRAINT pk_service_endpoint PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3272 (class 2606 OID 28245)
+-- Name: pk_service_endpoint_type; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint_type
+    ADD CONSTRAINT pk_service_endpoint_type PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3274 (class 2606 OID 28247)
+-- Name: pk_service_method; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_method
+    ADD CONSTRAINT pk_service_method PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3276 (class 2606 OID 28249)
+-- Name: pk_service_module; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_module
+    ADD CONSTRAINT pk_service_module PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3280 (class 2606 OID 28251)
+-- Name: pk_session; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY session
+    ADD CONSTRAINT pk_session PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3282 (class 2606 OID 28253)
+-- Name: pk_setting; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY setting
+    ADD CONSTRAINT pk_setting PRIMARY KEY (user_id, name);
+
+
+--
+-- TOC entry 3288 (class 2606 OID 28255)
+-- Name: pk_user; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT pk_user PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3295 (class 2606 OID 28257)
+-- Name: pk_user_type; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY user_type
+    ADD CONSTRAINT pk_user_type PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3146 (class 2606 OID 28259)
+-- Name: pk_version; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY version
+    ADD CONSTRAINT pk_version PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3290 (class 2606 OID 28261)
+-- Name: uk_account; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT uk_account UNIQUE (account);
+
+
+--
+-- TOC entry 3292 (class 2606 OID 28263)
+-- Name: uk_email; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT uk_email UNIQUE (email);
+
+
+--
+-- TOC entry 3153 (class 2606 OID 28265)
+-- Name: uk_event_code_code; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code
+    ADD CONSTRAINT uk_event_code_code UNIQUE (code);
+
+
+--
+-- TOC entry 3168 (class 2606 OID 28267)
+-- Name: uk_eventlog_category_name; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_category
+    ADD CONSTRAINT uk_eventlog_category_name UNIQUE (name);
+
+
+--
+-- TOC entry 3175 (class 2606 OID 28269)
+-- Name: uk_eventlog_channel_name; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_channel
+    ADD CONSTRAINT uk_eventlog_channel_name UNIQUE (name);
+
+
+--
+-- TOC entry 3195 (class 2606 OID 28271)
+-- Name: uk_eventlog_sink_method_name; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_method
+    ADD CONSTRAINT uk_eventlog_sink_method_name UNIQUE (method);
+
+
+--
+-- TOC entry 3210 (class 2606 OID 28273)
+-- Name: uk_eventlog_sink_target; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target
+    ADD CONSTRAINT uk_eventlog_sink_target UNIQUE (sink_id, sink_method_id, target);
+
+
+--
+-- TOC entry 3215 (class 2606 OID 28275)
+-- Name: uk_eventlog_sink_template_code; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template
+    ADD CONSTRAINT uk_eventlog_sink_template_code UNIQUE (name);
+
+
+--
+-- TOC entry 3226 (class 2606 OID 28277)
+-- Name: uk_languge_code; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY language
+    ADD CONSTRAINT uk_languge_code UNIQUE (code);
+
+
+--
+-- TOC entry 3234 (class 2606 OID 28279)
+-- Name: uk_perm_group; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group
+    ADD CONSTRAINT uk_perm_group UNIQUE (realm_id, category, name);
+
+
+--
+-- TOC entry 3255 (class 2606 OID 28281)
+-- Name: uk_perm_realm; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_realm
+    ADD CONSTRAINT uk_perm_realm UNIQUE (name);
+
+
+--
+-- TOC entry 3264 (class 2606 OID 28283)
+-- Name: uk_service; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT uk_service UNIQUE (version, module_id, name, method);
+
+
+--
+-- TOC entry 3148 (class 2606 OID 28285)
+-- Name: uk_version_name; Type: CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY version
+    ADD CONSTRAINT uk_version_name UNIQUE (name);
+
+
+--
+-- TOC entry 3129 (class 1259 OID 28286)
+-- Name: fki_access_log_agent_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_access_log_agent_id ON access_log USING btree (agent_id);
+
+
+--
+-- TOC entry 3130 (class 1259 OID 28287)
+-- Name: fki_access_log_service_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_access_log_service_id ON access_log USING btree (service_id);
+
+
+--
+-- TOC entry 3131 (class 1259 OID 28288)
+-- Name: fki_access_log_session_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_access_log_session_id ON access_log USING btree (session_id);
+
+
+--
+-- TOC entry 3132 (class 1259 OID 28289)
+-- Name: fki_access_log_user_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_access_log_user_id ON access_log USING btree (user_id);
+
+
+--
+-- TOC entry 3135 (class 1259 OID 28290)
+-- Name: fki_agent_agent_type; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_agent_agent_type ON agent USING btree (agent_type);
+
+
+--
+-- TOC entry 3136 (class 1259 OID 28291)
+-- Name: fki_agent_login_perm_service_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_agent_login_perm_service_id ON agent USING btree (login_perm_service_id);
+
+
+--
+-- TOC entry 3137 (class 1259 OID 28292)
+-- Name: fki_agent_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_agent_modified_by ON agent USING btree (modified_by);
+
+
+--
+-- TOC entry 3142 (class 1259 OID 28293)
+-- Name: fki_api_version_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_api_version_created_by ON version USING btree (created_by);
+
+
+--
+-- TOC entry 3143 (class 1259 OID 28294)
+-- Name: fki_api_version_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_api_version_deleted_by ON version USING btree (deleted_by);
+
+
+--
+-- TOC entry 3144 (class 1259 OID 28295)
+-- Name: fki_api_version_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_api_version_modified_by ON version USING btree (modified_by);
+
+
+--
+-- TOC entry 3149 (class 1259 OID 28296)
+-- Name: fki_event_code_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_event_code_modified_by ON event_code USING btree (modified_by);
+
+
+--
+-- TOC entry 3154 (class 1259 OID 28297)
+-- Name: fki_event_code_tr_event_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_event_code_tr_event_id ON event_code_tr USING btree (event_id);
+
+
+--
+-- TOC entry 3155 (class 1259 OID 28298)
+-- Name: fki_event_code_tr_language_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_event_code_tr_language_id ON event_code_tr USING btree (language_id);
+
+
+--
+-- TOC entry 3156 (class 1259 OID 28299)
+-- Name: fki_event_code_tr_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_event_code_tr_modified_by ON event_code_tr USING btree (modified_by);
+
+
+--
+-- TOC entry 3162 (class 1259 OID 28300)
+-- Name: fki_eventlog_category_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_category_created_by ON eventlog_category USING btree (created_by);
+
+
+--
+-- TOC entry 3163 (class 1259 OID 28301)
+-- Name: fki_eventlog_category_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_category_deleted_by ON eventlog_category USING btree (delated_by);
+
+
+--
+-- TOC entry 3164 (class 1259 OID 28302)
+-- Name: fki_eventlog_category_modifieded_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_category_modifieded_by ON eventlog_category USING btree (modified_by);
+
+
+--
+-- TOC entry 3169 (class 1259 OID 28303)
+-- Name: fki_eventlog_channel_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_channel_created_by ON eventlog_channel USING btree (created_by);
+
+
+--
+-- TOC entry 3170 (class 1259 OID 28304)
+-- Name: fki_eventlog_channel_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_channel_deleted_by ON eventlog_channel USING btree (delated_by);
+
+
+--
+-- TOC entry 3171 (class 1259 OID 28305)
+-- Name: fki_eventlog_channel_modifieded_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_channel_modifieded_by ON eventlog_channel USING btree (modified_by);
+
+
+--
+-- TOC entry 3159 (class 1259 OID 28306)
+-- Name: fki_eventlog_error_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_error_id ON eventlog USING btree (event_id);
+
+
+--
+-- TOC entry 3176 (class 1259 OID 28307)
+-- Name: fki_eventlog_sink_agent_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_agent_id ON eventlog_sink USING btree (agent_id);
+
+
+--
+-- TOC entry 3177 (class 1259 OID 28308)
+-- Name: fki_eventlog_sink_category_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_category_id ON eventlog_sink USING btree (category_id);
+
+
+--
+-- TOC entry 3178 (class 1259 OID 28309)
+-- Name: fki_eventlog_sink_channel_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_channel_id ON eventlog_sink USING btree (channel_id);
+
+
+--
+-- TOC entry 3179 (class 1259 OID 28310)
+-- Name: fki_eventlog_sink_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_created_by ON eventlog_sink USING btree (created_by);
+
+
+--
+-- TOC entry 3180 (class 1259 OID 28311)
+-- Name: fki_eventlog_sink_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_deleted_by ON eventlog_sink USING btree (delated_by);
+
+
+--
+-- TOC entry 3181 (class 1259 OID 28312)
+-- Name: fki_eventlog_sink_event_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_event_id ON eventlog_sink USING btree (event_id);
+
+
+--
+-- TOC entry 3182 (class 1259 OID 28313)
+-- Name: fki_eventlog_sink_language_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_language_id ON eventlog_sink USING btree (language_id);
+
+
+--
+-- TOC entry 3189 (class 1259 OID 28314)
+-- Name: fki_eventlog_sink_method_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_method_created_by ON eventlog_sink_method USING btree (created_by);
+
+
+--
+-- TOC entry 3190 (class 1259 OID 28315)
+-- Name: fki_eventlog_sink_method_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_method_deleted_by ON eventlog_sink_method USING btree (delated_by);
+
+
+--
+-- TOC entry 3191 (class 1259 OID 28316)
+-- Name: fki_eventlog_sink_method_modifieded_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_method_modifieded_by ON eventlog_sink_method USING btree (modified_by);
+
+
+--
+-- TOC entry 3183 (class 1259 OID 28317)
+-- Name: fki_eventlog_sink_modifieded_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_modifieded_by ON eventlog_sink USING btree (modified_by);
+
+
+--
+-- TOC entry 3196 (class 1259 OID 28318)
+-- Name: fki_eventlog_sink_queue_eventlog_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_queue_eventlog_id ON eventlog_sink_queue USING btree (eventlog_id);
+
+
+--
+-- TOC entry 3197 (class 1259 OID 28319)
+-- Name: fki_eventlog_sink_queue_sender_agent_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_queue_sender_agent_id ON eventlog_sink_queue USING btree (sender_agent_id);
+
+
+--
+-- TOC entry 3198 (class 1259 OID 28320)
+-- Name: fki_eventlog_sink_queue_sink_target; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_queue_sink_target ON eventlog_sink_queue USING btree (sink_target_id);
+
+
+--
+-- TOC entry 3184 (class 1259 OID 28321)
+-- Name: fki_eventlog_sink_service_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_service_id ON eventlog_sink USING btree (service_id);
+
+
+--
+-- TOC entry 3202 (class 1259 OID 28322)
+-- Name: fki_eventlog_sink_target_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_target_created_by ON eventlog_sink_target USING btree (created_by);
+
+
+--
+-- TOC entry 3203 (class 1259 OID 28323)
+-- Name: fki_eventlog_sink_target_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_target_deleted_by ON eventlog_sink_target USING btree (delated_by);
+
+
+--
+-- TOC entry 3204 (class 1259 OID 28324)
+-- Name: fki_eventlog_sink_target_modifieded_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_target_modifieded_by ON eventlog_sink_target USING btree (modified_by);
+
+
+--
+-- TOC entry 3205 (class 1259 OID 28325)
+-- Name: fki_eventlog_sink_target_sink_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_target_sink_id ON eventlog_sink_target USING btree (sink_id);
+
+
+--
+-- TOC entry 3206 (class 1259 OID 28326)
+-- Name: fki_eventlog_sink_target_sink_method; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_target_sink_method ON eventlog_sink_target USING btree (sink_method_id);
+
+
+--
+-- TOC entry 3185 (class 1259 OID 28327)
+-- Name: fki_eventlog_sink_template_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_template_id ON eventlog_sink USING btree (template_id);
+
+
+--
+-- TOC entry 3211 (class 1259 OID 28328)
+-- Name: fki_eventlog_sink_template_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_template_modified_by ON eventlog_sink_template USING btree (modified_by);
+
+
+--
+-- TOC entry 3216 (class 1259 OID 28329)
+-- Name: fki_eventlog_sink_template_tr_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_template_tr_modified_by ON eventlog_sink_template_tr USING btree (modified_by);
+
+
+--
+-- TOC entry 3217 (class 1259 OID 28330)
+-- Name: fki_eventlog_sink_template_tr_template_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_template_tr_template_id ON eventlog_sink_template_tr USING btree (template_id);
+
+
+--
+-- TOC entry 3186 (class 1259 OID 28331)
+-- Name: fki_eventlog_sink_user_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_eventlog_sink_user_id ON eventlog_sink USING btree (user_id);
+
+
+--
+-- TOC entry 3220 (class 1259 OID 28332)
+-- Name: fki_language_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_language_created_by ON language USING btree (created_by);
+
+
+--
+-- TOC entry 3221 (class 1259 OID 28333)
+-- Name: fki_language_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_language_deleted_by ON language USING btree (deleted_by);
+
+
+--
+-- TOC entry 3222 (class 1259 OID 28334)
+-- Name: fki_language_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_language_modified_by ON language USING btree (modified_by);
+
+
+--
+-- TOC entry 3227 (class 1259 OID 28335)
+-- Name: fki_perm_group_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_created_by ON perm_group USING btree (created_by);
+
+
+--
+-- TOC entry 3228 (class 1259 OID 28336)
+-- Name: fki_perm_group_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_deleted_by ON perm_group USING btree (deleted_by);
+
+
+--
+-- TOC entry 3235 (class 1259 OID 28337)
+-- Name: fki_perm_group_member_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_member_modified_by ON perm_group_member USING btree (modified_by);
+
+
+--
+-- TOC entry 3229 (class 1259 OID 28338)
+-- Name: fki_perm_group_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_modified_by ON perm_group USING btree (modified_by);
+
+
+--
+-- TOC entry 3238 (class 1259 OID 28339)
+-- Name: fki_perm_group_permission_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_permission_created_by ON perm_group_permission USING btree (modified_by);
+
+
+--
+-- TOC entry 3239 (class 1259 OID 28340)
+-- Name: fki_perm_group_permission_service_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_permission_service_id ON perm_group_permission USING btree (service_id);
+
+
+--
+-- TOC entry 3240 (class 1259 OID 28341)
+-- Name: fki_perm_group_subgroup_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_subgroup_created_by ON perm_group_permission USING btree (modified_by);
+
+
+--
+-- TOC entry 3243 (class 1259 OID 28342)
+-- Name: fki_perm_group_subgroup_group_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_subgroup_group_id ON perm_group_subgroup USING btree (group_id);
+
+
+--
+-- TOC entry 3244 (class 1259 OID 28343)
+-- Name: fki_perm_group_subgroup_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_subgroup_modified_by ON perm_group_subgroup USING btree (modified_by);
+
+
+--
+-- TOC entry 3245 (class 1259 OID 28344)
+-- Name: fki_perm_group_subgroup_subgroup_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_group_subgroup_subgroup_id ON perm_group_subgroup USING btree (subgroup_id);
+
+
+--
+-- TOC entry 3230 (class 1259 OID 28345)
+-- Name: fki_perm_realm; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_realm ON perm_group USING btree (realm_id);
+
+
+--
+-- TOC entry 3248 (class 1259 OID 28346)
+-- Name: fki_perm_realm_admin_group; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_realm_admin_group ON perm_realm USING btree (admin_group);
+
+
+--
+-- TOC entry 3249 (class 1259 OID 28347)
+-- Name: fki_perm_realm_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_realm_created_by ON perm_realm USING btree (created_by);
+
+
+--
+-- TOC entry 3250 (class 1259 OID 28348)
+-- Name: fki_perm_realm_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_realm_deleted_by ON perm_realm USING btree (deleted_by);
+
+
+--
+-- TOC entry 3251 (class 1259 OID 28349)
+-- Name: fki_perm_realm_modified_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_perm_realm_modified_by ON perm_realm USING btree (modified_by);
+
+
+--
+-- TOC entry 3277 (class 1259 OID 28350)
+-- Name: fki_pk_session_agent_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_pk_session_agent_id ON session USING btree (agent_id);
+
+
+--
+-- TOC entry 3278 (class 1259 OID 28351)
+-- Name: fki_pk_session_user_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_pk_session_user_id ON session USING btree (user_id);
+
+
+--
+-- TOC entry 3256 (class 1259 OID 28352)
+-- Name: fki_service_api_version; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_service_api_version ON service USING btree (version);
+
+
+--
+-- TOC entry 3257 (class 1259 OID 28353)
+-- Name: fki_service_auth_type; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_service_auth_type ON service USING btree (auth_type);
+
+
+--
+-- TOC entry 3267 (class 1259 OID 28354)
+-- Name: fki_service_endpoing_service_agent_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_service_endpoing_service_agent_id ON service_endpoint USING btree (service_agent_id);
+
+
+--
+-- TOC entry 3268 (class 1259 OID 28355)
+-- Name: fki_service_endpoint_endpoint_type; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_service_endpoint_endpoint_type ON service_endpoint USING btree (endpoint_type);
+
+
+--
+-- TOC entry 3258 (class 1259 OID 28356)
+-- Name: fki_service_endpoint_type; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_service_endpoint_type ON service USING btree (endpoint_id);
+
+
+--
+-- TOC entry 3259 (class 1259 OID 28357)
+-- Name: fki_service_method; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_service_method ON service USING btree (method);
+
+
+--
+-- TOC entry 3260 (class 1259 OID 28358)
+-- Name: fki_service_module; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_service_module ON service USING btree (module_id);
+
+
+--
+-- TOC entry 3283 (class 1259 OID 28359)
+-- Name: fki_user_created_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_user_created_by ON "user" USING btree (created_by);
+
+
+--
+-- TOC entry 3284 (class 1259 OID 28360)
+-- Name: fki_user_deleted_by; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_user_deleted_by ON "user" USING btree (deleted_by);
+
+
+--
+-- TOC entry 3285 (class 1259 OID 28361)
+-- Name: fki_user_realm_id; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_user_realm_id ON "user" USING btree (realm_id);
+
+
+--
+-- TOC entry 3286 (class 1259 OID 28362)
+-- Name: fki_user_user_type; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX fki_user_user_type ON "user" USING btree (user_type);
+
+
+--
+-- TOC entry 3199 (class 1259 OID 28363)
+-- Name: idx_eventlog_sink_queue_active; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE INDEX idx_eventlog_sink_queue_active ON eventlog_sink_queue USING btree (deleted_at NULLS FIRST, sent_at NULLS FIRST);
+
+
+--
+-- TOC entry 3293 (class 1259 OID 28364)
+-- Name: uki_user_user_name; Type: INDEX; Schema: api; Owner: -
+--
+
+CREATE UNIQUE INDEX uki_user_user_name ON "user" USING btree (account) WHERE (deleted_at IS NULL);
+
+
+--
+-- TOC entry 3394 (class 2620 OID 28365)
+-- Name: notify_update_agent; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_agent AFTER INSERT OR DELETE OR UPDATE ON agent FOR EACH ROW EXECUTE PROCEDURE notify_update_no_id();
+
+
+--
+-- TOC entry 3398 (class 2620 OID 28366)
+-- Name: notify_update_event_code; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_event_code AFTER INSERT OR DELETE OR UPDATE ON event_code FOR EACH ROW EXECUTE PROCEDURE notify_update_no_id();
+
+
+--
+-- TOC entry 3400 (class 2620 OID 28367)
+-- Name: notify_update_event_code_tr; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_event_code_tr AFTER INSERT OR DELETE OR UPDATE ON event_code_tr FOR EACH ROW EXECUTE PROCEDURE notify_update_no_id();
+
+
+--
+-- TOC entry 3406 (class 2620 OID 28368)
+-- Name: notify_update_eventlog_sink_queue; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_eventlog_sink_queue AFTER INSERT OR DELETE OR UPDATE ON eventlog_sink_queue FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3409 (class 2620 OID 28369)
+-- Name: notify_update_eventlog_sink_template; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_eventlog_sink_template AFTER INSERT OR DELETE OR UPDATE ON eventlog_sink_template FOR EACH ROW EXECUTE PROCEDURE notify_update_no_id();
+
+
+--
+-- TOC entry 3411 (class 2620 OID 28370)
+-- Name: notify_update_eventlog_sink_template_tr; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_eventlog_sink_template_tr AFTER INSERT OR DELETE OR UPDATE ON eventlog_sink_template_tr FOR EACH ROW EXECUTE PROCEDURE notify_update_no_id();
+
+
+--
+-- TOC entry 3413 (class 2620 OID 28371)
+-- Name: notify_update_language; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_language AFTER INSERT OR DELETE OR UPDATE ON language FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3415 (class 2620 OID 28372)
+-- Name: notify_update_perm_group; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_perm_group AFTER INSERT OR DELETE OR UPDATE ON perm_group FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3417 (class 2620 OID 28373)
+-- Name: notify_update_perm_group_member; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_perm_group_member AFTER INSERT OR DELETE OR UPDATE ON perm_group_member FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3419 (class 2620 OID 28374)
+-- Name: notify_update_perm_group_permission; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_perm_group_permission AFTER INSERT OR DELETE OR UPDATE ON perm_group_permission FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3421 (class 2620 OID 28375)
+-- Name: notify_update_perm_group_subgroup; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_perm_group_subgroup AFTER INSERT OR DELETE OR UPDATE ON perm_group_subgroup FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3423 (class 2620 OID 28376)
+-- Name: notify_update_perm_realm; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_perm_realm AFTER INSERT OR DELETE OR UPDATE ON perm_realm FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3425 (class 2620 OID 28377)
+-- Name: notify_update_service; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_service AFTER INSERT OR DELETE OR UPDATE ON service FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3427 (class 2620 OID 28378)
+-- Name: notify_update_service_endpoint; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_service_endpoint AFTER INSERT OR DELETE OR UPDATE ON service_endpoint FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3429 (class 2620 OID 28379)
+-- Name: notify_update_service_module; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_service_module AFTER INSERT OR DELETE OR UPDATE ON service_module FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3431 (class 2620 OID 28380)
+-- Name: notify_update_setting; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_setting AFTER INSERT OR DELETE OR UPDATE ON setting FOR EACH ROW EXECUTE PROCEDURE notify_update_no_id();
+
+
+--
+-- TOC entry 3433 (class 2620 OID 28381)
+-- Name: notify_update_user; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_user AFTER INSERT OR DELETE OR UPDATE ON "user" FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3396 (class 2620 OID 28382)
+-- Name: notify_update_version; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER notify_update_version AFTER INSERT OR DELETE OR UPDATE ON version FOR EACH ROW EXECUTE PROCEDURE notify_update_id();
+
+
+--
+-- TOC entry 3395 (class 2620 OID 28383)
+-- Name: sync_agent_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_agent_modified_at BEFORE UPDATE ON agent FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3397 (class 2620 OID 28384)
+-- Name: sync_api_version_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_api_version_modified_at BEFORE UPDATE ON version FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3399 (class 2620 OID 28385)
+-- Name: sync_event_code_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_event_code_modified_at BEFORE UPDATE ON event_code FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3401 (class 2620 OID 28386)
+-- Name: sync_event_code_tr_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_event_code_tr_modified_at BEFORE UPDATE ON event_code_tr FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3402 (class 2620 OID 28387)
+-- Name: sync_eventlog_category_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_category_modified_at BEFORE UPDATE ON eventlog_category FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3403 (class 2620 OID 28388)
+-- Name: sync_eventlog_channel_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_channel_modified_at BEFORE UPDATE ON eventlog_channel FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3405 (class 2620 OID 28389)
+-- Name: sync_eventlog_sink_method_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_sink_method_modified_at BEFORE UPDATE ON eventlog_sink_method FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3404 (class 2620 OID 28390)
+-- Name: sync_eventlog_sink_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_sink_modified_at BEFORE UPDATE ON eventlog_sink FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3407 (class 2620 OID 28391)
+-- Name: sync_eventlog_sink_queue_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_sink_queue_modified_at BEFORE UPDATE ON eventlog_sink_queue FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3408 (class 2620 OID 28392)
+-- Name: sync_eventlog_sink_target_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_sink_target_modified_at BEFORE UPDATE ON eventlog_sink_target FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3410 (class 2620 OID 28393)
+-- Name: sync_eventlog_sink_template_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_sink_template_modified_at BEFORE UPDATE ON eventlog_sink_template FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3412 (class 2620 OID 28394)
+-- Name: sync_eventlog_sink_template_tr_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_eventlog_sink_template_tr_modified_at BEFORE UPDATE ON eventlog_sink_template_tr FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3414 (class 2620 OID 28395)
+-- Name: sync_language_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_language_modified_at BEFORE UPDATE ON language FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3418 (class 2620 OID 28396)
+-- Name: sync_perm_group_member_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_perm_group_member_modified_at BEFORE INSERT OR UPDATE ON perm_group_member FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3416 (class 2620 OID 28397)
+-- Name: sync_perm_group_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_perm_group_modified_at BEFORE UPDATE ON perm_group FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3420 (class 2620 OID 28398)
+-- Name: sync_perm_group_permission_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_perm_group_permission_modified_at BEFORE INSERT OR UPDATE ON perm_group_permission FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3422 (class 2620 OID 28399)
+-- Name: sync_perm_group_subgroup_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_perm_group_subgroup_modified_at BEFORE INSERT OR UPDATE ON perm_group_subgroup FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3424 (class 2620 OID 28400)
+-- Name: sync_perm_realm_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_perm_realm_modified_at BEFORE UPDATE ON perm_realm FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3428 (class 2620 OID 28401)
+-- Name: sync_service_endpoint_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_service_endpoint_modified_at BEFORE UPDATE ON service_endpoint FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3426 (class 2620 OID 28402)
+-- Name: sync_service_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_service_modified_at BEFORE UPDATE ON service FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3430 (class 2620 OID 28403)
+-- Name: sync_service_module_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_service_module_modified_at BEFORE UPDATE ON service_module FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3432 (class 2620 OID 28404)
+-- Name: sync_setting_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_setting_modified_at BEFORE UPDATE ON setting FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3434 (class 2620 OID 28405)
+-- Name: sync_user_modified_at; Type: TRIGGER; Schema: api; Owner: -
+--
+
+CREATE TRIGGER sync_user_modified_at BEFORE UPDATE ON "user" FOR EACH ROW EXECUTE PROCEDURE sync_modified_at();
+
+
+--
+-- TOC entry 3296 (class 2606 OID 28406)
+-- Name: fk_access_log_agent_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY access_log
+    ADD CONSTRAINT fk_access_log_agent_id FOREIGN KEY (agent_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3297 (class 2606 OID 28411)
+-- Name: fk_access_log_session_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY access_log
+    ADD CONSTRAINT fk_access_log_session_id FOREIGN KEY (session_id) REFERENCES session(id);
+
+
+--
+-- TOC entry 3298 (class 2606 OID 28416)
+-- Name: fk_access_log_user_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY access_log
+    ADD CONSTRAINT fk_access_log_user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3300 (class 2606 OID 28421)
+-- Name: fk_agent_agent_type; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY agent
+    ADD CONSTRAINT fk_agent_agent_type FOREIGN KEY (agent_type) REFERENCES agent_type(id);
+
+
+--
+-- TOC entry 3301 (class 2606 OID 28426)
+-- Name: fk_agent_login_perm_service_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY agent
+    ADD CONSTRAINT fk_agent_login_perm_service_id FOREIGN KEY (login_perm_service_id) REFERENCES service(id);
+
+
+--
+-- TOC entry 3302 (class 2606 OID 28431)
+-- Name: fk_agent_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY agent
+    ADD CONSTRAINT fk_agent_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3303 (class 2606 OID 28436)
+-- Name: fk_agent_user_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY agent
+    ADD CONSTRAINT fk_agent_user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3307 (class 2606 OID 28441)
+-- Name: fk_event_code_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code
+    ADD CONSTRAINT fk_event_code_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3308 (class 2606 OID 28446)
+-- Name: fk_event_code_tr_event_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code_tr
+    ADD CONSTRAINT fk_event_code_tr_event_id FOREIGN KEY (event_id) REFERENCES event_code(id);
+
+
+--
+-- TOC entry 3309 (class 2606 OID 28451)
+-- Name: fk_event_code_tr_language_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code_tr
+    ADD CONSTRAINT fk_event_code_tr_language_id FOREIGN KEY (language_id) REFERENCES language(id);
+
+
+--
+-- TOC entry 3310 (class 2606 OID 28456)
+-- Name: fk_event_code_tr_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY event_code_tr
+    ADD CONSTRAINT fk_event_code_tr_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3311 (class 2606 OID 28461)
+-- Name: fk_eventlog_accesslog_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT fk_eventlog_accesslog_id FOREIGN KEY (accesslog_id) REFERENCES access_log(id);
+
+
+--
+-- TOC entry 3312 (class 2606 OID 28466)
+-- Name: fk_eventlog_agent_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT fk_eventlog_agent_id FOREIGN KEY (agent_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3318 (class 2606 OID 28471)
+-- Name: fk_eventlog_category_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_category
+    ADD CONSTRAINT fk_eventlog_category_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3319 (class 2606 OID 28476)
+-- Name: fk_eventlog_category_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_category
+    ADD CONSTRAINT fk_eventlog_category_deleted_by FOREIGN KEY (delated_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3313 (class 2606 OID 28481)
+-- Name: fk_eventlog_category_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT fk_eventlog_category_id FOREIGN KEY (category_id) REFERENCES eventlog_category(id);
+
+
+--
+-- TOC entry 3320 (class 2606 OID 28486)
+-- Name: fk_eventlog_category_modifieded_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_category
+    ADD CONSTRAINT fk_eventlog_category_modifieded_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3321 (class 2606 OID 28491)
+-- Name: fk_eventlog_channel_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_channel
+    ADD CONSTRAINT fk_eventlog_channel_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3322 (class 2606 OID 28496)
+-- Name: fk_eventlog_channel_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_channel
+    ADD CONSTRAINT fk_eventlog_channel_deleted_by FOREIGN KEY (delated_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3314 (class 2606 OID 28501)
+-- Name: fk_eventlog_channel_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT fk_eventlog_channel_id FOREIGN KEY (channel_id) REFERENCES eventlog_channel(id);
+
+
+--
+-- TOC entry 3323 (class 2606 OID 28506)
+-- Name: fk_eventlog_channel_modifieded_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_channel
+    ADD CONSTRAINT fk_eventlog_channel_modifieded_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3315 (class 2606 OID 28511)
+-- Name: fk_eventlog_event_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT fk_eventlog_event_id FOREIGN KEY (event_id) REFERENCES event_code(id);
+
+
+--
+-- TOC entry 3338 (class 2606 OID 28516)
+-- Name: fk_eventlog_queue_sink_target; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_queue
+    ADD CONSTRAINT fk_eventlog_queue_sink_target FOREIGN KEY (sink_target_id) REFERENCES eventlog_sink_target(id);
+
+
+--
+-- TOC entry 3316 (class 2606 OID 28521)
+-- Name: fk_eventlog_service_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT fk_eventlog_service_id FOREIGN KEY (service_id) REFERENCES service(id);
+
+
+--
+-- TOC entry 3324 (class 2606 OID 28526)
+-- Name: fk_eventlog_sink_agent_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_agent_id FOREIGN KEY (agent_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3325 (class 2606 OID 28531)
+-- Name: fk_eventlog_sink_category_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_category_id FOREIGN KEY (category_id) REFERENCES eventlog_category(id);
+
+
+--
+-- TOC entry 3326 (class 2606 OID 28536)
+-- Name: fk_eventlog_sink_channel_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_channel_id FOREIGN KEY (channel_id) REFERENCES eventlog_channel(id);
+
+
+--
+-- TOC entry 3327 (class 2606 OID 28541)
+-- Name: fk_eventlog_sink_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3328 (class 2606 OID 28546)
+-- Name: fk_eventlog_sink_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_deleted_by FOREIGN KEY (delated_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3329 (class 2606 OID 28551)
+-- Name: fk_eventlog_sink_event_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_event_id FOREIGN KEY (event_id) REFERENCES event_code(id);
+
+
+--
+-- TOC entry 3330 (class 2606 OID 28556)
+-- Name: fk_eventlog_sink_language_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_language_id FOREIGN KEY (language_id) REFERENCES language(id);
+
+
+--
+-- TOC entry 3335 (class 2606 OID 28561)
+-- Name: fk_eventlog_sink_method_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_method
+    ADD CONSTRAINT fk_eventlog_sink_method_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3336 (class 2606 OID 28566)
+-- Name: fk_eventlog_sink_method_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_method
+    ADD CONSTRAINT fk_eventlog_sink_method_deleted_by FOREIGN KEY (delated_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3337 (class 2606 OID 28571)
+-- Name: fk_eventlog_sink_method_modifieded_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_method
+    ADD CONSTRAINT fk_eventlog_sink_method_modifieded_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3331 (class 2606 OID 28576)
+-- Name: fk_eventlog_sink_modifieded_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_modifieded_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3339 (class 2606 OID 28581)
+-- Name: fk_eventlog_sink_queue_eventlog_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_queue
+    ADD CONSTRAINT fk_eventlog_sink_queue_eventlog_id FOREIGN KEY (eventlog_id) REFERENCES eventlog(id);
+
+
+--
+-- TOC entry 3340 (class 2606 OID 28586)
+-- Name: fk_eventlog_sink_queue_sender_agent_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_queue
+    ADD CONSTRAINT fk_eventlog_sink_queue_sender_agent_id FOREIGN KEY (sender_agent_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3332 (class 2606 OID 28591)
+-- Name: fk_eventlog_sink_service_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_service_id FOREIGN KEY (service_id) REFERENCES service(id);
+
+
+--
+-- TOC entry 3341 (class 2606 OID 28596)
+-- Name: fk_eventlog_sink_target_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target
+    ADD CONSTRAINT fk_eventlog_sink_target_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3342 (class 2606 OID 28601)
+-- Name: fk_eventlog_sink_target_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target
+    ADD CONSTRAINT fk_eventlog_sink_target_deleted_by FOREIGN KEY (delated_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3343 (class 2606 OID 28606)
+-- Name: fk_eventlog_sink_target_modifieded_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target
+    ADD CONSTRAINT fk_eventlog_sink_target_modifieded_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3344 (class 2606 OID 28611)
+-- Name: fk_eventlog_sink_target_sink_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target
+    ADD CONSTRAINT fk_eventlog_sink_target_sink_id FOREIGN KEY (sink_id) REFERENCES eventlog_sink(id);
+
+
+--
+-- TOC entry 3345 (class 2606 OID 28616)
+-- Name: fk_eventlog_sink_target_sink_method; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_target
+    ADD CONSTRAINT fk_eventlog_sink_target_sink_method FOREIGN KEY (sink_method_id) REFERENCES eventlog_sink_method(id);
+
+
+--
+-- TOC entry 3333 (class 2606 OID 28621)
+-- Name: fk_eventlog_sink_template_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_template_id FOREIGN KEY (template_id) REFERENCES eventlog_sink_template(id);
+
+
+--
+-- TOC entry 3346 (class 2606 OID 28626)
+-- Name: fk_eventlog_sink_template_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template
+    ADD CONSTRAINT fk_eventlog_sink_template_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3347 (class 2606 OID 28631)
+-- Name: fk_eventlog_sink_template_tr_language_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template_tr
+    ADD CONSTRAINT fk_eventlog_sink_template_tr_language_id FOREIGN KEY (language_id) REFERENCES language(id);
+
+
+--
+-- TOC entry 3348 (class 2606 OID 28636)
+-- Name: fk_eventlog_sink_template_tr_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template_tr
+    ADD CONSTRAINT fk_eventlog_sink_template_tr_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3349 (class 2606 OID 28641)
+-- Name: fk_eventlog_sink_template_tr_template_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink_template_tr
+    ADD CONSTRAINT fk_eventlog_sink_template_tr_template_id FOREIGN KEY (template_id) REFERENCES eventlog_sink_template(id);
+
+
+--
+-- TOC entry 3334 (class 2606 OID 28646)
+-- Name: fk_eventlog_sink_user_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog_sink
+    ADD CONSTRAINT fk_eventlog_sink_user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3317 (class 2606 OID 28651)
+-- Name: fk_eventlog_user_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY eventlog
+    ADD CONSTRAINT fk_eventlog_user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3350 (class 2606 OID 28656)
+-- Name: fk_language_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY language
+    ADD CONSTRAINT fk_language_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3351 (class 2606 OID 28661)
+-- Name: fk_language_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY language
+    ADD CONSTRAINT fk_language_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3352 (class 2606 OID 28666)
+-- Name: fk_language_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY language
+    ADD CONSTRAINT fk_language_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3353 (class 2606 OID 28671)
+-- Name: fk_perm_group_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group
+    ADD CONSTRAINT fk_perm_group_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3354 (class 2606 OID 28676)
+-- Name: fk_perm_group_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group
+    ADD CONSTRAINT fk_perm_group_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3357 (class 2606 OID 28681)
+-- Name: fk_perm_group_member_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_member
+    ADD CONSTRAINT fk_perm_group_member_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3358 (class 2606 OID 28686)
+-- Name: fk_perm_group_member_user_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_member
+    ADD CONSTRAINT fk_perm_group_member_user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3355 (class 2606 OID 28691)
+-- Name: fk_perm_group_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group
+    ADD CONSTRAINT fk_perm_group_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3360 (class 2606 OID 28696)
+-- Name: fk_perm_group_permission_group_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_permission
+    ADD CONSTRAINT fk_perm_group_permission_group_id FOREIGN KEY (group_id) REFERENCES perm_group(id);
+
+
+--
+-- TOC entry 3361 (class 2606 OID 28701)
+-- Name: fk_perm_group_permission_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_permission
+    ADD CONSTRAINT fk_perm_group_permission_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3362 (class 2606 OID 28706)
+-- Name: fk_perm_group_permission_service_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_permission
+    ADD CONSTRAINT fk_perm_group_permission_service_id FOREIGN KEY (service_id) REFERENCES service(id);
+
+
+--
+-- TOC entry 3363 (class 2606 OID 28711)
+-- Name: fk_perm_group_subgroup_group_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_subgroup
+    ADD CONSTRAINT fk_perm_group_subgroup_group_id FOREIGN KEY (group_id) REFERENCES perm_group(id);
+
+
+--
+-- TOC entry 3364 (class 2606 OID 28716)
+-- Name: fk_perm_group_subgroup_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_subgroup
+    ADD CONSTRAINT fk_perm_group_subgroup_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3365 (class 2606 OID 28721)
+-- Name: fk_perm_group_subgroup_subgroup_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_subgroup
+    ADD CONSTRAINT fk_perm_group_subgroup_subgroup_id FOREIGN KEY (subgroup_id) REFERENCES perm_group(id);
+
+
+--
+-- TOC entry 3356 (class 2606 OID 28726)
+-- Name: fk_perm_realm; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group
+    ADD CONSTRAINT fk_perm_realm FOREIGN KEY (realm_id) REFERENCES perm_realm(id);
+
+
+--
+-- TOC entry 3366 (class 2606 OID 28731)
+-- Name: fk_perm_realm_admin_group; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_realm
+    ADD CONSTRAINT fk_perm_realm_admin_group FOREIGN KEY (admin_group) REFERENCES perm_group(id);
+
+
+--
+-- TOC entry 3367 (class 2606 OID 28736)
+-- Name: fk_perm_realm_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_realm
+    ADD CONSTRAINT fk_perm_realm_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3368 (class 2606 OID 28741)
+-- Name: fk_perm_realm_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_realm
+    ADD CONSTRAINT fk_perm_realm_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3369 (class 2606 OID 28746)
+-- Name: fk_perm_realm_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_realm
+    ADD CONSTRAINT fk_perm_realm_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3370 (class 2606 OID 28751)
+-- Name: fk_service_auth_type; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_auth_type FOREIGN KEY (auth_type) REFERENCES service_auth_type(id);
+
+
+--
+-- TOC entry 3371 (class 2606 OID 28756)
+-- Name: fk_service_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3372 (class 2606 OID 28761)
+-- Name: fk_service_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3378 (class 2606 OID 28766)
+-- Name: fk_service_endpoing_agent_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint
+    ADD CONSTRAINT fk_service_endpoing_agent_id FOREIGN KEY (service_agent_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3379 (class 2606 OID 28771)
+-- Name: fk_service_endpoint_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint
+    ADD CONSTRAINT fk_service_endpoint_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3380 (class 2606 OID 28776)
+-- Name: fk_service_endpoint_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint
+    ADD CONSTRAINT fk_service_endpoint_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3381 (class 2606 OID 28781)
+-- Name: fk_service_endpoint_endpoint_type; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint
+    ADD CONSTRAINT fk_service_endpoint_endpoint_type FOREIGN KEY (endpoint_type) REFERENCES service_endpoint_type(id);
+
+
+--
+-- TOC entry 3373 (class 2606 OID 28786)
+-- Name: fk_service_endpoint_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_endpoint_id FOREIGN KEY (endpoint_id) REFERENCES service_endpoint(id);
+
+
+--
+-- TOC entry 3382 (class 2606 OID 28791)
+-- Name: fk_service_endpoint_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_endpoint
+    ADD CONSTRAINT fk_service_endpoint_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3374 (class 2606 OID 28796)
+-- Name: fk_service_method; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_method FOREIGN KEY (method) REFERENCES service_method(id);
+
+
+--
+-- TOC entry 3375 (class 2606 OID 28801)
+-- Name: fk_service_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3376 (class 2606 OID 28806)
+-- Name: fk_service_module; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_module FOREIGN KEY (module_id) REFERENCES service_module(id);
+
+
+--
+-- TOC entry 3383 (class 2606 OID 28811)
+-- Name: fk_service_module_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_module
+    ADD CONSTRAINT fk_service_module_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3384 (class 2606 OID 28816)
+-- Name: fk_service_module_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_module
+    ADD CONSTRAINT fk_service_module_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3385 (class 2606 OID 28821)
+-- Name: fk_service_module_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service_module
+    ADD CONSTRAINT fk_service_module_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3377 (class 2606 OID 28826)
+-- Name: fk_service_version; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY service
+    ADD CONSTRAINT fk_service_version FOREIGN KEY (version) REFERENCES version(id);
+
+
+--
+-- TOC entry 3388 (class 2606 OID 28831)
+-- Name: fk_setting_user_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY setting
+    ADD CONSTRAINT fk_setting_user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3389 (class 2606 OID 28836)
+-- Name: fk_user_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT fk_user_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3390 (class 2606 OID 28841)
+-- Name: fk_user_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT fk_user_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3391 (class 2606 OID 28846)
+-- Name: fk_user_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT fk_user_modified_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3392 (class 2606 OID 28851)
+-- Name: fk_user_realm_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT fk_user_realm_id FOREIGN KEY (realm_id) REFERENCES perm_realm(id);
+
+
+--
+-- TOC entry 3393 (class 2606 OID 28856)
+-- Name: fk_user_user_type; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT fk_user_user_type FOREIGN KEY (user_type) REFERENCES user_type(id);
+
+
+--
+-- TOC entry 3304 (class 2606 OID 28861)
+-- Name: fk_version_created_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY version
+    ADD CONSTRAINT fk_version_created_by FOREIGN KEY (created_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3305 (class 2606 OID 28866)
+-- Name: fk_version_deleted_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY version
+    ADD CONSTRAINT fk_version_deleted_by FOREIGN KEY (deleted_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3306 (class 2606 OID 28871)
+-- Name: fk_version_modified_by; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY version
+    ADD CONSTRAINT fk_version_modified_by FOREIGN KEY (modified_by) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3299 (class 2606 OID 28876)
+-- Name: pk_access_log_service_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY access_log
+    ADD CONSTRAINT pk_access_log_service_id FOREIGN KEY (service_id) REFERENCES service(id);
+
+
+--
+-- TOC entry 3359 (class 2606 OID 28881)
+-- Name: pk_perm_group_member_group_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY perm_group_member
+    ADD CONSTRAINT pk_perm_group_member_group_id FOREIGN KEY (group_id) REFERENCES perm_group(id);
+
+
+--
+-- TOC entry 3386 (class 2606 OID 28886)
+-- Name: pk_session_agent_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY session
+    ADD CONSTRAINT pk_session_agent_id FOREIGN KEY (agent_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3387 (class 2606 OID 28891)
+-- Name: pk_session_user_id; Type: FK CONSTRAINT; Schema: api; Owner: -
+--
+
+ALTER TABLE ONLY session
+    ADD CONSTRAINT pk_session_user_id FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- TOC entry 3615 (class 0 OID 0)
+-- Dependencies: 8
+-- Name: public; Type: ACL; Schema: -; Owner: -
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2016-05-30 05:39:36
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -1,0 +1,217 @@
+.leaflet-container{
+    font-family: "Kanit";
+    font-weight: 400;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
+.logo {
+    border-radius: 20px;
+}
+.info.date{
+    background-color: white;
+    border-radius: 3px;
+    text-align: center;
+}
+.leaflet-container{
+    cursor: default;
+}
+.leaflet-left {
+    width: 100%;
+}
+.leaflet-right{
+    font-size: 16px;
+    margin-right: 25px;
+}
+.control-left{
+    float: left;
+}
+.control-right{
+    float: right;
+}
+.control-left,
+.control-right{
+    width: 50%;
+}
+.control-box{
+    width: 280px;
+    margin-bottom: 20px;
+}
+.control-left .control-box{
+    float: right;
+}
+.control-right .control-box{
+    float: left;
+}
+.control-head div.icon{
+    width: 32px;
+    height: 32px;
+    float: left;
+    padding-right: 3px;
+    background-repeat: no-repeat;
+}
+.control-box-rain{
+    margin-right: 20%;
+}
+.control-box-rain .control-head div.icon{
+    background-image: url('../../../../../images/user/rain/rain_white_blue_32.png');
+}
+.control-box-waterlevel,
+.control-box-waterquality{
+    margin-right: 28%;
+}
+.control-box-waterlevel .control-head div.icon{
+    background-image: url('../../../../../images/user/waterlevel/waterlevel_white_blue_32.png');
+}
+.control-box-waterquality .control-head div.icon{
+    background-image: url('../../../../../images/user/waterquality/waterquality_white_blue_32.png');
+}
+.control-box-dam{
+    margin-right: 34%;
+}
+.control-box-dam .control-head div.icon{
+    background-image: url('../../../../../images/user/dam/dam_white_blue_32.png');
+}
+.control-box-storm{
+    margin-left: 35%;
+}
+.control-box-storm .control-head div.icon{
+    background-image: url('../../../../../images/user/storm/storm_white_blue_32.png');
+}
+.control-box-clock{
+    margin-left: 43%;
+}
+.control-box-clock .control-head div.icon{
+    background-image: url('../../../../../images/user/clock/clock_white_blue_32.png');
+}
+.control-box-wave{
+    margin-left: 46%;
+}
+.control-box-wave .control-head div.icon{
+    background-image: url('../../../../../images/user/wave/wave_white_blue_32.png');
+}
+.control-box-warning{
+    margin-left: 30%;
+}
+.control-box-warning .control-head div.icon{
+    background-image: url('../../../../../images/user/warning/warning_white_blue_32.png');
+}
+
+.control-head div.info{
+    width: 12px;
+    height: 12px;
+    margin-top: 12px;
+    float: left;
+    background-repeat: no-repeat;
+    background-image: url('../../../../../images/user/info/info_white_blue_12.png');
+}
+.control-head div.control-head-text{
+    margin-left: 55px;
+    line-height: 32px;
+    font-size: 20px;
+    font-weight: 700;
+}
+.control-head div.control-head-text span{
+    color: #939598;
+    font-size: 13px;
+    margin-left: 5px;
+}
+.control-head div.control-head-text a{
+    color: inherit;
+    text-decoration: none;
+}
+.control-body{
+    clear: both;
+    height: 55px;
+    overflow: hidden;
+}
+.control-body div{
+    position: relative;
+    top: 0;
+}
+.control-arrow{
+    text-align: center;
+}
+.control-arrow .fa-angle-down,
+.control-arrow .fa-angle-up{
+    visibility: hidden;
+    cursor: pointer;
+    margin: 0 .2em;
+}
+.control-arrow .fa-angle-down:hover,
+.control-arrow .fa-angle-up:hover{
+    transform: scale(2,2);
+}
+
+.control-arrow.hasDown .fa-angle-down{
+    visibility: visible;
+}
+.control-arrow.hasUp .fa-angle-up{
+    visibility: visible;
+}
+.label {
+    display: inline;
+    padding: .1em .6em .1em;
+    margin: 0 .5px;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    /*white-space: nowrap;*/
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+.label-title{
+    font-size: 100%;
+    color: #000;
+}
+.label-red {
+    background-color: #EF403D;
+}
+.label-yellow {
+    background-color: #FFCC4E;
+}
+.label-blue {
+    background-color: #00A7E1;
+}
+.label-orange {
+    background-color: #F36F31;
+}
+.label-green {
+    background-color: #50B748;
+}
+.label-gray {
+    background-color: #939598;
+}
+.label-silver {
+    background-color: #E6E7E8;
+}
+.label-white {
+    background-color: #FFFFFF;
+}
+.text-red {
+    color: #EF403D;
+}
+.text-yellow {
+    color: #FFCC4E;
+}
+.text-blue {
+    color: #00A7E1;
+}
+.text-orange {
+    color: #F36F31;
+}
+.text-green {
+    color: #50B748;
+}
+.text-gray {
+    color: #939598;
+}
+.text-silver {
+    color: #E6E7E8;
+}
+.text-white {
+    color: #FFFFFF;
+}

@@ -1,0 +1,100 @@
+<!--by werawan 17/04/2018 -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>How to use string function</title>
+	<link rel="stylesheet" type="text/css" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+	<div class="stackedit__html"><h1 id="วิธีใช้ฟังก์ชัน string ในตั้งค่า dataset">วิธีใช้ฟังก์ชัน string ในตั้งค่า dataset (ตัวอย่าง กรมฝนหลวงฯ)</h1>
+		<ol>
+			<li>เตรียม Path จากต้นทางที่จะนำไปใช้สร้าง path วางไฟล์ที่ถูกดาวน์โหลดมาจากหน่วยงานต้นทางบนเครื่อง archive.thaiwater.net โดย path จากหน่วยงานต้นทางสามารถดูได้ที่</li>
+		</ol>
+		<ul>
+			<li>เครื่อง archive.thaiwater.net</li>
+			<li>ไปที่ /data/thaiwaterdata/data/dataset/media/image/radar/drraa/yyyy/mm/dd/HHMMSS</li>
+            <li>เข้าไปที่ไฟล์ dl-...-filelist.json
+                <img src="string_drraa_01.jpg" alt="ภาพที่ 1">
+            </li>
+            <li>ไฟล์ต้นทางอยู่ที่ "name":"cband/chatu/171017/CAPPI240@chatu@171017020600.png"</li>
+		</ul>
+		<ol start="2">
+			<li>
+				<p>การใช้คำสั่ง string <b>splitword</b></p>
+			</li>
+        </ol>
+        <ul>
+            <li>Path จากหน่วยงานต้นทาง : cband/chatu/171017/CAPPI240@chatu@171017020600.png</li>
+            <li>ผลที่ต้องการ : cband</li>
+            <li>วิธีใช้คำสั่ง : splitword(input('name'), '/', 'first')</li>
+                <ul>
+                    <li>input('name') คือ เลือก path ที่จะใช้ splitword โดยเลือกจากข้อ 1.</li>
+                    <li>'/' คือ ตัวใช้คั่นแต่ละ array</li>
+                    <li>'first' คือ เลือกจากตำแหน่งของ array ใน path นั้น ซึ่ง cband เป็น array ตำแหน่งแรกของ Path จากหน่วยงานต้นทาง</li>
+                </ul>
+        </ul>
+        <ol start="3">
+            <li>
+                <p>การใช้คำสั่ง string <b>pickword</b></p>
+            </li>
+        </ol>
+        <ul>
+            <li>Path จากหน่วยงานต้นทาง : cband/chatu/171017/CAPPI240@chatu@171017020600.png</li>
+            <li>ผลที่ต้องการ : 17</li>
+            <li>วิธีใช้คำสั่ง : pickword(input('name'), 12, 13)</li>
+                <ul>
+                    <li>12 และ 13 คือ ตำแหน่งของ string (ตัวอักษร) ที่ต้องการ</li>
+                </ul>
+            <li>ในกรณีที่ Path จากหน่วยงานต้นทาง มีความยาวของ string (ตัวอักษร) ไม่เท่ากัน จะใช้ทั้งคำสั่ง pickword และ splitword ดังนี้</li>
+                <ul>
+                    <li>วิธีใช้คำสั่ง : pickword(splitword(input('name'), '/', '2'), 0, 1)</li>
+                    <ul>
+                        <li>splitword(input('name'), '/', '2') = 171017</li>
+                        <li>ใช้คำสั่ง pickword เลือกตำแหน่งของ string จากการ spliword แล้ว 
+                            <br>จะได้ pickword(171017, 0, 1) = 17</li>
+                    </ul>
+                </ul>
+        </ul>
+        <ol start="4">
+            <li>
+                <p>การใช้คำสั่ง <b>combineword</b></p>
+            </li>
+        </ol>
+        <ul>
+            <li>Path จากหน่วยงานต้นทาง : cband/chatu/171017/CAPPI240@chatu@171017020600.png</li>
+            <li>ผลที่ต้องการ : cband/chatu/17/10/17</li>
+            <li>วิธีใช้คำสั่ง : combineword('/', splitword(input('name'), '/', 'first'), splitword(input('name'), '/', '1'), pickword(splitword(input('name'), '/', '2'), 0, 1), pickword(splitword(input('name'), '/', '2'), 2, 3), pickword(splitword(input('name'), '/', '2'), 4, 5))</li>
+                <ul>
+                    <li>splitword(input('name'), '/', 'first') = cband</li>
+                    <li>splitword(input('name'), '/', '1') = chatu</li>
+                    <li>pickword(splitword(input('name'), '/', '2'), 0, 1) = 17</li>
+                    <li>pickword(splitword(input('name'), '/', '2'), 2, 3) = 10</li>
+                    <li>pickword(splitword(input('name'), '/', '2'), 4, 5) = 17</li>
+                    <li>แล้วใช้คำสั่ง combineword('/', cband, chatu, 17, 10, 17) จะได้ cband/chatu/17/10/17 
+                        <br>ซึ่งเป็นการรวมคำจากการ splitword และ pickword ทั้งหมดแล้วคั่นด้วย '/'</li>
+                </ul>
+        </ul>
+
+        <ol start="5">
+            <li>
+                <p>การต่อ string</p>
+            </li>
+        </ol>
+        <ul>
+            <li>Path จากหน่วยงานต้นทาง : cband/chatu/171017/CAPPI240@chatu@171017020600.png</li>
+            <li>ผลที่ต้องการ : 20171017</li>
+            <li>วิธีใช้คำสั่ง : '20' + splitword(input('name'), '/', '2')</li>
+                <ul>
+                    <li>'20' = 20</li>
+                    <li>splitword(input('name'), '/', '2') = 171017</li>
+                    <li>สามารถต่อ string ด้วยการใช้ + ระหว่าง string ที่ต้องการให้เป็นคำเดียวกัน</li>
+                </ul>
+        </ul>
+		
+	</div>
+
+</body>
+</html>

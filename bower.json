@@ -1,0 +1,63 @@
+{
+  "name": "haii-system-report",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Atikom <jmjkoj@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "3.5.1",
+    "font-awesome": "fontawesome#4.6.3",
+    "bootstrap": "4.4.1",
+    "bootstrap-datepicker": "1.9.0",
+    "bootstrap-duallistbox": "4.0.2",
+    "jquery-minicolors": "2.3.4",
+    "jquery-ui": "1.12.1",
+    "highcharts": "8.1.0",
+    "datatables.net": "1.10.11",
+    "datatables.net-bs": "1.10.11",
+    "datatables.net-dt": "1.10.11",
+    "datatables.net-buttons": "1.2.1",
+    "datatables.net-buttons-dt": "1.2.1",
+    "datatables.net-buttons-bs": "1.2.1",
+    "datatables.net-select-bs": "1.1.2",
+    "datatables.net-select": "1.1.2",
+    "datatables.net-select-dt": "1.1.2",
+    "select2": "4.0.3",
+    "leaflet": "^1.0.1",
+    "leaflet.loading": "^0.1.23",
+    "Leaflet.awesome-markers": "leaflet.awesome-markers#^2.0.2",
+    "leaflet-ajax": "^2.1.0",
+    "leaflet-providers": "^1.1.15",
+    "d3": "^4.3.0",
+    "geojson": "http://github.com/caseypt/geojson.js.git#^0.4.0",
+    "Leaflet.defaultextent": "https://github.com/nguyenning/Leaflet.defaultextent.git#^0.0.2",
+    "vue": "^2.0.5",
+    "vue-resource": "^1.0.3",
+    "socket.io-client": "^1.6.0",
+    "numeral": "^1.5.5",
+    "lightbox2": "^2.9.0",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "datatables.net-fixedheader": "^3.1.2",
+    "datatables.net-fixedheader-dt": "^3.1.2",
+    "highcharts-latest": "highcharts#^8.1.0",
+    "popper.js": "^2.4.2",
+    "datatables.net-bs4": "^3.2.2",
+    "datatables.net-responsive-bs4": "^2.2.5",
+    "datatables.net-rowgroup-bs4": "^1.1.2",
+    "datatables.net-scroller-bs4": "^2.0.2",
+    "bootstrap-multiselect": "^0.9.15"
+  },
+  "resolutions": {
+    "leaflet": "^1.0.1"
+  }
+}

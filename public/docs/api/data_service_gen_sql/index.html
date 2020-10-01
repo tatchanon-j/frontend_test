@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>วิธีรันทดสอบ api_dataservice by metadata_id</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="วิธีรันทดสอบ-api_dataservice-by-metadata_id-ของระบบให้บริการข้อมูล">วิธีรันทดสอบ api_dataservice by metadata_id ของระบบให้บริการข้อมูล</h1>
+<p>โฟล์เดอร์หลักจะอยู่ใน</p>
+<blockquote>
+<p>/thaiwater30/src/haii.or.th/api/thaiwater30/tools/api_service_query</p>
+</blockquote>
+<p>ไฟล์เริ่มต้น main.go ทำการเปลี่ยน metadata id ดังโค้ดด้านล่างจะทำการทดสอบ metadata id 550</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/tools/api_service_query/main.go</span>
+<span class="token keyword">package</span> main
+<span class="token keyword">import</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token function">initDB</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">var</span> service_id <span class="token builtin">int64</span> <span class="token operator">=</span> <span class="token number">550</span><span class="token comment">// metadata id</span>
+	<span class="token function">testDataserviceById</span><span class="token punctuation">(</span>service_id<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>เพิ่ม run configurations ดังนี้<br>
+<img src="assets/04.jpg" alt="ตัวอย่างrun configurations"><br>
+<img src="assets/03.jpg" alt="ตัวอย่างrun configurations"></p>
+<p>shh connect database<br>
+<img src="assets/05.jpg" alt="ตัวอย่าง connect database"></p>
+<p>เมื่อกด run configurations ที่เพิ่มไว้ โค้ดจะ gen โฟล์เดอร์ชื่อตาม metadata id เช่น ตัวอย่างที่รันเป็น 550 ในโฟล์เดอร์จะมี ไฟล์ detail.log เป็น sql และไฟล์ .json เป็นข้อมูลที่ได้จาก query sql<br>
+<img src="assets/06.jpg" alt="ตัวอย่าง ไฟล์ที่ได้จากการรัน"></p>
+<p>ตัวอย่างไฟล์  .json ที่ได้</p>
+<pre class=" language-json"><code class="prism  language-json"><span class="token punctuation">[</span>	
+  <span class="token punctuation">{</span>
+    <span class="token string">"agency_id"</span><span class="token punctuation">:</span> <span class="token number">12</span><span class="token punctuation">,</span>
+    <span class="token string">"amphoe_name"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"hydro_id"</span><span class="token punctuation">:</span> <span class="token number">8</span><span class="token punctuation">,</span>
+    <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token number">2559</span><span class="token punctuation">,</span>
+    <span class="token string">"offset"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"province_name"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"qmax"</span><span class="token punctuation">:</span> <span class="token number">204</span><span class="token punctuation">,</span>
+    <span class="token string">"riverbank"</span><span class="token punctuation">:</span> <span class="token number">8.2</span><span class="token punctuation">,</span>
+    <span class="token string">"station_type_msl"</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_lat"</span><span class="token punctuation">:</span> <span class="token string">"6.022610"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_long"</span><span class="token punctuation">:</span> <span class="token string">"101.974892"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"บริเวณสะพานลันตู"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_oldcode"</span><span class="token punctuation">:</span> <span class="token string">"X.119A"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_type"</span><span class="token punctuation">:</span> <span class="token string">"W"</span><span class="token punctuation">,</span>
+    <span class="token string">"tumbon_name"</span><span class="token punctuation">:</span> <span class="token keyword">null</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token string">"agency_id"</span><span class="token punctuation">:</span> <span class="token number">12</span><span class="token punctuation">,</span>
+    <span class="token string">"amphoe_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"มะนัง"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"hydro_id"</span><span class="token punctuation">:</span> <span class="token number">8</span><span class="token punctuation">,</span>
+    <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token number">2561</span><span class="token punctuation">,</span>
+    <span class="token string">"offset"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"province_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"สตูล"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"qmax"</span><span class="token punctuation">:</span> <span class="token number">265</span><span class="token punctuation">,</span>
+    <span class="token string">"riverbank"</span><span class="token punctuation">:</span> <span class="token number">12.8</span><span class="token punctuation">,</span>
+    <span class="token string">"station_type_msl"</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_lat"</span><span class="token punctuation">:</span> <span class="token string">"6.940820"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_long"</span><span class="token punctuation">:</span> <span class="token string">"99.872917"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"บ้านวังพระเคียน"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_oldcode"</span><span class="token punctuation">:</span> <span class="token string">"X.150"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_type"</span><span class="token punctuation">:</span> <span class="token string">"W"</span><span class="token punctuation">,</span>
+    <span class="token string">"tumbon_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"นิคมพัฒนา"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+</code></pre>
+<p>ตัวอย่างไฟล์ detail.log</p>
+<pre class=" language-go"><code class="prism  language-go">Service id <span class="token punctuation">:</span> <span class="token number">1</span>
+Query <span class="token punctuation">:</span> SELECT tt<span class="token punctuation">.</span>id<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>agency_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_name <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_type <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_lat <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_long <span class="token punctuation">,</span> lg<span class="token punctuation">.</span>province_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>amphoe_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>tumbon_name<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_oldcode <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>riverbank <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>station_type_msl <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>hydro_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>offset <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>qmax  FROM m_tele_station tt  LEFT JOIN lt_geocode lg ON tt<span class="token punctuation">.</span>geocode_id <span class="token operator">=</span> lg<span class="token punctuation">.</span>id  LEFT JOIN subbasin s ON tt<span class="token punctuation">.</span>subbasin_id <span class="token operator">=</span> s<span class="token punctuation">.</span>id  WHERE tt<span class="token punctuation">.</span>agency_id <span class="token operator">=</span> <span class="token string">'12'</span> AND tt<span class="token punctuation">.</span>deleted_at <span class="token operator">=</span> <span class="token function">to_timestamp</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  AND hydro_id IS NOT NULL ORDER BY tt<span class="token punctuation">.</span>id 
+Param <span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> 
+<span class="token punctuation">(</span><span class="token number">0.01995</span> sec<span class="token punctuation">)</span>
+rows <span class="token number">286</span>
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>
+Service id <span class="token punctuation">:</span> <span class="token number">2</span>
+Query <span class="token punctuation">:</span> SELECT tt<span class="token punctuation">.</span>id<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>agency_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_name <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_type <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_lat <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_long <span class="token punctuation">,</span> lg<span class="token punctuation">.</span>province_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>amphoe_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>tumbon_name<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_oldcode <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>riverbank <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>station_type_msl <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>hydro_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>offset <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>qmax  FROM m_tele_station tt  LEFT JOIN lt_geocode lg ON tt<span class="token punctuation">.</span>geocode_id <span class="token operator">=</span> lg<span class="token punctuation">.</span>id  LEFT JOIN subbasin s ON tt<span class="token punctuation">.</span>subbasin_id <span class="token operator">=</span> s<span class="token punctuation">.</span>id  WHERE tt<span class="token punctuation">.</span>agency_id <span class="token operator">=</span> <span class="token string">'12'</span> AND tt<span class="token punctuation">.</span>deleted_at <span class="token operator">=</span> <span class="token function">to_timestamp</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  AND hydro_id IS NOT NULL ORDER BY tt<span class="token punctuation">.</span>id 
+Param <span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> 
+<span class="token punctuation">(</span><span class="token number">0.00705</span> sec<span class="token punctuation">)</span>
+rows <span class="token number">286</span>
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>
+Service id <span class="token punctuation">:</span> <span class="token number">4</span>
+Query <span class="token punctuation">:</span> SELECT tt<span class="token punctuation">.</span>id<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>agency_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_name <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_type <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_lat <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_long <span class="token punctuation">,</span> lg<span class="token punctuation">.</span>province_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>amphoe_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>tumbon_name<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_oldcode <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>riverbank <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>station_type_msl <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>hydro_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>offset <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>qmax  FROM m_tele_station tt  LEFT JOIN lt_geocode lg ON tt<span class="token punctuation">.</span>geocode_id <span class="token operator">=</span> lg<span class="token punctuation">.</span>id  LEFT JOIN subbasin s ON tt<span class="token punctuation">.</span>subbasin_id <span class="token operator">=</span> s<span class="token punctuation">.</span>id  WHERE tt<span class="token punctuation">.</span>agency_id <span class="token operator">=</span> <span class="token string">'12'</span> AND tt<span class="token punctuation">.</span>deleted_at <span class="token operator">=</span> <span class="token function">to_timestamp</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  AND hydro_id IS NOT NULL ORDER BY tt<span class="token punctuation">.</span>id 
+Param <span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> 
+<span class="token punctuation">(</span><span class="token number">0.00573</span> sec<span class="token punctuation">)</span>
+rows <span class="token number">286</span>
+</code></pre>
+</div>
+</body>
+
+</html>

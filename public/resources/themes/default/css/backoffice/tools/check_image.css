@@ -1,0 +1,46 @@
+@CHARSET "ISO-8859-1";
+
+
+table.check-img-datatables th {
+	text-align: center
+}
+
+table.check-img-datatables th:nth-child(1) {
+	width: 5%;
+}
+
+table.check-img-datatables th:nth-child(2) {
+	width: 17%;
+  text-align: left;
+}
+
+table.check-img-datatables th:nth-child(3) {
+	width: 40%;
+}
+
+table.check-img-datatables th:nth-child(4) {
+	width: 15%;
+}
+
+table.check-img-datatables th:nth-child(5) {
+	width: 15%;
+}
+
+
+table.check-img-datatables td:nth-child(1),
+table.check-img-datatables td:nth-child(5) {
+    text-align: center;
+}
+table.check-img-datatables td:nth-child(2),
+table.check-img-datatables td:nth-child(3) ,
+table.check-img-datatables td:nth-child(4){
+    text-align: left;
+}
+
+table.check-img-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}

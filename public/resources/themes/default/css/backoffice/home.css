@@ -1,0 +1,16 @@
+.main-header > .navbar,
+.content-wrapper, .right-side, .main-footer{
+  margin-left: 0px !important;
+}
+.box-body{
+  padding: 2%;
+  min-height: 800px;
+}
+
+.sidebar-mini.sidebar-collapse .content-wrapper,
+.sidebar-mini.sidebar-collapse .right-side,
+.sidebar-mini.sidebar-collapse .main-footer{
+  margin-left: 0px !important;
+}
+
+.main-picture{}

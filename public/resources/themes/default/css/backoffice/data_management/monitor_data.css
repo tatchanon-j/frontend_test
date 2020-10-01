@@ -1,0 +1,55 @@
+@CHARSET "ISO-8859-1";
+
+
+table.monitor-datatables th {
+	text-align: center
+}
+
+table.monitor-datatables th:nth-child(1) {
+	width: 10px;
+}
+
+table.monitor-datatables th:nth-child(2),
+table.monitor-datatables th:nth-child(3),
+table.monitor-datatables th:nth-child(4),
+table.monitor-datatables th:nth-child(5),
+table.monitor-datatables th:nth-child(6),
+table.monitor-datatables th:nth-child(7),
+table.monitor-datatables th:nth-child(8),
+table.monitor-datatables th:nth-child(9),
+table.monitor-datatables th:nth-child(10)   {
+	width: 10%;
+}
+
+table.monitor-datatables td:nth-child(1){
+	text-align: center;
+}
+
+table.monitor-datatables td:nth-child(2),
+table.monitor-datatables td:nth-child(3),
+table.monitor-datatables td:nth-child(4),
+table.monitor-datatables td:nth-child(5),
+table.monitor-datatables td:nth-child(6),
+table.monitor-datatables td:nth-child(7),
+table.monitor-datatables td:nth-child(8),
+table.monitor-datatables td:nth-child(9),
+table.monitor-datatables td:nth-child(10)   {
+	width: 10%;
+  text-align:left;
+}
+
+table.admin-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}
+
+table.admin-datatables i.btn-edit:before {
+	content: '\f044';
+}
+
+.data-filters {
+	padding-bottom: 10px;
+}

@@ -1,0 +1,205 @@
+/* line 3, ../../../../../../../resources/assets/sass/user/main.scss */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Kanit" !important;
+}
+
+/* line 8, ../../../../../../../resources/assets/sass/user/main.scss */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: "Kanit";
+}
+
+/* line 11, ../../../../../../../resources/assets/sass/user/main.scss */
+.main-header {
+  border-bottom-width: 10px;
+  border-bottom-style: solid;
+  border-bottom-color: #939598;
+}
+/* line 15, ../../../../../../../resources/assets/sass/user/main.scss */
+.main-header .sidebar-toggle:before {
+  content: " ";
+}
+/* line 18, ../../../../../../../resources/assets/sass/user/main.scss */
+.main-header > .navbar {
+  /*padding: 10px 15px;*/
+}
+/* line 21, ../../../../../../../resources/assets/sass/user/main.scss */
+.main-header > .navbar {
+  margin-left: 0;
+}
+
+/* line 27, ../../../../../../../resources/assets/sass/user/main.scss */
+.content-wrapper,
+.right-side,
+.main-footer {
+  margin-left: 0;
+}
+
+/* line 32, ../../../../../../../resources/assets/sass/user/main.scss */
+.skin-blue-light .main-header .navbar {
+  background-color: #00a7e1;
+}
+/* line 36, ../../../../../../../resources/assets/sass/user/main.scss */
+.skin-blue-light .main-header .navbar .sidebar-toggle,
+.skin-blue-light .main-header .navbar .nav > li > a {
+  color: white;
+}
+/* line 46, ../../../../../../../resources/assets/sass/user/main.scss */
+.skin-blue-light .main-header .navbar .sidebar-toggle:hover,
+.skin-blue-light .main-header .navbar .nav .open > a,
+.skin-blue-light .main-header .navbar .nav .open > a:hover,
+.skin-blue-light .main-header .navbar .nav .open > a:focus,
+.skin-blue-light .main-header .navbar .nav > li > a:active,
+.skin-blue-light .main-header .navbar .nav > li > a:focus,
+.skin-blue-light .main-header .navbar .nav > li > a:hover,
+.skin-blue-light .main-header .navbar .nav > .active > a {
+  background-color: white;
+  color: #00a7e1;
+  border-radius: 10px;
+}
+/* line 54, ../../../../../../../resources/assets/sass/user/main.scss */
+.skin-blue-light .main-footer {
+  background-color: #00a7e1;
+  color: white;
+}
+/* line 58, ../../../../../../../resources/assets/sass/user/main.scss */
+.skin-blue-light .box-header.with-border {
+  border-bottom-color: #00a7e1;
+}
+
+/* line 63, ../../../../../../../resources/assets/sass/user/main.scss */
+.content-wrapper,
+.right-side {
+  background-color: white;
+}
+
+/* line 67, ../../../../../../../resources/assets/sass/user/main.scss */
+.content-header ol.breadcrumb {
+  font-size: 16px;
+}
+
+/* line 71, ../../../../../../../resources/assets/sass/user/main.scss */
+.box {
+  border-top: inherit;
+  box-shadow: none;
+}
+
+/* line 75, ../../../../../../../resources/assets/sass/user/main.scss */
+.breadcrumb {
+  background-color: inherit;
+}
+/* line 77, ../../../../../../../resources/assets/sass/user/main.scss */
+.breadcrumb > li + li:before {
+  content: "|";
+}
+
+/* line 81, ../../../../../../../resources/assets/sass/user/main.scss */
+.nav-stacked.nav-scrollspy {
+  display: none;
+  position: fixed;
+  width: 16%;
+  text-align: right;
+}
+/* line 86, ../../../../../../../resources/assets/sass/user/main.scss */
+.nav-stacked.nav-scrollspy a {
+  line-height: 1px;
+}
+/* line 88, ../../../../../../../resources/assets/sass/user/main.scss */
+.nav-stacked.nav-scrollspy a label {
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  /* line 94, ../../../../../../../resources/assets/sass/user/main.scss */
+  .nav-stacked.nav-scrollspy {
+    display: inherit;
+  }
+}
+/* line 99, ../../../../../../../resources/assets/sass/user/main.scss */
+.nav-stacked > li {
+  border-radius: 0;
+  border: 0 solid transparent;
+  border-right-width: 3px;
+  border-right-color: #00a7e1;
+  color: #444;
+}
+/* line 105, ../../../../../../../resources/assets/sass/user/main.scss */
+.nav-stacked > li > a {
+  border: none;
+}
+/* line 109, ../../../../../../../resources/assets/sass/user/main.scss */
+.nav-stacked > li + li {
+  margin-top: 0;
+}
+/* line 113, ../../../../../../../resources/assets/sass/user/main.scss */
+.nav-stacked li.active,
+.nav-stacked li.active:hover {
+  background: transparent;
+  color: #444;
+  border-color: #00a7e1;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 3px;
+  border-right: none;
+}
+
+/* line 124, ../../../../../../../resources/assets/sass/user/main.scss */
+.footer .breadcrumb {
+  text-align: center;
+  margin-bottom: 0;
+  font-size: 16px;
+}
+
+/* line 130, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon {
+  margin: 0;
+  width: 32px;
+  height: 32px;
+  padding-right: 3px;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+}
+/* line 138, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-rain {
+  background-image: url("../../../../../images/user/rain/rain_white_blue_32.png");
+}
+/* line 141, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-waterlevel {
+  background-image: url("../../../../../images/user/waterlevel/waterlevel_white_blue_32.png");
+}
+/* line 144, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-waterquality {
+  background-image: url("../../../../../images/user/waterquality/waterquality_white_blue_32.png");
+}
+/* line 147, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-dam {
+  background-image: url("../../../../../images/user/dam/dam_white_blue_32.png");
+}
+/* line 150, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-storm {
+  background-image: url("../../../../../images/user/storm/storm_white_blue_32.png");
+}
+/* line 153, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-clock {
+  background-image: url("../../../../../images/user/clock/clock_white_blue_32.png");
+}
+/* line 156, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-wave {
+  background-image: url("../../../../../images/user/wave/wave_white_blue_32.png");
+}
+/* line 159, ../../../../../../../resources/assets/sass/user/main.scss */
+label.user-icon.user-icon-warning {
+  background-image: url("../../../../../images/user/warning/warning_white_blue_32.png");
+}
+
+/* line 163, ../../../../../../../resources/assets/sass/user/main.scss */
+table.normal-table {
+  width: 100%;
+  text-align: center;
+}
+/* line 166, ../../../../../../../resources/assets/sass/user/main.scss */
+table.normal-table th, table.normal-table td {
+  text-align: inherit;
+  padding: 0 2px;
+}

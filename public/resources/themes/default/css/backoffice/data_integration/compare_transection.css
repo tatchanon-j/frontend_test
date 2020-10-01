@@ -1,0 +1,54 @@
+@CHARSET "ISO-8859-1";
+
+
+table.transection-datatables th {
+	text-align: center
+}
+
+table.transection-datatables th:nth-child(1),
+table.transection-datatables th:nth-child(5){
+	width: 5%;
+}
+table.transection-datatables th:nth-child(1),
+table.transection-datatables th:nth-child(2),
+table.transection-datatables th:nth-child(3),
+table.transection-datatables th:nth-child(4){
+	width:20%;
+}
+
+table.transection-datatables td:nth-child(1),
+table.transection-datatables td:nth-child(6){
+    text-align: center;
+}
+
+table.transection-datatables td:nth-child(1),
+table.transection-datatables td:nth-child(3){
+    text-align: left;
+}
+
+table.transection-datatables td:nth-child(2),
+table.transection-datatables td:nth-child(4),
+table.transection-datatables td:nth-child(5){
+    text-align: right;
+}
+
+
+table.transection-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}
+
+table.transection-datatables i.btn-view:before {
+	content: '\F0DB';
+	color:#3c8dbc;
+}
+
+div.dt-buttons {
+    float: right;
+}
+.hidden {
+    display:none
+}

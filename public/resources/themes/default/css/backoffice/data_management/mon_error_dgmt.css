@@ -1,0 +1,41 @@
+@CHARSET "ISO-8859-1";
+
+
+table.monerr-datatables th {
+	text-align: center
+}
+
+table.monerr-datatables th:nth-child(1) {
+	width: 10px;
+	text-align: center;
+}
+
+table.monerr-datatables th:nth-child(2),
+table.monerr-datatables th:nth-child(3),
+table.monerr-datatables th:nth-child(4),
+table.monerr-datatables th:nth-child(5),
+table.monerr-datatables th:nth-child(6),
+table.monerr-datatables th:nth-child(7),
+table.monerr-datatables th:nth-child(8)  {
+	text-align: center;
+	width: 20%;
+	min-width: 20%;
+}
+
+table.monerr-datatables td:nth-child(1),
+table.monerr-datatables td:nth-child(2){
+	text-align: center;
+}
+
+table.monerr-datatables td:nth-child(3),
+table.monerr-datatables td:nth-child(4),
+table.monerr-datatables td:nth-child(5),
+table.monerr-datatables td:nth-child(6),
+table.monerr-datatables td:nth-child(7),
+table.monerr-datatables td:nth-child(8)  {
+  text-align:left;
+}
+
+.data-filters {
+	padding-bottom: 10px;
+}

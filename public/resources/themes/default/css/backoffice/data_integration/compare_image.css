@@ -1,0 +1,64 @@
+@CHARSET "ISO-8859-1";
+
+
+table.image-datatables th {
+	text-align: center
+}
+
+table.image-datatables th:nth-child(1){
+	width: 5%;
+}
+table.image-datatables th:nth-child(2),
+table.image-datatables th:nth-child(3),
+table.image-datatables th:nth-child(4),
+table.image-datatables th:nth-child(5),
+table.image-datatables th:nth-child(6),
+table.image-datatables th:nth-child(7),
+table.image-datatables th:nth-child(8),
+table.image-datatables th:nth-child(9),
+table.image-datatables th:nth-child(10){
+	width:auto;
+}
+
+table.image-datatables td:nth-child(1),
+table.image-datatables td:nth-child(2){
+    text-align: center;
+}
+
+table.image-datatables td:nth-child(3),
+table.image-datatables td:nth-child(4),
+table.image-datatables td:nth-child(8),
+table.image-datatables td:nth-child(9){
+	text-align: left;
+}
+
+table.image-datatables td:nth-child(5),
+table.image-datatables td:nth-child(6),
+table.image-datatables td:nth-child(7),
+table.image-datatables td:nth-child(8),
+table.image-datatables td:nth-child(10),
+table.image-datatables td:nth-child(11),
+table.image-datatables td:nth-child(12){
+    text-align: right;
+}
+
+
+table.image-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}
+
+table.image-datatables i.btn-view:before {
+	content: '\F0DB';
+	color:#3c8dbc;
+}
+
+div.dt-buttons {
+    float: right;
+}
+.hidden {
+    display:none
+}

@@ -1,0 +1,52 @@
+#rid_daily #egat_daily td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4) , td:nth-child(5) {
+  text-align: right;
+}
+
+div.user-marker.user-marker-dam {
+  background-image: url("../../../../../images/thailand/marker/dam/default/s_15.png?v=1.1");
+  z-index: 1 !important;
+}
+div.user-marker.user-marker-dam.user-marker-dam-yellow {
+  background-image: url("../../../../../images/thailand/marker/dam/yellow/s_15.png?v=1.1");
+  z-index: 2 !important;
+}
+div.user-marker.user-marker-dam.user-marker-dam-green {
+  background-image: url("../../../../../images/thailand/marker/dam/green/s_15.png?v=1.1");
+  z-index: 3 !important;
+}
+div.user-marker.user-marker-dam.user-marker-dam-blue {
+  background-image: url("../../../../../images/thailand/marker/dam/blue/s_15.png?v=1.1");
+  z-index: 4 !important;
+}
+div.user-marker.user-marker-dam.user-marker-dam-red {
+  background-image: url("../../../../../images/thailand/marker/dam/red/s_15.png?v=1.1");
+  z-index: 5 !important;
+}
+div.user-marker.user-marker-dam.user-marker-dam-min {
+  background-image: url("../../../../../images/thailand/marker/dam/min/s_15.png?v=1.1");
+  z-index: 6 !important;
+}
+.dataTables_filter{
+  display: none;
+}
+
+table.dam-table tbody th {
+    background-color: #d9dce1;
+}
+table th {
+    text-align: center;
+}
+
+table.dataTable thead > tr > th.sorting, table.dataTable thead > tr > th.sorting_asc, table.dataTable thead > tr > th.sorting_desc, table.dataTable thead > tr > td.sorting, table.dataTable thead > tr > td.sorting_asc, table.dataTable thead > tr > td.sorting_desc {
+    padding: 10px 18px;
+    font-family: Kanit;
+    font-weight: 300;
+    color : white;
+}
+table.dam-table {
+    font-size: 1em;
+}
+table#waterlevel_table_scale td:nth-child(n+2), table#dam_table_scale td:nth-child(n+2) {
+    color: white;
+    padding: 0px 12px;
+}

@@ -1,0 +1,33 @@
+@CHARSET "ISO-8859-1";
+
+
+table.ur-table th {
+	text-align: center
+}
+table.ur-table th:nth-child(1),
+table.ur-table th:nth-child(4),
+table.ur-table th:nth-child(5) {
+	width: 80px;
+}
+
+table.ur-table td:nth-child(1),
+table.ur-table td:nth-child(4),
+table.ur-table td:nth-child(5) {
+    text-align: center;
+}
+
+table.ur-table .btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px;
+	padding: 0px 2px;
+}
+
+table.ur-table .btn-view:before {
+	content: '\f002';
+}
+
+table.ur-table .btn-upload:before {
+    content: '\f0ee';
+}

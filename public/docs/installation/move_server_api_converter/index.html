@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ย้ายเครื่อง api converter</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="วิธีการแก้ไขและทดสอบในกรณีย้ายเครื่อง-api2.thaiwater.net--converter.thaiwater.net">วิธีการแก้ไขและทดสอบในกรณีย้ายเครื่อง <a href="http://api2.thaiwater.net">api2.thaiwater.net</a> &amp; <a href="http://converter.thaiwater.net">converter.thaiwater.net</a></h1>
+<p><strong>ขั้นตอนการแก้ไข config และทดสอบ กรณีย้ายเครื่อง <a href="http://api2.thaiwater.net">api2.thaiwater.net</a></strong></p>
+<pre><code>ในตัวอย่างจะใช้ 
+api server ตัวใหม่ : 192.168.150.111 
+database ตัวใหม่ : 192.168.140.137  
+เป็นตัวอย่าง
+</code></pre>
+<p><strong>1. ตรวจสอบ git</strong> แล้วทำการ git pull เพื่ออัพเดจ code ทั้งหมดที่เครื่อง api</p>
+<p><strong>2. แก้ไข config connect database</strong><br>
+ที่  /home/cim/haii-api-server/haii-api-server.conf เปิดไฟล์แก้ไขที่</p>
+<pre><code>  export TW30_DB=postgres://thaiwater30:cnp2T%402559@master1.
+  thaiwater.net/thaiwater30?sslmode=disable
+</code></pre>
+<p>ตัวอย่างเช่น เปลี่ยนจาก <a href="http://master1.thaiwater.net">master1.thaiwater.net</a> เป็น 192.168.140.137</p>
+<p><strong>3. Map drive จากเครื่อง <a href="http://archive.thaiwater.net">archive.thaiwater.net</a></strong><br>
+ที่ /data/thaiwaterdata/ มาไว้ที่เครื่องใหม่ เช่น 192.168.150.111 ที่ /data/thaiwater/thaiwaterdata/ โดย api จะต้องใช้โฟล์เดอร์ /data/thaiwater/thaiwaterdata/data/serverstore เก็บ api doc</p>
+<p><strong>4. ทำการ start service</strong> โดยคำสั่ง ดังนี้</p>
+<pre><code>* ตรวจสอบสถานะ : /home/cim/haii-api-server/haii-api-server status
+* Start service : /home/cim/haii-api-server/haii-api-server start
+* Stop service : /home/cim/haii-api-server/haii-api-server stop
+</code></pre>
+<p><strong>5. สามารถดู error log</strong> ได้ที่ /home/cim/haii-api-server/log</p>
+<p><strong>6. แก้ไขการเชื่อมโยงข้อมูล</strong><br>
+เข้า database api ตาราง system_setting คอลัมน์ name=server.ServerURL แก้ไข value=http:// 192.168.150.111:9200</p>
+<p><strong>7. ทดสอบ Api</strong><br>
+ได้ที่ <a href="http://192.168.150.111:9200">http://192.168.150.111:9200</a><br>
+ตัวอย่าง เช่น <a href="http://192.168.150.111:9200/api/v1/mobile/MBtOTp6IUXbjaCxhQoFQNrFgZUCzNgbo/th/rainfall24h_latest">http://192.168.150.111:9200/api/v1/mobile/MBtOTp6IUXbjaCxhQoFQNrFgZUCzNgbo/th/rainfall24h_latest</a></p>
+<h2 id="section"></h2>
+<p><strong>ขั้นตอนการแก้ไข config และ ทดสอบกรณีย้ายเครื่อง <a href="http://converter.thaiwater.net">converter.thaiwater.net</a></strong></p>
+<pre><code>ในตัวอย่างจะใช้ 
+api server ตัวใหม่ : 192.168.150.111 
+database ตัวใหม่ : 192.168.140.137  
+เป็นตัวอย่าง
+</code></pre>
+<p><strong>1. ตรวจสอบ git</strong> แล้วทำการ git pull เพื่ออัพเดจ code ทั้งหมดที่เครื่อง api</p>
+<p><strong>2. Map drive จากเครื่อง <a href="http://archive.thaiwater.net">archive.thaiwater.net</a></strong><br>
+ที่ /data/thaiwaterdata/ มาไว้ที่เครื่องใหม่ เช่น 192.168.150.111 ที่ /data/thaiwater/thaiwaterdata/ โดย api จะต้องใช้โฟล์เดอร์ /data/thaiwater/thaiwaterdata/data/serverstore เก็บ api doc</p>
+<p><strong>3.เปิด ftp และ sftp</strong> ปัจจุบันมีการ ftp และ sftp ไปยัง host ดังนี้</p>
+<pre><code>ftp
+	* nhc2bma.haii.or.th
+	* nhc2gistda.haii.or.th
+	* nhc2tmd.haii.or.th
+	* 10.111.41.120
+sftp
+	* archive.thaiwater.net
+	* 192.168.12.190
+	* 192.168.12.189
+	* live1.haii.or.th
+</code></pre>
+<p><strong>4. แจ้งการใช้งาน mail ทาง system เพื่อให้ระบบสามารถใช้งาน mail ได้</strong><br>
+สามารถดู mail จาก config  database ชื่อ api ตาราง system_setting name=thaiwater30.service.event_management.smtpserver.smtp1</p>
+<p><strong>5. แก้ไขการ config database</strong><br>
+เข้า database api ตาราง system_setting คอลัมน์ name= server.service.dataimport.RDLNodes.node0<br>
+แก้ไข value</p>
+<pre><code>{"user": "cim", "host": "192.168.150.112", 
+"key": "cimTiwrm*(89", "pathprefix": "dataimport", 
+"timeout_seconds": 1}
+</code></pre>
+<blockquote></blockquote>
+<p>ตรง “host”: “192.168.150.112” ปรับเป็นเครื่อง converter เครื่องใหม่</p>
+<p><strong>6. ทำการ start service</strong> โดยคำสั่ง ดังนี้</p>
+<pre><code>ตรวจสอบสถานะ : /home/cim/haii-api-server/haii-api-server status
+Start service : /home/cim/haii-api-server/haii-api-server start
+Stop service : /home/cim/haii-api-server/haii-api-server stop
+</code></pre>
+<p><strong>7. สามารถดู error log</strong> ได้ที่ /home/cim/dataimport/log</p>
+<p><strong>8. การทดสอบ</strong> โดยการ รันคำสั่งเชื่อมโยงข้อมูล</p>
+<pre><code>เช่น dataimport/bin/rdl 1 dl-basic
+</code></pre>
+<h2 id="section-1"></h2>
+<p><strong>ทดสอบเว็บ <a href="http://web.thaiwater.net/thaiwater30">web.thaiwater.net/thaiwater30</a></strong> โดยสามารถใช้งาน Api และในส่วนของ backoffice ได้สมบูรณ์</p>
+<p><strong>1. Clone project ลงเครื่อง local</strong></p>
+<pre><code>Git clone git@git.haii.or.th:cim_cws/fronend-thaiwater30.git
+</code></pre>
+<p><strong>2. ทำการแก้ไข config</strong>  .env ให้ใช้ api ตัวใหม่ (192.168.150.11)</p>
+<p><strong>3.ทำการตรวจสอบหน้าเว็บและทดสอบ backoffice ในเครื่อง local</strong></p>
+</div>
+</body>
+
+</html>

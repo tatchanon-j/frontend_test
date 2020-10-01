@@ -1,0 +1,149 @@
+@CHARSET "ISO-8859-1";
+
+
+table.archive-datatables th {
+	text-align: center
+}
+
+table.archive-datatables th:nth-child(1) {
+	width: 5%;
+}
+
+table.archive-datatables th:nth-child(2){
+	width: 20%;
+}
+table.archive-datatables td:nth-child(3){
+	width: 15%;
+}
+
+table.archive-datatables th:nth-child(4),
+table.archive-datatables th:nth-child(5),
+table.archive-datatables th:nth-child(6){
+	width: 20%;
+}
+
+table.archive-datatables td:nth-child(1){
+    text-align: center;
+}
+table.archive-datatables td:nth-child(2),
+table.archive-datatables td:nth-child(3){
+	text-align: left;
+}
+
+table.archive-datatables td:nth-child(4),
+table.archive-datatables td:nth-child(5),
+table.archive-datatables td:nth-child(6){
+    text-align: right;;
+}
+
+
+
+table.compare-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}
+
+table.compare-datatables th {
+	text-align: center
+}
+
+table.compare-datatables th:nth-child(1),
+table.compare-datatables th:nth-child(2),
+table.compare-datatables th:nth-child(3),
+table.compare-datatables th:nth-child(4),
+table.compare-datatables th:nth-child(5),
+table.compare-datatables th:nth-child(6),
+table.compare-datatables th:nth-child(7),
+table.compare-datatables th:nth-child(8),
+table.compare-datatables th:nth-child(9),
+table.compare-datatables th:nth-child(10),
+table.compare-datatables th:nth-child(11),
+table.compare-datatables th:nth-child(12),
+table.compare-datatables th:nth-child(13),
+table.compare-datatables th:nth-child(14),
+table.compare-datatables th:nth-child(15),{
+	width: auto;
+}
+
+table.compare-datatables td:nth-child(1){
+	text-align: center;
+}
+
+table.compare-datatables td:nth-child(3),
+table.compare-datatables td:nth-child(4),
+table.compare-datatables td:nth-child(5),
+table.compare-datatables td:nth-child(6),
+table.compare-datatables td:nth-child(7),
+table.compare-datatables td:nth-child(8),
+table.compare-datatables td:nth-child(9),
+table.compare-datatables td:nth-child(10),
+table.compare-datatables td:nth-child(11),
+table.compare-datatables td:nth-child(12),
+table.compare-datatables td:nth-child(13),
+table.compare-datatables td:nth-child(14),
+table.compare-datatables td:nth-child(15){
+	text-align: right;;
+}
+
+
+
+table.compare-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}
+
+table.compare-datatables > tbody > tr > td{
+	border: 0px !important;
+}
+
+table.compare-datatables tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+table.compare-datatables th {
+   background-color: #3c8dbc;
+	 color:#FFF;
+}
+
+table.compare-datatables .sum_column{
+	background-color: #f7d6a2;
+	color: #000;
+}
+
+a.dt-button {
+	font-size: 14px;
+}
+
+.txt-middle{
+	vertical-align: middle !important;
+}
+
+
+/* end the box on on filter */
+.top-buffer { margin-top:20px; }
+.group {
+  width:145px;
+  height:92px;
+	background-color:#dddddd;
+	color: #4e4e4e;
+  cursor:pointer;
+	float:left;
+	margin-left:10px;
+	border-radius: 5px;
+}
+.grp-active {
+	background-color:#3c8dbc;
+	color:#FFF;
+  transition:all 0.5s;
+}
+
+input[type=radio] {
+  display: none;
+}
+/* end the box on on filter */

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>index</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///C:\Users\rd\.atom\packages\markdown-preview-enhanced\node_modules\@shd101wyy\mume\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      <style> 
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+ 
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview   ">
+      <h1 class="mume-header" id="%E0%B8%82%E0%B8%B1%E0%B9%89%E0%B8%99%E0%B8%95%E0%B8%AD%E0%B8%99%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%80%E0%B8%8A%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%A1%E0%B9%82%E0%B8%A2%E0%B8%87%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%B9%E0%B8%A5%E0%B8%A3%E0%B8%B0%E0%B8%94%E0%B8%B1%E0%B8%9A%E0%B8%99%E0%B9%89%E0%B9%8D%E0%B8%B2%E0%B8%81%E0%B8%A3%E0%B8%A1%E0%B9%80%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%97%E0%B9%88%E0%B8%B2-%E0%B8%A2%E0%B9%89%E0%B8%AD%E0%B8%99%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87-%E0%B9%82%E0%B8%94%E0%B8%A2%E0%B9%83%E0%B8%8A%E0%B9%89-web-service">ขั้นตอนการเชื่อมโยงข้อมูลระดับน้ำกรมเจ้าท่า (ย้อนหลัง) โดยใช้   Web Service</h1>
+
+<h6 class="mume-header" id="%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%B9%E0%B8%A5%E0%B8%A3%E0%B8%B0%E0%B8%94%E0%B8%B1%E0%B8%9A%E0%B8%99%E0%B9%89%E0%B9%8D%E0%B8%B2%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%81%E0%B8%A3%E0%B8%A1%E0%B9%80%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B8%97%E0%B9%88%E0%B8%B2-%E0%B8%A1%E0%B8%B5%E0%B8%AA%E0%B8%96%E0%B8%B2%E0%B8%99%E0%B8%B5%E0%B8%97%E0%B8%B1%E0%B9%89%E0%B8%87%E0%B8%AB%E0%B8%A1%E0%B8%94-12-%E0%B8%AA%E0%B8%96%E0%B8%B2%E0%B8%99%E0%B8%B5-%E0%B9%82%E0%B8%94%E0%B8%A2%E0%B9%80%E0%B8%A3%E0%B8%B5%E0%B8%A2%E0%B8%81%E0%B9%83%E0%B8%8A%E0%B9%89-api-%E0%B8%A3%E0%B9%88%E0%B8%A7%E0%B8%A1%E0%B8%81%E0%B8%B1%E0%B8%99-2-%E0%B8%8A%E0%B8%B8%E0%B8%94">ข้อมูลระดับน้ำของกรมเจ้าท่า มีสถานีทั้งหมด 12 สถานี โดยเรียกใช้ API ร่วมกัน 2 ชุด</h6>
+
+<blockquote>
+<ol>
+<li>API สำหรับใช้ในการอ่านค่าสถานี</li>
+</ol>
+<pre data-role="codeBlock" data-info="" class="language-"><code>http://log.ddnsthai.com/MD/Api/MD/GetAll
+</code></pre><p><a href="http://log.ddnsthai.com/MD/Api/MD/GetAll">คลิกดูตัวอย่างข้อมูล</a></p>
+<ol start="2">
+<li>API สำหรับอ่านข้อมูลระดับน้ำย้อนหลัง</li>
+</ol>
+<pre data-role="codeBlock" data-info="" class="language-"><code>http://log.ddnsthai.com/MD/Api/MD/GetLevel?codestation={&#xE23;&#xE2B;&#xE31;&#xE2A;&#xE2A;&#xE16;&#xE32;&#xE19;&#xE35;}&amp;datadate={&#xE27;&#xE31;&#xE19;&#xE17;&#xE35;&#xE48;}
+</code></pre><table>
+<thead>
+<tr>
+<th>พารามิเตอร์</th>
+<th>ชื่อ</th>
+<th>ตัวอย่างข้อมูล</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>codestation</td>
+<td>รหัสสถานี</td>
+<td>MD01</td>
+</tr>
+<tr>
+<td>datadate</td>
+<td>รูปแบบวันที</td>
+<td>2018-01-01</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://log.ddnsthai.com/MD/Api/MD/GetLevel?codestation=MD01&amp;datadate=2018-01-01">คลิกดูตัวอย่างข้อมูล</a></p>
+</blockquote>
+<h4 class="mume-header" id="%E0%B8%95%E0%B8%B1%E0%B9%89%E0%B8%87%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B9%82%E0%B8%9B%E0%B8%A3%E0%B9%81%E0%B8%81%E0%B8%A3%E0%B8%A1-eclipse-%E0%B9%80%E0%B8%9E%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B9%83%E0%B8%AB%E0%B9%89-run-dataimport-%E0%B8%9A%E0%B8%99-local">ตั้งค่าโปรแกรม Eclipse เพื่อให้ Run Dataimport บน Local</h4>
+
+<blockquote>
+<p>กดเมนู Run (ไอคอนสีเขียว) -&gt; เลือก Run Configurations</p>
+</blockquote>
+<p><img src="assets/index-cf207.png" alt=""></p>
+<h6 class="mume-header" id="%E0%B9%80%E0%B8%A5%E0%B8%B7%E0%B8%AD%E0%B8%81-tab-main">เลือก tab main</h6>
+
+<blockquote>
+<p>ตั้งค่า Project Path</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="" class="language-"><code>thaiwater30
+</code></pre><blockquote>
+<p>ตั้งค่า Go package to build</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="" class="language-"><code>haii.or.th/dataimport/downloader/dl-basic
+</code></pre><p><img src="assets/index-a3422.png" alt=""></p>
+<h6 class="mume-header" id="%E0%B9%80%E0%B8%A5%E0%B8%B7%E0%B8%AD%E0%B8%81-tab-arguments">เลือก tab Arguments</h6>
+
+<blockquote>
+<p>ตั้งค่า Program Arguments</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="" class="language-"><code>&#xE01;&#xE48;&#xE2D;&#xE19;&#xE15;&#xE31;&#xE49;&#xE07;&#xE04;&#xE48;&#xE32; Program Arguments &#xE43;&#xE2B;&#xE49;&#xE2A;&#xE23;&#xE49;&#xE32;&#xE07; folder &#xE44;&#xE27;&#xE49;&#xE17;&#xE35;&#xE48; c:/www_data/test_download
+&#xE08;&#xE32;&#xE01;&#xE19;&#xE31;&#xE49;&#xE19; &#xE2A;&#xE23;&#xE49;&#xE32;&#xE07;&#xE44;&#xE1F;&#xE25;&#xE4C; basic.json &#xE25;&#xE07;&#xE43;&#xE19; c:/www_data/test_download/basic.js
+</code></pre><pre data-role="codeBlock" data-info="" class="language-"><code>&#xE40;&#xE02;&#xE49;&#xE32;  backoffice-&gt;&#xE40;&#xE0A;&#xE37;&#xE48;&#xE2D;&#xE21;&#xE42;&#xE22;&#xE07;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;-&gt;&#xE15;&#xE31;&#xE49;&#xE07;&#xE04;&#xE48;&#xE32;&#xE01;&#xE32;&#xE23; download
+&#xE40;&#xE25;&#xE37;&#xE2D;&#xE01; &#xE23;&#xE32;&#xE22;&#xE01;&#xE32;&#xE23;&#xE15;&#xE31;&#xE49;&#xE07;&#xE04;&#xE48;&#xE32; download &#xE21;&#xE32; 1 &#xE23;&#xE32;&#xE22;&#xE01;&#xE32;&#xE23;
+&#xE08;&#xE32;&#xE01;&#xE19;&#xE31;&#xE49;&#xE19; &#xE01;&#xE14; view json  
+</code></pre><p><img src="assets/index-6eafa.png" alt=""></p>
+<blockquote>
+<p><img src="assets/index-a4128.png" alt=""></p>
+</blockquote>
+<pre data-role="codeBlock" data-info="" class="language-"><code>&#xE04;&#xE31;&#xE14;&#xE25;&#xE2D;&#xE01; &#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE43;&#xE19; download_setting_json
+</code></pre><blockquote>
+<p><img src="assets/index-20eac.png" alt=""></p>
+</blockquote>
+<pre data-role="codeBlock" data-info="" class="language-"><code>&#xE19;&#xE33;&#xE44;&#xE1B;&#xE27;&#xE32;&#xE07;&#xE44;&#xE27;&#xE49;&#xE43;&#xE19;&#xE44;&#xE1F;&#xE25;&#xE4C; c:/www_data/test_download/basic.js &#xE41;&#xE25;&#xE49;&#xE27;&#xE1A;&#xE31;&#xE19;&#xE17;&#xE36;&#xE01;&#xE44;&#xE1F;&#xE25;&#xE4C;
+
+&#xE1A;&#xE23;&#xE23;&#xE17;&#xE31;&#xE14;&#xE17;&#xE35;&#xE48;&#xE02;&#xE35;&#xE14;&#xE40;&#xE2A;&#xE49;&#xE19;&#xE43;&#xE15;&#xE49;&#xE2A;&#xE35;&#xE41;&#xE14;&#xE07; &#xE04;&#xE48;&#xE32; host &#xE40;&#xE1B;&#xE47;&#xE19;&#xE01;&#xE33;&#xE2B;&#xE19;&#xE14; url:webservice &#xE2A;&#xE33;&#xE2B;&#xE23;&#xE31;&#xE1A;&#xE2D;&#xE48;&#xE32;&#xE19;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;
+</code></pre><blockquote>
+<p><img src="assets/index-111c3.png" alt=""></p>
+</blockquote>
+<pre data-role="codeBlock" data-info="" class="language-"><code>-verbose
+-datapath c:/www_data/test_download
+-testcfg c:/www_data/test_download/basic.json
+</code></pre><p><img src="assets/index-859da.png" alt=""></p>
+<h4 class="mume-header" id="%E0%B9%80%E0%B8%A3%E0%B8%B4%E0%B9%88%E0%B8%A1%E0%B9%80%E0%B8%82%E0%B8%B5%E0%B8%A2%E0%B8%99-dataimport-driver-%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2%E0%B8%A0%E0%B8%B2%E0%B8%A9%E0%B8%B2-golang">เริ่มเขียน Dataimport Driver ด้วยภาษา Golang</h4>
+
+<h6 class="mume-header" id="1-%E0%B9%80%E0%B8%9E%E0%B8%B4%E0%B9%88%E0%B8%A1-folder-%E0%B8%AA%E0%B9%8D%E0%B8%B2%E0%B8%AB%E0%B8%A3%E0%B8%B1%E0%B8%9A%E0%B9%80%E0%B8%81%E0%B9%87%E0%B8%9A%E0%B9%84%E0%B8%9F%E0%B8%A5%E0%B9%8C-drivergo-%E0%B9%83%E0%B8%8A%E0%B9%89%E0%B8%8A%E0%B8%B7%E0%B9%88%E0%B8%AD-md_waterlevel_history-%E0%B8%95%E0%B8%B2%E0%B8%A1-path">1. เพิ่ม folder สำหรับเก็บไฟล์ driver.go ใช้ชื่อ md_waterlevel_history ตาม path</h6>
+
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\downloader\driver\md_waterlevel\driver.go
+</code></pre><p><img src="assets/index-44976.png" alt=""></p>
+<blockquote>
+<p>ตั้งชื่อ Package ให้สอดคล้องกับ โฟลเดอร์</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="go" class="language-go"><span class="token keyword">package</span> md_waterlevel_history
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">}</span>
+</pre><h6 class="mume-header" id="2-%E0%B9%80%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B9%84%E0%B8%9F%E0%B8%A5%E0%B9%8C-connectorgo-%E0%B8%97%E0%B9%8D%E0%B8%B2%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%81%E0%B8%81%E0%B9%89%E0%B9%84%E0%B8%82-2-%E0%B8%88%E0%B8%B8%E0%B8%94-%E0%B8%94%E0%B8%B1%E0%B8%87%E0%B8%99%E0%B8%B5%E0%B9%89">2. เปิดไฟล์ connector.go  ทำการแก้ไข 2 จุด ดังนี้</h6>
+
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\downloader\connector.go
+</code></pre><blockquote>
+<p>เพิ่ม import driver ตัวใหม่ .... บรรทัดที่ 8-35</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="go" class="language-go"><span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token operator">...</span>
+	<span class="token string">"haii.or.th/dataimport/downloader/driver/md_waterlevel_history"</span>
+<span class="token punctuation">)</span>
+</pre><blockquote>
+<p>เพิ่ม NewConnector ตัวใหม่ .... บรรทัดที่ 42-66</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="go" class="language-go"><span class="token keyword">var</span> knownConnectionType <span class="token operator">=</span> <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>NewConnectionFn<span class="token punctuation">{</span>
+	<span class="token operator">...</span>
+	<span class="token string">"mdwaterlevelhistory"</span><span class="token punctuation">:</span> md_waterlevel_history<span class="token punctuation">.</span>NewConnector<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</pre><blockquote>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>connnector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;mdwaterlevelhistory&quot;</td>
+<td>md_waterlevel_history.NewConnector,</td>
+</tr>
+</tbody>
+</table>
+<p><span style="color:red">*key ตัวเล็กหมด ติดกันเท่านั้น ห้ามมีอักขระพิเศษ</span></p>
+</blockquote>
+<h6 class="mume-header" id="3-update-code-%E0%B8%9A%E0%B8%99%E0%B9%80%E0%B8%84%E0%B8%A3%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%87-server-converter">3. update code บนเครื่อง server converter</h6>
+
+<pre data-role="codeBlock" data-info="sh" class="language-bash">Server <span class="token keyword">:</span> converter
+<span class="token function">cd</span> go_local/src/haii.or.th/dataimport
+<span class="token function">make</span> pull <span class="token function">install</span>
+</pre><h6 class="mume-header" id="4-%E0%B9%80%E0%B8%9E%E0%B8%B4%E0%B9%88%E0%B8%A1-driver-type-%E0%B9%83%E0%B8%99-table-%E0%B9%80%E0%B8%9E%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B9%83%E0%B8%AB%E0%B9%89-backoffice-%E0%B8%AA%E0%B8%B2%E0%B8%A1%E0%B8%B2%E0%B8%A3%E0%B8%96%E0%B8%A1%E0%B8%AD%E0%B8%87%E0%B9%80%E0%B8%AB%E0%B9%87%E0%B8%99%E0%B9%83%E0%B8%99-dropdown">4. เพิ่ม driver type ใน table เพื่อให้ backoffice สามารถมองเห็นใน dropdown</h6>
+
+<pre data-role="codeBlock" data-info="sql" class="language-sql">host : https:<span class="token comment">//192.168.12.136/phpPgAdmin</span>
+<span class="token keyword">schema</span> : api
+<span class="token keyword">table</span> : system_settiing
+<span class="token keyword">data</span> ID : <span class="token number">66</span>
+colunm name : name
+colunm <span class="token keyword">value</span> : bof<span class="token punctuation">.</span>DataIntegration<span class="token punctuation">.</span>dl<span class="token punctuation">.</span>DownloadType
+
+{
+    <span class="token string">"text"</span>: <span class="token string">"md_waterlevel_history://"</span><span class="token punctuation">,</span>
+    <span class="token string">"value"</span>: <span class="token string">"mdwaterlevelhistory://"</span>
+}
+</pre><blockquote>
+<p><img src="assets/index-144ed.png" alt=""></p>
+</blockquote>
+<blockquote>
+<p>หากเพิ่มข้อมูลครบถ้วน ชื่อ driver : md_waterlevel_history จะเพิ่มเข้ามา</p>
+</blockquote>
+<blockquote>
+<p><img src="assets/index-5e7cc.png" alt=""></p>
+</blockquote>
+<h6 class="mume-header" id="5-%E0%B8%95%E0%B8%B1%E0%B9%89%E0%B8%87%E0%B8%84%E0%B9%88%E0%B8%B2-download-%E0%B9%83%E0%B8%99-backoffice-%E0%B9%80%E0%B8%A1%E0%B8%99%E0%B8%B9%E0%B9%80%E0%B8%8A%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%A1%E0%B9%82%E0%B8%A2%E0%B8%87%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%B9%E0%B8%A5-%E0%B8%95%E0%B8%B1%E0%B9%89%E0%B8%87%E0%B8%84%E0%B9%88%E0%B8%B2%E0%B8%81%E0%B8%B2%E0%B8%A3-download">5. ตั้งค่า download ใน backoffice เมนูเชื่อมโยงข้อมูล-ตั้งค่าการ download</h6>
+
+<p><img src="assets/index-0cbc8.png" alt=""></p>
+<p><img src="assets/index-9cbf7.png" alt=""></p>
+<blockquote>
+<h6>การตั้งค่าโฮสและส่งค่าพารามิเตอร์ เพื่อ Run ข้อมูลย้อนหลัง</h6>
+</blockquote>
+<pre data-role="codeBlock" data-info="" class="language-"><code>log.ddnsthai.com/MD/Api/MD/GetAll?codestation=MD01&amp;datadate=2018-03-12
+</code></pre><table>
+<thead>
+<tr>
+<th>ชุดข้อมูล</th>
+<th>codestation (รหัสสถานี)</th>
+<th>datadate (วันที่ )</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ข้อมูลสถานี ( ทั้งหมด ) ( วันปัจจุบัน )</td>
+<td>ว่าง</td>
+<td>ว่าง</td>
+</tr>
+<tr>
+<td>ข้อมูลสถานี ( ทั้งหมด ) ( รายวัน )</td>
+<td>ว่าง</td>
+<td>2018-01-01</td>
+</tr>
+<tr>
+<td>ข้อมูลสถานี ( ทั้งหมด ) ( รายเดือน )</td>
+<td>ว่าง</td>
+<td>2018-01</td>
+</tr>
+<tr>
+<td>ข้อมูลสถานี ( ทั้งหมด ) ( รายปี )</td>
+<td>ว่าง</td>
+<td>2018</td>
+</tr>
+<tr>
+<td>ข้อมูลสถานี ( MD01 ) (วันปัจจุบัน)</td>
+<td>MD01</td>
+<td>ว่าง</td>
+</tr>
+<tr>
+<td>ข้อมูลสถานี ( MD01 ) ( รายวัน )</td>
+<td>MD01</td>
+<td>2018-01-01</td>
+</tr>
+<tr>
+<td>ข้อมูลสถานี ( MD01 ) ( รายเดือน )</td>
+<td>MD01</td>
+<td>2018-01</td>
+</tr>
+<tr>
+<td>ข้อมูลสถานี ( MD01 ) ( รายปี )</td>
+<td>MD01</td>
+<td>2018</td>
+</tr>
+</tbody>
+</table>
+<h6 class="mume-header" id="6-%E0%B8%95%E0%B8%B1%E0%B9%89%E0%B8%87%E0%B8%84%E0%B9%88%E0%B8%B2-dataset-%E0%B9%80%E0%B8%9E%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%97%E0%B9%8D%E0%B8%B2%E0%B8%81%E0%B8%B2%E0%B8%A3-convert-%E0%B9%81%E0%B8%A5%E0%B8%B0-import-data">6. ตั้งค่า dataset เพื่อทำการ convert และ import data</h6>
+
+<blockquote>
+<p>รูปแบบข้อมูล</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    <span class="token property">"CodeStation"</span><span class="token operator">:</span> <span class="token string">"MD11"</span><span class="token punctuation">,</span>
+    <span class="token property">"LevelWater"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token property">"DatetimeServer"</span><span class="token operator">:</span> <span class="token string">"2017-04-24 12:52:00"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token property">"CodeStation"</span><span class="token operator">:</span> <span class="token string">"MD11"</span><span class="token punctuation">,</span>
+    <span class="token property">"LevelWater"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token property">"DatetimeServer"</span><span class="token operator">:</span> <span class="token string">"2017-04-24 12:52:00"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token property">"CodeStation"</span><span class="token operator">:</span> <span class="token string">"MD11"</span><span class="token punctuation">,</span>
+    <span class="token property">"LevelWater"</span><span class="token operator">:</span> <span class="token string">"-1.591"</span><span class="token punctuation">,</span>
+    <span class="token property">"DatetimeServer"</span><span class="token operator">:</span> <span class="token string">"2017-04-27 18:44:00"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token property">"CodeStation"</span><span class="token operator">:</span> <span class="token string">"MD11"</span><span class="token punctuation">,</span>
+    <span class="token property">"LevelWater"</span><span class="token operator">:</span> <span class="token string">"-1.591"</span><span class="token punctuation">,</span>
+    <span class="token property">"DatetimeServer"</span><span class="token operator">:</span> <span class="token string">"2017-04-27 18:45:00"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</pre><blockquote>
+<p>การ mapping ชื่อ กับ dataset  กรณีที่เป็น xml หรือ json</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="json" class="language-json">หากไม่มีชื่อ tag ข้อมูลที่ต้องการอ่านค่า ให้ระบุ<span class="token operator">:</span> /
+
+ตัวอย่างข้อมูล JSON
+<span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    <span class="token property">"CodeStation"</span><span class="token operator">:</span> <span class="token string">"MD11"</span><span class="token punctuation">,</span>
+    <span class="token property">"LevelWater"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token property">"DatetimeServer"</span><span class="token operator">:</span> <span class="token string">"2017-04-24 12:52:00"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</pre><pre data-role="codeBlock" data-info="json" class="language-json">หากมีชื่อ tag ข้อมูลที่ต้องการอ่านค่า ให้ระบุ<span class="token operator">:</span> data
+
+ตัวอย่างข้อมูล JSON
+<span class="token punctuation">[</span>
+  <span class="token property">"data"</span> <span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"CodeStation"</span><span class="token operator">:</span> <span class="token string">"MD11"</span><span class="token punctuation">,</span>
+      <span class="token property">"LevelWater"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+      <span class="token property">"DatetimeServer"</span><span class="token operator">:</span> <span class="token string">"2017-04-24 12:52:00"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">]</span>
+</pre><blockquote>
+<p>ใน backoffice เมนูเชื่อมโยงข้อมูล-&gt;ตั้งค่า dataset</p>
+</blockquote>
+<p><img src="assets/index-d4851.png" alt=""></p>
+<p><img src="assets/index-b0a79.png" alt=""></p>
+<ol start="7">
+<li>เมือใส่ dataset เสร็จแล้ว กด รันเพื่อสั่งให้โปรแกรมทำงานที่เมนุ download</li>
+</ol>
+<p><img src="assets/index-6cc2a.png" alt=""></p>
+<blockquote>
+<p>หาต้องการทดสอบการันแบบ manual server : converter</p>
+<pre data-role="codeBlock" data-info="sh" class="language-bash"><span class="token function">cd</span> dataimport
+   <span class="token comment">#คำสั่งจะทำทั้ง download convert import</span>
+   <span class="token comment">#bin/rdl {download_id} dl-basic</span>
+bin/rdl 595 dl-basic
+</pre></blockquote>
+<ol start="8">
+<li>ดู log การ download convert import ที่</li>
+</ol>
+<pre data-role="codeBlock" data-info="sql" class="language-sql">host : https:<span class="token comment">//192.168.12.136/phpPgAdmin</span>
+<span class="token keyword">schema</span> : api
+<span class="token keyword">view</span> : v_dataset_log_download_log
+</pre><p><img src="assets/index-912aa.png" alt=""></p>
+<blockquote>
+<p>โดยใส่เงื่อนไข id download ที่สร้างขึ้น</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="sql" class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span>
+<span class="token keyword">FROM</span> v_dataset_log_download_log
+<span class="token keyword">WHERE</span> api<span class="token punctuation">.</span>v_dataset_log_download_log<span class="token punctuation">.</span>dataimport_download_id <span class="token operator">=</span> <span class="token number">595</span>
+</pre><p><img src="assets/index-d6110.png" alt=""><br>
+<img src="assets/index-4e9fc.png" alt=""></p>
+<blockquote>
+<p>ตรวจสอบข้อมูล ในตารางที่นำข้อมูลเข้า คือ tele_waterlevel</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="sql" class="language-sql">host : https:<span class="token comment">//192.168.12.136/phpPgAdmin</span>
+<span class="token keyword">schema</span> : <span class="token keyword">public</span>
+<span class="token keyword">table</span> : tele_waterlevel
+</pre><blockquote>
+<p>นำข้อมูล dataset_log_id ค้นหาในช่อง dataimport_log_id</p>
+</blockquote>
+<pre data-role="codeBlock" data-info="sql" class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> <span class="token keyword">public</span><span class="token punctuation">.</span>tele_waterlevel
+<span class="token keyword">WHERE</span> <span class="token keyword">public</span><span class="token punctuation">.</span>tele_waterlevel<span class="token punctuation">.</span>dataimport_log_id <span class="token operator">=</span> <span class="token string">'1491607'</span>
+</pre><blockquote>
+<p>เมื่อนำเข้าสำเร็จ ผลการค้นหาจะแสดงผลดังรูป</p>
+</blockquote>
+<p><img src="assets/index-360b7.png" alt=""></p>
+
+      </div>
+      
+      
+    </body>
+    
+    
+    
+    
+    
+    
+    
+  </html>

@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "devDependencies": {
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "laravel-elixir": "^1.0.0",
+    "laravel-elixir-webpack": "^1.0.1",
+    "vue-pagination-2": "^0.2.4",
+    "vue-tables-2": "^0.2.4"
+  }
+}

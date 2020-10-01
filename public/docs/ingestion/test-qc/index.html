@@ -1,0 +1,479 @@
+<!DOCTYPE html><html><head>
+      <title>index</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///C:\Users\thitiporn\.atom\packages\markdown-preview-enhanced\node_modules\@shd101wyy\mume\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      <style> 
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+ 
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview   ">
+      <h3 class="mume-header" id="%E0%B8%97%E0%B8%94%E0%B8%AA%E0%B8%AD%E0%B8%9A-qc-rule">&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A; qc-rule</h3>
+
+<h4 class="mume-header" id="%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AD%E0%B8%A2%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%97%E0%B8%94%E0%B8%AA%E0%B8%AD%E0%B8%9A%E0%B8%82%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%B9%E0%B8%A5%E0%B8%A3%E0%B8%B0%E0%B8%94%E0%B8%B1%E0%B8%9A%E0%B8%99%E0%B9%89%E0%B9%8D%E0%B8%B2%E0%B8%AA%E0%B8%AA%E0%B8%99%E0%B8%81">&#xE15;&#xE31;&#xE27;&#xE2D;&#xE22;&#xE48;&#xE32;&#xE07;&#xE01;&#xE32;&#xE23;&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE23;&#xE30;&#xE14;&#xE31;&#xE1A;&#xE19;&#xE49;&#xE33;&#xE2A;&#xE2A;&#xE19;&#xE01;.</h4>
+
+<pre data-role="codeBlock" data-info="go" class="language-go">waterlevel_msl qc<span class="token operator">-</span>rule &#xE23;&#xE30;&#xE14;&#xE31;&#xE1A;&#xE19;&#xE49;&#xE33;&#xE1B;&#xE31;&#xE08;&#xE08;&#xE38;&#xE1A;&#xE31;&#xE19;&#xE15;&#xE49;&#xE2D;&#xE07;&#xE44;&#xE21;&#xE48;&#xE21;&#xE32;&#xE01;&#xE01;&#xE27;&#xE48;&#xE32;&#xE23;&#xE30;&#xE14;&#xE31;&#xE1A;&#xE19;&#xE49;&#xE33;&#xE01;&#xE48;&#xE2D;&#xE19;&#xE2B;&#xE19;&#xE49;&#xE32; <span class="token number">60</span> &#xE0B;&#xE21;<span class="token punctuation">.</span>
+</pre><p>qc-rule &#xE17;&#xE35;&#xE48;&#xE08;&#xE30;&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A;</p>
+<pre data-role="codeBlock" data-info="go" class="language-go">waterlevel_msl <span class="token operator">&lt;=</span> <span class="token function">lookup</span><span class="token punctuation">(</span><span class="token string">&apos;cache.latest_waterlevel&apos;</span><span class="token punctuation">,</span><span class="token string">&apos;value_previous&apos;</span><span class="token punctuation">,</span><span class="token string">&apos;id&apos;</span><span class="token punctuation">,</span>tele_station_id<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">0.6</span>
+
+look up table <span class="token string">&quot;cache.latest_waterlevel&quot;</span> &#xE15;&#xE49;&#xE2D;&#xE07;&#xE01;&#xE32;&#xE23;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25; field <span class="token string">&quot;value_previous&quot;</span>
+&#xE42;&#xE14;&#xE22;&#xE2B;&#xE32;&#xE08;&#xE32;&#xE01; <span class="token string">&quot;id&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;tele_station_id&quot;</span>
+</pre><ol>
+<li>&#xE2A;&#xE23;&#xE49;&#xE32;&#xE07; folder &#xE15;&#xE32;&#xE21;&#xE2B;&#xE19;&#xE48;&#xE27;&#xE22;&#xE07;&#xE32;&#xE19; &#xE15;&#xE32;&#xE21;&#xE1B;&#xE23;&#xE30;&#xE40;&#xE20;&#xE17;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;</li>
+</ol>
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\converter\agency\haii\tele_waterlevel\
+
+</code></pre><p>&#xE15;&#xE49;&#xE2D;&#xE07;&#xE21;&#xE35;&#xE42;&#xE04;&#xE23;&#xE07;&#xE2A;&#xE23;&#xE49;&#xE32;&#xE07;&#xE44;&#xE1F;&#xE25;&#xE4C;&#xE15;&#xE32;&#xE21;&#xE23;&#xE39;&#xE1B;<br>
+<img src="assets/markdown-img-paste-20190306141228408.png" alt=""></p>
+<ol start="2">
+<li>&#xE44;&#xE1F;&#xE25;&#xE4C; config.json copy config &#xE08;&#xE32;&#xE01; backoffice &#xE40;&#xE21;&#xE19;&#xE39;&#xE01;&#xE32;&#xE23;&#xE15;&#xE31;&#xE49;&#xE07;&#xE04;&#xE48;&#xE32; dataset <a href="http://web.thaiwater.net/thaiwater30/backoffice/data_integration/mgmt_conv">http://web.thaiwater.net/thaiwater30/backoffice/data_integration/mgmt_conv</a></li>
+</ol>
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\converter\agency\haii\tele_waterlevel\config.json
+</code></pre><p><img src="assets/markdown-img-paste-2019030614154818.png" alt=""><br>
+<img src="assets/markdown-img-paste-20190306141700417.png" alt=""></p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+	<span class="token property">&quot;data_folder&quot;</span><span class="token operator">:</span> <span class="token string">&quot;dataset&quot;</span><span class="token punctuation">,</span>
+	<span class="token property">&quot;configs&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+			<span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;haii-telemetering-waterlevel&quot;</span><span class="token punctuation">,</span>
+			<span class="token property">&quot;input_name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;telemetering.json&quot;</span><span class="token punctuation">,</span>
+			<span class="token property">&quot;header_row&quot;</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+			<span class="token property">&quot;data_tag&quot;</span><span class="token operator">:</span> <span class="token string">&quot;/&quot;</span><span class="token punctuation">,</span>
+			<span class="token property">&quot;row_validator&quot;</span><span class="token operator">:</span> <span class="token string">&quot;!is_nil(waterlevel_msl)&quot;</span><span class="token punctuation">,</span>
+			<span class="token property">&quot;fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+			<span class="token punctuation">{</span>
+          <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;tele_station_id&quot;</span><span class="token punctuation">,</span>
+          <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;int&quot;</span><span class="token punctuation">,</span>
+          <span class="token property">&quot;input_fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token string">&quot;code&quot;</span>
+          <span class="token punctuation">]</span><span class="token punctuation">,</span>
+          <span class="token property">&quot;transform_method&quot;</span><span class="token operator">:</span> <span class="token string">&quot;mapping&quot;</span><span class="token punctuation">,</span>
+          <span class="token property">&quot;transform_params&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+            <span class="token property">&quot;add_missing&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;from&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+              <span class="token string">&quot;tele_station_oldcode&quot;</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;missing_data&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;table&quot;</span><span class="token operator">:</span> <span class="token string">&quot;m_tele_station&quot;</span><span class="token punctuation">,</span>
+            <span class="token property">&quot;to&quot;</span><span class="token operator">:</span> <span class="token string">&quot;id&quot;</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+					<span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;waterlevel_datetime&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;datetime&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;input_fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+						<span class="token string">&quot;date&quot;</span><span class="token punctuation">,</span>
+						<span class="token string">&quot;time&quot;</span>
+					<span class="token punctuation">]</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;transform_method&quot;</span><span class="token operator">:</span> <span class="token string">&quot;datetime&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;transform_params&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+						<span class="token property">&quot;input_format&quot;</span><span class="token operator">:</span> <span class="token string">&quot;%Y-%m-%d %H:%M&quot;</span>
+					<span class="token punctuation">}</span>
+				<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+					<span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;waterlevel_msl&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;float&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;input_fields&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+						<span class="token string">&quot;water_level&quot;</span>
+					<span class="token punctuation">]</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;transform_method&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;transform_params&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span>
+				<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+					<span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;qc_status&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;qc&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;input_fields&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;transform_method&quot;</span><span class="token operator">:</span> <span class="token string">&quot;qc&quot;</span><span class="token punctuation">,</span>
+					<span class="token property">&quot;transform_params&quot;</span><span class="token operator">:</span> <span class="token string">&quot;&quot;</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">]</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</pre><ol start="3">
+<li>&#xE44;&#xE1F;&#xE25;&#xE4C; qc_rule.json &#xE43;&#xE2A;&#xE48; qc-rule &#xE17;&#xE35;&#xE48;&#xE15;&#xE49;&#xE2D;&#xE07;&#xE01;&#xE32;&#xE23;&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A; &#xE0B;&#xE36;&#xE48;&#xE07; qc-rule group_name,expression &#xE08;&#xE30;&#xE15;&#xE23;&#xE07;&#xE01;&#xE31;&#xE1A;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE17;&#xE35;&#xE48;&#xE08;&#xE30;&#xE43;&#xE2A;&#xE48;&#xE43;&#xE19; table public.qc_rule field group_name,expression</li>
+</ol>
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\converter\agency\haii\tele_waterlevel1\testdata\qc_rule.json
+</code></pre><pre data-role="codeBlock" data-info="go" class="language-go"><span class="token punctuation">[</span>
+	<span class="token punctuation">{</span>
+		<span class="token string">&quot;id&quot;</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;group_name&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;waterlevel_msl&quot;</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;expression&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;lookupnil(&apos;cache.latest_waterlevel&apos;,&apos;value_previous&apos;,&apos;id&apos;,tele_station_id) || waterlevel_msl &lt;= lookup(&apos;cache.latest_waterlevel&apos;,&apos;value_previous&apos;,&apos;id&apos;,tele_station_id) + 0.6&quot;</span><span class="token punctuation">,</span>
+		<span class="token string">&quot;description&quot;</span><span class="token punctuation">:</span> <span class="token string">&quot;&#xE23;&#xE30;&#xE14;&#xE31;&#xE1A;&#xE19;&#xE49;&#xE33;&#xE1B;&#xE31;&#xE08;&#xE08;&#xE38;&#xE1A;&#xE31;&#xE19; &#xE15;&#xE49;&#xE2D;&#xE07;&#xE44;&#xE21;&#xE48;&#xE21;&#xE32;&#xE01;&#xE01;&#xE27;&#xE48;&#xE32;&#xE23;&#xE30;&#xE14;&#xE31;&#xE1A;&#xE19;&#xE49;&#xE33;&#xE01;&#xE48;&#xE2D;&#xE19;&#xE2B;&#xE19;&#xE49;&#xE32; 0.6 &#xE40;&#xE21;&#xE15;&#xE23;  if (abs(WL(t) - WL (t-1)) &gt; 60 cm)  then QC_Flag (fail)&quot;</span>
+	<span class="token punctuation">}</span>
+ <span class="token punctuation">]</span>
+</pre><p><span style="color:red">*&#xE01;&#xE23;&#xE13;&#xE35;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE44;&#xE21;&#xE48;&#xE04;&#xE23;&#xE1A;&#xE15;&#xE32;&#xE21;&#xE40;&#xE01;&#xE13;&#xE11;&#xE4C; &#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25; qc_status = false</span></p>
+<ol start="4">
+<li>&#xE01;&#xE23;&#xE13;&#xE35; qc-rule &#xE21;&#xE35;&#xE21;&#xE35;&#xE40;&#xE23;&#xE35;&#xE22;&#xE01;&#xE43;&#xE0A;&#xE49; func lookup &#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE08;&#xE32;&#xE01; table &#xE2D;&#xE37;&#xE48;&#xE19; &#xE46; &#xE43;&#xE2B;&#xE49;&#xE2A;&#xE23;&#xE49;&#xE32;&#xE07;&#xE44;&#xE1F;&#xE25;&#xE4C; lookup &#xE41;&#xE25;&#xE30;&#xE43;&#xE2A;&#xE48;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE40;&#xE1E;&#xE37;&#xE48;&#xE2D;&#xE43;&#xE2B;&#xE49;&#xE23;&#xE30;&#xE1A;&#xE1A;&#xE40;&#xE23;&#xE35;&#xE22;&#xE01;&#xE43;&#xE0A;&#xE49; func &#xE17;&#xE33;&#xE07;&#xE32;&#xE19;&#xE44;&#xE14;&#xE49;&#xE16;&#xE39;&#xE01;&#xE15;&#xE49;&#xE2D;&#xE07;</li>
+</ol>
+<p>&#xE15;&#xE31;&#xE27;&#xE2D;&#xE22;&#xE48;&#xE32;&#xE07;&#xE44;&#xE1F;&#xE25;&#xE4C; lookup_m_tele_station.json &#xE43;&#xE0A;&#xE49;&#xE43;&#xE19;&#xE01;&#xE32;&#xE23; mappin tele_station_oldcode &#xE08;&#xE32;&#xE01;&#xE44;&#xE1F;&#xE25;&#xE4C; download &#xE40;&#xE1E;&#xE37;&#xE48;&#xE2D;&#xE41;&#xE1B;&#xE25;&#xE07;&#xE40;&#xE1B;&#xE47;&#xE19; id &#xE15;&#xE2D;&#xE19; convert file</p>
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\converter\agency\haii\tele_waterlevel1\testdata\lookup_m_tele_station.json
+</code></pre><pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;column_names&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;id&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;tele_station_oldcode&quot;</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+		<span class="token punctuation">[</span><span class="token number">365</span><span class="token punctuation">,</span><span class="token string">&quot;ABRT&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">310</span><span class="token punctuation">,</span><span class="token string">&quot;ACRU&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">514</span><span class="token punctuation">,</span><span class="token string">&quot;ANLI&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492316</span><span class="token punctuation">,</span><span class="token string">&quot;ATG011&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492317</span><span class="token punctuation">,</span><span class="token string">&quot;ATG02&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492340</span><span class="token punctuation">,</span><span class="token string">&quot;ATG021&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492341</span><span class="token punctuation">,</span><span class="token string">&quot;ATG022&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492318</span><span class="token punctuation">,</span><span class="token string">&quot;ATG03&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492342</span><span class="token punctuation">,</span><span class="token string">&quot;ATG031&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492343</span><span class="token punctuation">,</span><span class="token string">&quot;ATG032&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492319</span><span class="token punctuation">,</span><span class="token string">&quot;ATG04&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492344</span><span class="token punctuation">,</span><span class="token string">&quot;ATG041&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492345</span><span class="token punctuation">,</span><span class="token string">&quot;ATG042&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492320</span><span class="token punctuation">,</span><span class="token string">&quot;ATG05&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492346</span><span class="token punctuation">,</span><span class="token string">&quot;ATG051&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+		<span class="token punctuation">[</span><span class="token number">492347</span><span class="token punctuation">,</span><span class="token string">&quot;ATG052&quot;</span><span class="token punctuation">]</span>
+	<span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</pre><p>&#xE44;&#xE1F;&#xE25;&#xE4C;&#xE2A;&#xE33;&#xE2B;&#xE23;&#xE31;&#xE1A;&#xE43;&#xE2A;&#xE48;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A; qc lookup_cache.latest_waterlevel.json</p>
+<pre data-role="codeBlock" data-info="go" class="language-go"><span class="token function">lookup</span><span class="token punctuation">(</span><span class="token string">&apos;cache.latest_waterlevel&apos;</span><span class="token punctuation">,</span><span class="token string">&apos;value_previous&apos;</span><span class="token punctuation">,</span><span class="token string">&apos;id&apos;</span><span class="token punctuation">,</span>tele_station_id<span class="token punctuation">)</span>
+</pre><p>&#xE0A;&#xE37;&#xE48;&#xE2D;&#xE44;&#xE1F;&#xE25;&#xE4C; lookup_[&#xE0A;&#xE37;&#xE48;&#xE2D; table &#xE17;&#xE35;&#xE48;&#xE08;&#xE30; lookup].json</p>
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\converter\agency\haii\tele_waterlevel1\testdata\lookup_cache.latest_waterlevel.json
+</code></pre><pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;column_names&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;tele_station_id&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;id&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;value_previous&quot;</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">[</span>
+      <span class="token number">128</span><span class="token punctuation">,</span>
+      <span class="token number">128</span><span class="token punctuation">,</span>
+      <span class="token number">22.10</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">[</span>
+      <span class="token number">238</span><span class="token punctuation">,</span>
+      <span class="token number">238</span><span class="token punctuation">,</span>
+      <span class="token null">null</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">[</span>
+      <span class="token number">36</span><span class="token punctuation">,</span>
+      <span class="token number">36</span><span class="token punctuation">,</span>
+      <span class="token number">1.58</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">[</span>
+      <span class="token number">734</span><span class="token punctuation">,</span>
+      <span class="token number">734</span><span class="token punctuation">,</span>
+      <span class="token number">62.81</span>
+    <span class="token punctuation">]</span>  
+   <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</pre><ol start="5">
+<li>copy file download &#xE08;&#xE32;&#xE01; server converter &#xE27;&#xE32;&#xE07;&#xE43;&#xE15;&#xE49; folder testdata\test1 &#xE40;&#xE1E;&#xE37;&#xE48;&#xE2D;&#xE40;&#xE1B;&#xE47;&#xE19;&#xE15;&#xE31;&#xE27;&#xE2D;&#xE22;&#xE48;&#xE32;&#xE07;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE17;&#xE35;&#xE48;&#xE08;&#xE30;&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A;</li>
+</ol>
+<pre data-role="codeBlock" data-info="" class="language-"><code>src\haii.or.th\dataimport\converter\agency\haii\tele_waterlevel1\testdata\test1\dl-20190306005200-telemetering.json
+</code></pre><pre data-role="codeBlock" data-info="json" class="language-json"><span class="token punctuation">[</span><span class="token punctuation">{</span>
+  <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> <span class="token string">&quot;CHN004&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;date&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2019-03-06&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;time&quot;</span><span class="token operator">:</span> <span class="token string">&quot;00:40&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;temp&quot;</span><span class="token operator">:</span> <span class="token string">&quot;999999&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;humid&quot;</span><span class="token operator">:</span> <span class="token string">&quot;999999&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;press&quot;</span><span class="token operator">:</span> <span class="token string">&quot;999999&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;solar&quot;</span><span class="token operator">:</span> <span class="token string">&quot;127.25&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;rain10m&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;rain1h&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;raintoday&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;rain24past&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;date_rain24past&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;time_rain24past&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;water_level&quot;</span><span class="token operator">:</span> <span class="token string">&quot;22.06&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;geo_code_basin&quot;</span><span class="token operator">:</span> <span class="token number">9999</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">{</span>
+  <span class="token property">&quot;code&quot;</span><span class="token operator">:</span> <span class="token string">&quot;MUN014&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;date&quot;</span><span class="token operator">:</span> <span class="token string">&quot;2019-03-06&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;time&quot;</span><span class="token operator">:</span> <span class="token string">&quot;00:40&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;temp&quot;</span><span class="token operator">:</span> <span class="token string">&quot;999999&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;humid&quot;</span><span class="token operator">:</span> <span class="token string">&quot;999999&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;press&quot;</span><span class="token operator">:</span> <span class="token string">&quot;999999&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;solar&quot;</span><span class="token operator">:</span> <span class="token string">&quot;123.39&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;rain10m&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;rain1h&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;raintoday&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;rain24past&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;date_rain24past&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;time_rain24past&quot;</span><span class="token operator">:</span> <span class="token null">null</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;water_level&quot;</span><span class="token operator">:</span> <span class="token string">&quot;231.72&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;geo_code_basin&quot;</span><span class="token operator">:</span> <span class="token number">9999</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</pre><ol start="6">
+<li>&#xE2A;&#xE23;&#xE49;&#xE32;&#xE07; configuration &#xE40;&#xE1E;&#xE37;&#xE48;&#xE2D;&#xE23;&#xE31;&#xE19;&#xE42;&#xE1B;&#xE23;&#xE41;&#xE01;&#xE23;&#xE21;&#xE14;&#xE49;&#xE27;&#xE22; Eclipse<br>
+<img src="assets/markdown-img-paste-20190306175508270.png" alt=""></li>
+</ol>
+<p>Arguments<br>
+<img src="assets/markdown-img-paste-20190306161028663.png" alt=""></p>
+<p>&#xE23;&#xE31;&#xE19; configuration<br>
+<img src="assets/markdown-img-paste-20190306175631836.png" alt=""><br>
+&#xE16;&#xE49;&#xE32; config &#xE17;&#xE38;&#xE01;&#xE44;&#xE1F;&#xE25;&#xE4C;&#xE16;&#xE39;&#xE01;&#xE15;&#xE49;&#xE2D;&#xE07; &#xE40;&#xE21;&#xE37;&#xE48;&#xE2D;&#xE23;&#xE31;&#xE19; configuration &#xE23;&#xE30;&#xE1A;&#xE1A;&#xE08;&#xE30;&#xE41;&#xE2A;&#xE14;&#xE07;&#xE02;&#xE49;&#xE2D;&#xE04;&#xE27;&#xE32;&#xE21;&#xE27;&#xE48;&#xE32; convert file &#xE2A;&#xE33;&#xE40;&#xE23;&#xE47;&#xE08;<br>
+<img src="assets/markdown-img-paste-20190306173506602.png" alt=""></p>
+<ol start="7">
+<li>&#xE1C;&#xE25;&#xE25;&#xE31;&#xE1E;&#xE17;&#xE4C;&#xE17;&#xE35;&#xE48;&#xE44;&#xE14;&#xE49;&#xE08;&#xE32;&#xE01;&#xE01;&#xE32;&#xE23; convert &#xE23;&#xE2B;&#xE31;&#xE2A; 128</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>&#xE44;&#xE1F;&#xE25;&#xE4C;</th>
+<th>&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE17;&#xE35;&#xE48;&#xE43;&#xE0A;&#xE49;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lookup_m_tele_station.json</td>
+<td>[128,&quot;CHN004&quot;],</td>
+</tr>
+<tr>
+<td>testdata\test1\dl-20190306005200-telemetering.json</td>
+<td>&quot;code&quot;: &quot;CHN004&quot; &quot;water_level&quot;: &quot;22.06&quot;,</td>
+</tr>
+<tr>
+<td>testdata\lookup_cache.latest_waterlevel.json</td>
+<td>&quot;data&quot;: <a href="128,128,22.10.md">128,128,22.10</a></td>
+</tr>
+</tbody>
+</table>
+<p><img src="assets/markdown-img-paste-2019030618040153.png" alt=""></p>
+<p>&#xE15;&#xE31;&#xE27;&#xE2D;&#xE22;&#xE48;&#xE32;&#xE07;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE23;&#xE30;&#xE14;&#xE31;&#xE1A;&#xE19;&#xE49;&#xE33;&#xE43;&#xE19;&#xE04;&#xE25;&#xE2D;&#xE07; &#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE08;&#xE32;&#xE01; &#xE01;&#xE17;&#xE21;.<br>
+\src\<a href="http://haii.or.th">haii.or.th</a>\dataimport\converter\agency\bma\canal</p>
+<pre data-role="codeBlock" data-info="json" class="language-json"><span class="token number">1</span>|<span class="token number">128</span>|<span class="token number">2019</span>-<span class="token number">03</span>-<span class="token number">06</span>T00<span class="token operator">:</span><span class="token number">40</span><span class="token operator">:</span><span class="token number">00</span>+<span class="token number">07</span><span class="token operator">:</span><span class="token number">00</span>|<span class="token number">22.060000</span>|<span class="token string">&quot;{&quot;</span><span class="token string">&quot;is_pass&quot;</span><span class="token string">&quot;:true,&quot;</span><span class="token string">&quot;rules&quot;</span><span class="token string">&quot;:{&quot;</span><span class="token string">&quot;waterlevel_msl&quot;</span><span class="token string">&quot;:[{&quot;</span><span class="token string">&quot;id&quot;</span><span class="token string">&quot;:1,&quot;</span><span class="token string">&quot;is_pass&quot;</span><span class="token string">&quot;:true}]}}&quot;</span>
+</pre><p>&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A;&#xE40;&#xE1B;&#xE25;&#xE35;&#xE48;&#xE22;&#xE19;&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE17;&#xE35;&#xE48; lookup &#xE42;&#xE14;&#xE22;&#xE43;&#xE2B;&#xE49;&#xE23;&#xE30;&#xE14;&#xE31;&#xE1A;&#xE19;&#xE49;&#xE33;&#xE01;&#xE48;&#xE2D;&#xE19;&#xE2B;&#xE19;&#xE49;&#xE32; = 20.10 &#xE40;&#xE1E;&#xE37;&#xE48;&#xE2D;&#xE43;&#xE2B;&#xE49; qc_status &#xE40;&#xE1B;&#xE47;&#xE19; false</p>
+<table>
+<thead>
+<tr>
+<th>&#xE44;&#xE1F;&#xE25;&#xE4C;</th>
+<th>&#xE02;&#xE49;&#xE2D;&#xE21;&#xE39;&#xE25;&#xE17;&#xE35;&#xE48;&#xE43;&#xE0A;&#xE49;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>testdata\lookup_cache.latest_waterlevel.json</td>
+<td>&quot;data&quot;: <a href="128,128,20.10.md">128,128,20.10</a></td>
+</tr>
+<tr>
+<td>waterlevel_msl</td>
+<td>22.060000</td>
+</tr>
+</tbody>
+</table>
+<p>&#xE1C;&#xE25;&#xE01;&#xE32;&#xE23;&#xE17;&#xE14;&#xE2A;&#xE2D;&#xE1A;<br>
+<img src="assets/markdown-img-paste-20190306181209529.png" alt=""></p>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

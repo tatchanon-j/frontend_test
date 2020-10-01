@@ -1,0 +1,176 @@
+@CHARSET "ISO-8859-1";
+
+#metadata-tbl th,
+#tbl th {
+	text-align: center;
+}
+
+table.admin-datatables th:nth-child(1){
+    width:5%;
+}
+table.admin-datatables th:nth-child(2){
+    width:20%;
+}
+table.admin-datatables th:nth-child(3){
+    width:10%;
+}
+table.admin-datatables th:nth-child(5){
+    width:10%;
+}
+table.admin-datatables th:nth-child(6){
+    width:20%;
+}
+table.admin-datatables th:nth-child(4){
+    width:15%;
+}
+
+#metadata-tbl td:nth-child(1),
+#metadata-tbl td:nth-child(5),
+#tbl td:nth-child(1),
+#tbl td:nth-child(4),
+#tbl td:nth-child(5)
+/*.input-group-host{
+	width: 100%
+}
+.input-group-host select.form-control{
+	width: 15%;
+}
+.input-group-host input.form-control{
+	width: 85%;
+}*/
+table.admin-datatables i.btn-edit:before {
+    content: '\f044';
+}
+table.admin-datatables i.btn-delete:before {
+    content: '\f014';
+}
+table.admin-datatables i.btn-download:before {
+    content: "\f019";
+}
+table.admin-datatables i.btn-convert:before {
+    content: "\f0ec";
+}
+table.admin-datatables i.btn-import:before {
+    content: "\f16c";
+}
+table.admin-datatables i.btn-rerun:before {
+    content: "\f0c9";
+}
+
+table.admin-datatables i.btn-view:before {
+    content: "\f1c9";
+}
+
+table.admin-datatables i.btn-view-data:before {
+    content: "\f002";
+}
+table.admin-datatables i.btn-copy:before {
+    content: "\f24d";
+}
+
+table.admin-datatables i.btn-play:before {
+    content: "\f144 ";
+}
+
+table.admin-datatables i.btn-pause:before {
+    content: "\f28e";
+}
+
+
+ul.multiselect-container.dropdown-menu {
+    overflow-y: auto;
+    height: 200px;
+}
+div.dataTables_wrapper div.dataTables_filter {
+    float: left;
+}
+
+
+
+a.dt-button {
+	font-size: 14px;
+}
+
+div.dt-buttons {
+    float: right;
+}
+
+.container {
+    margin-top: 10px;
+}
+
+.nav-tabs > li {
+    position:relative;
+}
+
+.nav-tabs > li > a {
+    display:inline-block;
+}
+
+.hidden {
+    display:none
+}
+
+.nav-tabs > li > span {
+    display:none;
+    cursor:pointer;
+    position:absolute;
+    right: 6px;
+    top: 8px;
+    color: red;
+}
+
+.nav-tabs > li:hover > span {
+    display: inline-block;
+}
+
+.tab-content{
+
+	padding-top: 2%;
+}
+
+.new-txt-area{
+	margin-top: 2%;
+}
+.dropdown-menu>li>a{
+	white-space: normal;
+}
+
+.fa-times-circle{color:red;}
+.fa-plus-circle{color:green;}
+
+
+/* Tooltrip inner*/
+.tooltip-inner{min-width:100%;}
+
+
+/*! ========================================================================
+ * Bootstrap Toggle: bootstrap-toggle.css v2.2.0
+ * http://www.bootstraptoggle.com
+ * ========================================================================
+ * Copyright 2014 Min Hur, The New York Times Company
+ * Licensed under MIT
+ * ======================================================================== */
+.checkbox label .toggle,.checkbox-inline .toggle{margin-left:-20px;margin-right:5px}
+.toggle{position:relative;overflow:hidden}
+.toggle input[type=checkbox]{display:none}
+.toggle-group{position:absolute;width:200%;top:0;bottom:0;left:0;transition:left .35s;-webkit-transition:left .35s;-moz-user-select:none;-webkit-user-select:none}
+.toggle.off .toggle-group{left:-100%}
+.toggle-on{position:absolute;top:0;bottom:0;left:0;right:50%;margin:0;border:0;border-radius:0}
+.toggle-off{position:absolute;top:0;bottom:0;left:50%;right:0;margin:0;border:0;border-radius:0}
+.toggle-handle{position:relative;margin:0 auto;padding-top:0;padding-bottom:0;height:100%;width:0;border-width:0 1px}
+.toggle.btn{min-width:59px;min-height:34px}
+.toggle-on.btn{padding-right:24px}
+.toggle-off.btn{padding-left:24px}
+.toggle.btn-lg{min-width:79px;min-height:45px}
+.toggle-on.btn-lg{padding-right:31px}
+.toggle-off.btn-lg{padding-left:31px}
+.toggle-handle.btn-lg{width:40px}
+.toggle.btn-sm{min-width:50px;min-height:30px}
+.toggle-on.btn-sm{padding-right:20px}
+.toggle-off.btn-sm{padding-left:20px}
+.toggle.btn-xs{min-width:35px;min-height:22px}
+.toggle-on.btn-xs{padding-right:12px}
+.toggle-off.btn-xs{padding-left:12px}
+
+.toggle{float: right;}

@@ -1,0 +1,87 @@
+@CHARSET "ISO-8859-1";
+
+.text-control{
+		padding-left :50px;
+		padding-top: 10px;
+}
+
+#input-reponse{
+	color: red;
+}
+
+table.admin-datatables th {
+	text-align: center
+}
+
+table.admin-datatables th:nth-child(1) {
+	width: 10%;
+}
+
+table.admin-datatables th:nth-child(2) {
+	width: 10%;
+  text-align: left;
+}
+
+table.admin-datatables th:nth-child(3) {
+	width: 10%;
+	text-align: left;
+}
+table.admin-datatables th:nth-child(4) {
+	width: 10%;
+	text-align: left;
+}
+table.admin-datatables th:nth-child(5) {
+	width: 20px;
+	text-align: left;
+	word-wrap: break-word;
+}
+table.admin-datatables th:nth-child(6) {
+	width: 10%;
+	text-align: left;
+	/*color: red;*/
+}
+table.admin-datatables th:nth-child(7) {
+	width: 10%;
+	text-align: left;
+}
+
+
+
+table.admin-datatables td:nth-child(1) {
+    text-align: center;
+}
+table.admin-datatables td:nth-child(2) {
+    text-align: left;
+}
+table.admin-datatables td:nth-child(3) {
+    text-align: left;
+}
+table.admin-datatables td:nth-child(4) {
+    text-align: left;
+}
+table.admin-datatables td:nth-child(5) {
+    text-align: left;
+}
+table.admin-datatables td:nth-child(6) {
+    text-align: center;
+}
+
+table.admin-datatables td:nth-child(7) {
+    text-align: center;
+}
+
+table.admin-datatables i.btn {
+	font-family: FontAwesome;
+	font-style: normal;
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 2px 0px 0px;
+}
+
+table.admin-datatables i.btn-edit:before {
+	content: '\f044';
+}
+
+table.admin-datatables i.btn-delete:before {
+	content: '\f014';
+}

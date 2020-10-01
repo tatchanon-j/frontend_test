@@ -1,0 +1,45 @@
+@CHARSET "ISO-8859-1";
+
+#input-reponse{
+	color: red;
+}
+
+table.admin-datatables th {
+	text-align: center
+}
+
+
+table.admin-datatables th:nth-child(1){
+    text-align: center;
+}
+table.admin-datatables th:nth-child(2){min-width:150px;}
+table.admin-datatables th:nth-child(3){min-width: 150px;}
+table.admin-datatables th:nth-child(4){min-width: 50px;}
+table.admin-datatables th:nth-child(5){min-width: 100px;}
+table.admin-datatables th:nth-child(6){min-width: 100px;}
+table.admin-datatables th:nth-child(7){min-width: 20px;}
+table.admin-datatables th:nth-child(8){min-width: 150px;}
+table.admin-datatables th:nth-child(9){min-width: 150px;}
+table.admin-datatables th:nth-child(10){min-width: 200px; max-width: 250px; word-wrap: break-word;}
+table.admin-datatables th:nth-child(11){min-width: 150px;}
+table.admin-datatables th:nth-child(12){min-width: 50px;}
+
+table.admin-datatables td:nth-child(1),
+table.admin-datatables td:nth-child(12){
+    text-align: center;
+}
+table.admin-datatables td:nth-child(2),
+table.admin-datatables td:nth-child(3),
+table.admin-datatables td:nth-child(4),
+table.admin-datatables td:nth-child(5),
+table.admin-datatables td:nth-child(6),
+table.admin-datatables td:nth-child(7),
+table.admin-datatables td:nth-child(8),
+table.admin-datatables td:nth-child(9),
+table.admin-datatables td:nth-child(10){
+    text-align: left;
+}
+
+table.admin-datatables td:nth-child(11){
+	text-align: right;
+}

@@ -1,0 +1,7 @@
+#manorot-table th {
+	font-weight: bold;
+}
+
+#manorot-table td:nth-child(2) {
+	text-align: right;
+}

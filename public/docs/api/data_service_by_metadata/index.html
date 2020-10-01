@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ให้บริการข้อมูลเพิ่มเงื่อนไข filter</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="ให้บริการข้อมูลเพิ่มเงื่อนไข-filter-ข้อมูลรายบัญชีข้อมูลของระบบให้บริการข้อมูล-และการทดสอบ">ให้บริการข้อมูลเพิ่มเงื่อนไข filter ข้อมูลรายบัญชีข้อมูลของระบบให้บริการข้อมูล และการทดสอบ</h1>
+<h4 id="ตัวอย่างบัญชีข้อมูล--ข้อมูลพื้นฐานของสถานีวัดน้ำท่าจากศูนย์อุทกวิทยา-ภาค1-8-กรมชลประทาน-ได้ทำการสร้างบัญชีข้อมูลแล้ว-แต่เนื่องจาก-api-ที่ได้ยังแสดงข้อมูลทั้งหมดที่มีทำให้-api-ยังไม่ถูกต้องต้องทำการกรองข้อมูลบางส่วนออก">ตัวอย่างบัญชีข้อมูล : ข้อมูลพื้นฐานของสถานีวัดน้ำท่าจากศูนย์อุทกวิทยา ภาค1-8 (กรมชลประทาน) ได้ทำการสร้างบัญชีข้อมูลแล้ว แต่เนื่องจาก api ที่ได้ยังแสดงข้อมูลทั้งหมดที่มีทำให้ api ยังไม่ถูกต้องต้องทำการกรองข้อมูลบางส่วนออก</h4>
+<p>โฟล์เดอร์โค้ด api สำหรับให้ระบบบริการข้อมูล</p>
+<blockquote>
+<p>/thaiwater30/src/haii.or.th/api/thaiwater30/service/api_service/</p>
+</blockquote>
+<p>ไฟล์เริ่มต้น main.go</p>
+<blockquote>
+<p>/thaiwater30/src/haii.or.th/api/thaiwater30/service/api_service/main.go</p>
+</blockquote>
+<p>เริ่มต้นที่ function handleGetData() จะเป็นฟังก์ชั่นหลักในการทำงานของ api สำหรับให้บริการข้อมูล โดยข้างล่างจะเป็นโค้ดบ้างส่วนของฟังก์ชั่น จากโค้ดส่วนแรกจะเป็น สร้างตัวแปร และรับ parameter แล้วเช็คแล้วนำ parameter ส่งไปยังฟังก์ชั่น GetMetadataByEId() โดยส่งค่า eid</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/service/api_service/main.go</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>srv <span class="token operator">*</span>HttpService<span class="token punctuation">)</span> <span class="token function">handleGetData</span><span class="token punctuation">(</span>ctx service<span class="token punctuation">.</span>RequestContext<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+	media_url <span class="token operator">:=</span> ctx<span class="token punctuation">.</span><span class="token function">BuildURL</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">"thaiwater30/shared/file"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+	p <span class="token operator">:=</span> <span class="token operator">&amp;</span>ApiService<span class="token punctuation">{</span><span class="token punctuation">}</span>
+	<span class="token comment">// has eid ?</span>
+	<span class="token keyword">if</span> err <span class="token operator">:=</span> ctx<span class="token punctuation">.</span><span class="token function">GetRequestParams</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span> 
+		<span class="token keyword">return</span> rest<span class="token punctuation">.</span><span class="token function">NewError</span><span class="token punctuation">(</span><span class="token number">404</span><span class="token punctuation">,</span> <span class="token string">"no eid"</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// has metadata id ?</span>
+	<span class="token keyword">if</span> p<span class="token punctuation">.</span>MetadataId <span class="token operator">&lt;=</span> <span class="token number">0</span> <span class="token punctuation">{</span> 
+		<span class="token keyword">return</span> rest<span class="token punctuation">.</span><span class="token function">NewError</span><span class="token punctuation">(</span><span class="token number">422</span><span class="token punctuation">,</span> <span class="token string">"invalid mid"</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// decrypt eid</span>
+	_s_id<span class="token punctuation">,</span> err <span class="token operator">:=</span> model<span class="token punctuation">.</span><span class="token function">GetCipher</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">DecryptText</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>Eid<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span> 
+		<span class="token keyword">return</span> rest<span class="token punctuation">.</span><span class="token function">NewError</span><span class="token punctuation">(</span><span class="token number">422</span><span class="token punctuation">,</span> <span class="token string">"invalid eid"</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// check _s_id is int</span>
+	<span class="token boolean">_</span><span class="token punctuation">,</span> err <span class="token operator">=</span> strconv<span class="token punctuation">.</span><span class="token function">ParseInt</span><span class="token punctuation">(</span>_s_id<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span> 
+		<span class="token keyword">return</span> rest<span class="token punctuation">.</span><span class="token function">NewError</span><span class="token punctuation">(</span><span class="token number">422</span><span class="token punctuation">,</span> <span class="token string">"invalid eid"</span><span class="token punctuation">,</span> <span class="token boolean">nil</span><span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// Get Matadata by Eid</span>
+	sd<span class="token punctuation">,</span> err <span class="token operator">:=</span> model_order_detail<span class="token punctuation">.</span><span class="token function">GetMetadataByEId</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>Eid<span class="token punctuation">)</span> <span class="token comment">// &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; function</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> err
+	<span class="token punctuation">}</span>
+	<span class="token operator">...</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ฟังก์ชั่น GetMetadataByEId() เรียกฟังก์ชั่น scanMetadata() แล้ว return ค่าคืนไปยัง main</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/model/order_detail/get_service.go</span>
+<span class="token keyword">func</span> <span class="token function">GetMetadataByEId</span><span class="token punctuation">(</span>e_id <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>Strct_Data<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">return</span> <span class="token function">scanMetadata</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> e_id<span class="token punctuation">)</span> <span class="token comment">// &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; function</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ฟังก์ชั่น scanMetadata() เรียกฟังก์ชั่น GetTable() เพื่อเลือก field map table ที่ต้องการจาก ชื่อTable</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/model/order_detail/get_service.go</span>
+<span class="token keyword">func</span> <span class="token function">scanMetadata</span><span class="token punctuation">(</span>od_id<span class="token punctuation">,</span> m_id <span class="token builtin">int64</span><span class="token punctuation">,</span> e_id <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>Strct_Data<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	db<span class="token punctuation">,</span> err <span class="token operator">:=</span> pqx<span class="token punctuation">.</span><span class="token function">Open</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// connect database</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+	<span class="token punctuation">}</span>
+	<span class="token keyword">var</span> <span class="token punctuation">(</span> 
+		strSql <span class="token builtin">string</span> <span class="token comment">// ประกาศตัวแปรที่จะใช้งาน</span>
+		itf    <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+		_service_id         sql<span class="token punctuation">.</span>NullInt64
+		_detail_fromdate    sql<span class="token punctuation">.</span>NullString
+		<span class="token operator">...</span>
+	<span class="token punctuation">)</span>
+	itf <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+	<span class="token comment">// เลือกใช้ sql ตาม parameter</span>
+	<span class="token keyword">if</span> e_id <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		strSql <span class="token operator">=</span> SQL_SelectMetadata_FromEId <span class="token comment">// query metadata</span>
+		itf <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>itf<span class="token punctuation">,</span> e_id<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> od_id <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		strSql <span class="token operator">=</span> SQL_SelectMetadata
+		itf <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>itf<span class="token punctuation">,</span> od_id<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> m_id <span class="token operator">!=</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+		strSql <span class="token operator">=</span> SQL_SelectMetadata_FromMetadata
+		itf <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>itf<span class="token punctuation">,</span> m_id<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	err <span class="token operator">=</span> db<span class="token punctuation">.</span><span class="token function">QueryRow</span><span class="token punctuation">(</span>strSql<span class="token punctuation">,</span> itf<span class="token operator">...</span><span class="token punctuation">)</span><span class="token punctuation">.</span>
+		<span class="token function">Scan</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>_service_id<span class="token punctuation">,</span> <span class="token operator">&amp;</span>_detail_fromdate<span class="token punctuation">,</span> <span class="token operator">&amp;</span>_detail_todate<span class="token punctuation">,</span> <span class="token operator">&amp;</span>_metadata_id<span class="token punctuation">,</span> 
+		<span class="token operator">...</span>
+	data <span class="token operator">:=</span> <span class="token operator">&amp;</span>Strct_Data<span class="token punctuation">{</span><span class="token punctuation">}</span> <span class="token comment">// ใส่ค่า</span>
+	data<span class="token punctuation">.</span>Service_id <span class="token operator">=</span> _service_id<span class="token punctuation">.</span>Int64
+	data<span class="token punctuation">.</span>Detail_fromdate <span class="token operator">=</span> _detail_fromdate
+	<span class="token operator">...</span>
+	<span class="token keyword">var</span> _im_f <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+	<span class="token keyword">var</span> temp_selecte_field <span class="token builtin">string</span> <span class="token operator">=</span> <span class="token string">""</span>
+	json<span class="token punctuation">.</span><span class="token function">Unmarshal</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span>_import_f<span class="token punctuation">.</span>String<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>_im_f<span class="token punctuation">)</span>
+	<span class="token comment">// สร้าง select field จาก Table map config</span>
+	<span class="token keyword">var</span> table <span class="token operator">=</span> _table_name<span class="token punctuation">.</span>String	
+	st <span class="token operator">:=</span> model_metadata<span class="token punctuation">.</span><span class="token function">GetTable</span><span class="token punctuation">(</span>table<span class="token punctuation">)</span>  <span class="token comment">// &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; function</span>
+	<span class="token operator">...</span>
+	<span class="token keyword">return</span> data<span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ฟังก์ชั่น GetTable() จะรับชื่อ table ไป map กับ mapStrctTable  ไว้สำหรับเป็น config parameter ไปใช้ในการ gen query ของ api สำหรับให้บริการข้อมูล  แล้วทำการ return ค่าที่ map ได้คืนมา</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/model/metadata/map.go</span>
+<span class="token comment">//	get map table</span>
+<span class="token comment">//	Parameters: table ชื่อตาราง</span>
+<span class="token comment">//	Return: map table ที่เตรียมไว้ล่วงหน้า</span>
+<span class="token keyword">func</span> <span class="token function">GetTable</span><span class="token punctuation">(</span>table <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token operator">*</span>Struct_Table <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> s<span class="token punctuation">,</span> ok <span class="token operator">:=</span> mapStrctTable<span class="token punctuation">[</span>table<span class="token punctuation">]</span><span class="token punctuation">;</span> ok <span class="token punctuation">{</span>  <span class="token comment">// &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; function</span>
+		<span class="token keyword">return</span> s
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ตัวอย่าง  mapStrctTable ที่ได้สร้างไว้แล้ว</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/model/metadata/map.go</span>
+<span class="token keyword">var</span> mapStrctTable <span class="token operator">=</span> <span class="token keyword">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span><span class="token operator">*</span>Struct_Table<span class="token punctuation">{</span>
+	<span class="token string">"agency"</span><span class="token punctuation">:</span> <span class="token operator">&amp;</span>Struct_Table<span class="token punctuation">{</span>
+		Table<span class="token punctuation">:</span>    <span class="token string">"agency"</span><span class="token punctuation">,</span>
+		Fields<span class="token punctuation">:</span>   <span class="token string">"id, agency_name, agency_name-&gt;&gt;'th', agency_name-&gt;&gt;'en'"</span><span class="token punctuation">,</span>
+		IsMaster<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token string">"m_tele_station"</span><span class="token punctuation">:</span> <span class="token operator">&amp;</span>Struct_Table<span class="token punctuation">{</span>
+		Table<span class="token punctuation">:</span>        <span class="token string">"m_tele_station"</span><span class="token punctuation">,</span>
+		SelectColumn<span class="token punctuation">:</span> <span class="token string">" tele_station_name, tele_station_name-&gt;&gt;'th', tele_station_name-&gt;&gt;'en', tele_station_lat, tele_station_long "</span><span class="token punctuation">,</span>
+		Fields<span class="token punctuation">:</span>       <span class="token string">"id, tele_station_oldcode, agency_id, tele_station_type, tele_station_name, tele_station_lat, tele_station_long"</span><span class="token punctuation">,</span>
+		WhereHydro<span class="token punctuation">:</span>   <span class="token string">"hydro_id IS NOT NULL "</span><span class="token punctuation">,</span>  <span class="token comment">// &lt;&lt;&lt;&lt;ส่วนที่เพิ่มเติม </span>
+		IsMaster<span class="token punctuation">:</span>     <span class="token boolean">true</span><span class="token punctuation">,</span>
+		HasProvince<span class="token punctuation">:</span>  <span class="token boolean">true</span><span class="token punctuation">,</span>
+		HasBasin<span class="token punctuation">:</span>     <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token operator">...</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ทำการเพิ่มเงื่อนไขที่ต้องการจะ Where query ใน Struct_Table m_tele_station ทำการเพิ่ม “hydro_id IS NOT NULL”</p>
+<pre class=" language-go"><code class="prism  language-go">WhereHydro<span class="token punctuation">:</span>   <span class="token string">"hydro_id IS NOT NULL "</span><span class="token punctuation">,</span> 
+</code></pre>
+<p>แล้วทำการเพิ่มที่ field  WhereHydro  string ใน Struct</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/model/metadata/struct.go</span>
+<span class="token comment">//	map struct table ที่เตรียมไว้สำหรับ shopping</span>
+<span class="token keyword">type</span> Struct_Table <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	Table          <span class="token builtin">string</span> 	<span class="token comment">// ชื่อตาราง</span>
+	PartitionField <span class="token builtin">string</span> 	<span class="token comment">// ชื่อ partition field</span>
+	MasterId       <span class="token builtin">string</span> 	<span class="token comment">// ชื่อ master id field</span>
+	MasterTable    <span class="token builtin">string</span> 	<span class="token comment">// ชื่อ master table</span>
+	SelectColumn   <span class="token builtin">string</span>
+	Fields         <span class="token builtin">string</span> 	<span class="token comment">// field lookup table</span>
+	WhereHAII      <span class="token builtin">string</span> 	<span class="token comment">// เงื่อนไขถ้าเป็น สสนก</span>
+	Where          <span class="token builtin">string</span> 	<span class="token comment">// เพิ่มเงื่อนไข ให้ value &lt;&gt; 999999</span>
+	WhereHydro     <span class="token builtin">string</span> 	<span class="token comment">// เพิ่มเงื่อนไข eget hydro1-8 	// &lt;&lt;&lt;&lt;ส่วนที่เพิ่มเติม </span>
+	IsMaster    	<span class="token builtin">bool</span> 	<span class="token comment">// เป็นตาราง master?</span>
+	HasProvince 	<span class="token builtin">bool</span> 	<span class="token comment">// มี geocode_id ในตาราง?</span>
+	HasBasin    	<span class="token builtin">bool</span> 	<span class="token comment">// มี subbasin_id ในตาราง?</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>เมื่อเพิ่มเงื่อนไขใน Struct_Table แล้วจะได้ค่า return เป็น Metadata กลับมา หลังจากนั้นไป get query ได้ที่ฟังก์ชั่น GetMetadataQueryResult() ฟังก์ชั่นจะส่ง parameter ที่ได้จากการ ฟังก์ชั่น GetMetadataByEId()  ไป</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/service/api_service/main.go</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>srv <span class="token operator">*</span>HttpService<span class="token punctuation">)</span> <span class="token function">handleGetData</span><span class="token punctuation">(</span>ctx service<span class="token punctuation">.</span>RequestContext<span class="token punctuation">)</span> <span class="token builtin">error</span> <span class="token punctuation">{</span>
+	<span class="token operator">...</span>
+	<span class="token comment">// Get Matadata by Eid</span>
+	sd<span class="token punctuation">,</span> err <span class="token operator">:=</span> model_order_detail<span class="token punctuation">.</span><span class="token function">GetMetadataByEId</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>Eid<span class="token punctuation">)</span> <span class="token comment">// &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; function</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> err
+	<span class="token punctuation">}</span>
+	<span class="token operator">...</span>
+	<span class="token comment">// get query result</span>
+	row<span class="token punctuation">,</span> err <span class="token operator">:=</span> model_order_detail<span class="token punctuation">.</span><span class="token function">GetMetadataQueryResult</span><span class="token punctuation">(</span>sd<span class="token punctuation">)</span> <span class="token comment">// &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; function</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> err
+	<span class="token punctuation">}</span>
+	<span class="token operator">...</span>
+	<span class="token keyword">return</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ฟังก์ชั่น  GetMetadataQueryResult เรียกฟังก์ชั่น SQL_GenSQLSelectDataservice_All() ส่ง Struct_Table เพื่อไป Gen SQL</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/model/order_detail/get_service.go</span>
+<span class="token comment">// get query result ของ SelectedFields</span>
+<span class="token keyword">func</span> <span class="token function">GetMetadataQueryResult</span><span class="token punctuation">(</span>p <span class="token operator">*</span>Strct_Data<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token operator">*</span>sql<span class="token punctuation">.</span>Rows<span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	db<span class="token punctuation">,</span> err <span class="token operator">:=</span> pqx<span class="token punctuation">.</span><span class="token function">Open</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+	<span class="token punctuation">}</span>
+	<span class="token keyword">var</span> <span class="token punctuation">(</span>
+		row <span class="token operator">*</span>sql<span class="token punctuation">.</span>Rows
+		itf <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+	<span class="token punctuation">)</span>
+	itf <span class="token operator">=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+	<span class="token operator">...</span>
+	<span class="token comment">//  สร้าง sql</span>
+	p<span class="token punctuation">.</span>Sql<span class="token punctuation">,</span> itf <span class="token operator">=</span> <span class="token function">SQL_GenSQLSelectDataservice_All</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span> <span class="token comment">// &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; function</span>
+	row<span class="token punctuation">,</span> err <span class="token operator">=</span> db<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span>Sql<span class="token punctuation">,</span> itf<span class="token operator">...</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span> <span class="token boolean">nil</span><span class="token punctuation">,</span> err
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> row<span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ฟังก์ชั่น SQL_GenSQLSelectDataservice_All() จะทำการ gen query ตามเงื่อนไข ด้านล่างเป็นโค้ดบ้างส่วน สามารถเพิ่มเงื่อนไข query ได้ในฟังก์ชั่นนี้</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/model/order_detail/get_service.go</span>
+<span class="token comment">//	genarate sql string สำหรับ data_service</span>
+<span class="token comment">//	Parameters: p Strct_Data</span>
+<span class="token comment">//	Retun: sql string, parameter</span>
+<span class="token keyword">func</span> <span class="token function">SQL_GenSQLSelectDataservice_All</span><span class="token punctuation">(</span>p <span class="token operator">*</span>Strct_Data<span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token builtin">string</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> q <span class="token builtin">string</span> <span class="token operator">=</span> <span class="token string">""</span>
+	itf <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token keyword">interface</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+	<span class="token keyword">var</span> <span class="token punctuation">(</span>
+		table_name <span class="token operator">=</span> p<span class="token punctuation">.</span>Table_name<span class="token punctuation">.</span>String
+		agency_id  <span class="token operator">=</span> p<span class="token punctuation">.</span>Agency_id<span class="token punctuation">.</span>String
+		<span class="token operator">...</span>
+	<span class="token punctuation">)</span>
+	m_id <span class="token operator">:=</span> model_metadata<span class="token punctuation">.</span><span class="token function">GetColumnMasterId</span><span class="token punctuation">(</span>table_name<span class="token punctuation">)</span>
+	st <span class="token operator">:=</span> model_metadata<span class="token punctuation">.</span><span class="token function">GetTable</span><span class="token punctuation">(</span>table_name<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> st<span class="token punctuation">.</span>MasterTable <span class="token operator">==</span> <span class="token string">""</span> <span class="token punctuation">{</span> <span class="token comment">// ไม่มี master table ไม่ต้อง join</span>
+		<span class="token operator">...</span>
+		<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> st<span class="token punctuation">.</span>IsMaster <span class="token punctuation">{</span>
+			q <span class="token operator">+=</span> <span class="token string">" WHERE tt.agency_id = '"</span> <span class="token operator">+</span> agency_id <span class="token operator">+</span> <span class="token string">"' AND tt.deleted_at = to_timestamp(0) "</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment">// มีตัว master table ต้อง join master เพื่อเอา geocode, subbasin_id</span>
+		<span class="token comment">//		q = "SELECT " + selectField + " FROM " + st.MasterTable + " m " +</span>
+		q <span class="token operator">=</span> <span class="token string">" INNER JOIN "</span> <span class="token operator">+</span> st<span class="token punctuation">.</span>MasterTable <span class="token operator">+</span> <span class="token string">" m ON m.id = tt."</span> <span class="token operator">+</span> m_id
+		<span class="token operator">...</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> media_type_id <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" AND tt.media_type_id IN ("</span> <span class="token operator">+</span> media_type_id <span class="token operator">+</span> <span class="token string">") "</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> province <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" AND nullif(lg.province_code,'')::integer IN ("</span> <span class="token operator">+</span> province <span class="token operator">+</span> <span class="token string">") "</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> basin <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" AND s.basin_id IN ("</span> <span class="token operator">+</span> basin <span class="token operator">+</span> <span class="token string">") "</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// เพิ่มเงื่อนไข query ข้อมูล value &lt;&gt; 999999</span>
+	<span class="token keyword">if</span> st<span class="token punctuation">.</span>Where <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" AND "</span> <span class="token operator">+</span> st<span class="token punctuation">.</span>Where <span class="token operator">+</span> <span class="token string">" "</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> st<span class="token punctuation">.</span>WhereHAII <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" AND "</span> <span class="token operator">+</span> st<span class="token punctuation">.</span>WhereHAII <span class="token operator">+</span> <span class="token string">" "</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// เพิ่มเงื่อนไข  query station ที่เเป็น hydro 1-8 </span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>metadata_id <span class="token operator">==</span> <span class="token number">550</span> <span class="token operator">||</span> metadata_id <span class="token operator">==</span> <span class="token number">228</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> st<span class="token punctuation">.</span>WhereHydro <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" AND "</span> <span class="token operator">+</span> st<span class="token punctuation">.</span>WhereHydro <span class="token operator">+</span> <span class="token string">" "</span>
+	<span class="token punctuation">}</span>
+	<span class="token comment">// เพิ่มเงื่อนไข query ข้อมูลถ้าใน dataset มี qc_status</span>
+	<span class="token keyword">if</span> hasQC <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" AND (qc_status IS NULL OR qc_status-&gt;&gt;'is_pass' = 'true') "</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> st<span class="token punctuation">.</span>PartitionField <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+		q <span class="token operator">+=</span> <span class="token string">" ORDER BY  tt."</span> <span class="token operator">+</span> st<span class="token punctuation">.</span>PartitionField <span class="token operator">+</span> <span class="token string">" DESC"</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> st<span class="token punctuation">.</span>IsMaster <span class="token punctuation">{</span> <span class="token comment">// เป็น master table เรียงตาม id</span>
+		q <span class="token operator">+=</span> <span class="token string">" ORDER BY tt.id "</span>
+	<span class="token punctuation">}</span>
+	q <span class="token operator">=</span> <span class="token string">"SELECT "</span> <span class="token operator">+</span> selectField <span class="token operator">+</span> <span class="token string">" FROM "</span> <span class="token operator">+</span> table_name <span class="token operator">+</span> <span class="token string">" tt "</span> <span class="token operator">+</span> q
+	
+	<span class="token keyword">return</span> q<span class="token punctuation">,</span> itf
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ทำการเพิ่มเงื่อนไข query station ที่เป็น hydro 1-8 เท่านั้น โดยเข้าเงื่อนไขก็ต่อเมื่อ metadata_id == 550 หรือ metadata_id == 228 และมี WhereHydro ไม่เท่ากับค่าว่าง ซึ่งในส่วนของ WhereHydro เราได้ทำการเพิ่มไว้ที่ mapStrctTable แล้วช่วงแรก ถ้าเข้าเงื่อนไขดังกล่าว ก็จะเพิ่ม WHERE ได้</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// เพิ่มเงื่อนไข query station ที่เเป็น hydro 1-8 เท่านั้น</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>metadata_id <span class="token operator">==</span> <span class="token number">550</span> <span class="token operator">||</span> metadata_id <span class="token operator">==</span> <span class="token number">228</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> st<span class="token punctuation">.</span>WhereHydro <span class="token operator">!=</span> <span class="token string">""</span> <span class="token punctuation">{</span>
+	q <span class="token operator">+=</span> <span class="token string">" AND "</span> <span class="token operator">+</span> st<span class="token punctuation">.</span>WhereHydro <span class="token operator">+</span> <span class="token string">" "</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ตัวอย่าง query metadata_id 550 ที่ได้ สังเกตจะมีเงื่อนไข hydro_id IS NOT NULL  เพิ่มเข้าไปทำให้ api ของบัญชีข้อมูลพื้นฐานของสถานีวัดน้ำท่าจากศูนย์อุทกวิทยา ภาค1-8 เราถูกต้อง โดยจะแสดงสถานีที่เป็น ศูนย์อุทกวิทยา ภาค1-8 เท่านั้น</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> tt<span class="token punctuation">.</span>id<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>agency_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_name <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_type <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_lat <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_long <span class="token punctuation">,</span> lg<span class="token punctuation">.</span>province_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>amphoe_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>tumbon_name<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_oldcode <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>riverbank <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>station_type_msl <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>hydro_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span><span class="token keyword">offset</span> <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>qmax  
+	<span class="token keyword">FROM</span> m_tele_station tt  
+	<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> lt_geocode lg <span class="token keyword">ON</span> tt<span class="token punctuation">.</span>geocode_id <span class="token operator">=</span> lg<span class="token punctuation">.</span>id  
+	<span class="token keyword">LEFT</span> <span class="token keyword">JOIN</span> subbasin s <span class="token keyword">ON</span> tt<span class="token punctuation">.</span>subbasin_id <span class="token operator">=</span> s<span class="token punctuation">.</span>id  
+	<span class="token keyword">WHERE</span> tt<span class="token punctuation">.</span>agency_id <span class="token operator">=</span> <span class="token string">'12'</span> 
+		<span class="token operator">AND</span> tt<span class="token punctuation">.</span>deleted_at <span class="token operator">=</span> to_timestamp<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  
+		<span class="token operator">AND</span> hydro_id <span class="token operator">IS</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span>  
+	<span class="token keyword">ORDER</span> <span class="token keyword">BY</span> tt<span class="token punctuation">.</span>id 
+</code></pre>
+<blockquote>
+<p>หมายเหตุ คู่มืออาจจะไม่ได้ลงโค้ดทุกส่วน จะอธิบายส่วนที่ใช้ในการทำเท่านั้น</p>
+</blockquote>
+<h1 id="วิธีรันทดสอบ-api_dataservice-by-metadata_id">วิธีรันทดสอบ api_dataservice by metadata_id</h1>
+<p>โฟล์เดอร์หลักจะอยู่ใน</p>
+<blockquote>
+<p>/thaiwater30/src/haii.or.th/api/thaiwater30/tools/api_service_query</p>
+</blockquote>
+<p>ไฟล์เริ่มต้น main.go ทำการเปลี่ยน metadata id ดังโค้ดด้านล่างจะทำการทดสอบ metadata id 550</p>
+<pre class=" language-go"><code class="prism  language-go"><span class="token comment">// thaiwater30/src/haii.or.th/api/thaiwater30/tools/api_service_query/main.go</span>
+<span class="token keyword">package</span> main
+<span class="token keyword">import</span> <span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token function">initDB</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">var</span> service_id <span class="token builtin">int64</span> <span class="token operator">=</span> <span class="token number">550</span><span class="token comment">// metadata id</span>
+	<span class="token function">testDataserviceById</span><span class="token punctuation">(</span>service_id<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>เพิ่ม run configurations ดังนี้<br>
+<img src="assets/04.jpg" alt="ตัวอย่างrun configurations"><br>
+<img src="assets/03.jpg" alt="ตัวอย่างrun configurations"></p>
+<p>shh connect database<br>
+<img src="assets/05.jpg" alt="ตัวอย่าง connect database"></p>
+<p>เมื่อกด run configurations ที่เพิ่มไว้ โค้ดจะ gen โฟล์เดอร์ชื่อตาม metadata id เช่น ตัวอย่างที่รันเป็น 550 ในโฟล์เดอร์จะมี ไฟล์ detail.log เป็น sql และไฟล์ .json เป็นข้อมูลที่ได้จาก query sql<br>
+<img src="assets/06.jpg" alt="ตัวอย่าง ไฟล์ที่ได้จากการรัน"></p>
+<p>ตัวอย่างไฟล์  .json ที่ได้</p>
+<pre class=" language-json"><code class="prism  language-json"><span class="token punctuation">[</span>	
+  <span class="token punctuation">{</span>
+    <span class="token string">"agency_id"</span><span class="token punctuation">:</span> <span class="token number">12</span><span class="token punctuation">,</span>
+    <span class="token string">"amphoe_name"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"hydro_id"</span><span class="token punctuation">:</span> <span class="token number">8</span><span class="token punctuation">,</span>
+    <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token number">2559</span><span class="token punctuation">,</span>
+    <span class="token string">"offset"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"province_name"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"qmax"</span><span class="token punctuation">:</span> <span class="token number">204</span><span class="token punctuation">,</span>
+    <span class="token string">"riverbank"</span><span class="token punctuation">:</span> <span class="token number">8.2</span><span class="token punctuation">,</span>
+    <span class="token string">"station_type_msl"</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_lat"</span><span class="token punctuation">:</span> <span class="token string">"6.022610"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_long"</span><span class="token punctuation">:</span> <span class="token string">"101.974892"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"บริเวณสะพานลันตู"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_oldcode"</span><span class="token punctuation">:</span> <span class="token string">"X.119A"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_type"</span><span class="token punctuation">:</span> <span class="token string">"W"</span><span class="token punctuation">,</span>
+    <span class="token string">"tumbon_name"</span><span class="token punctuation">:</span> <span class="token keyword">null</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token string">"agency_id"</span><span class="token punctuation">:</span> <span class="token number">12</span><span class="token punctuation">,</span>
+    <span class="token string">"amphoe_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"มะนัง"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"hydro_id"</span><span class="token punctuation">:</span> <span class="token number">8</span><span class="token punctuation">,</span>
+    <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token number">2561</span><span class="token punctuation">,</span>
+    <span class="token string">"offset"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token string">"province_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"สตูล"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"qmax"</span><span class="token punctuation">:</span> <span class="token number">265</span><span class="token punctuation">,</span>
+    <span class="token string">"riverbank"</span><span class="token punctuation">:</span> <span class="token number">12.8</span><span class="token punctuation">,</span>
+    <span class="token string">"station_type_msl"</span><span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_lat"</span><span class="token punctuation">:</span> <span class="token string">"6.940820"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_long"</span><span class="token punctuation">:</span> <span class="token string">"99.872917"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"บ้านวังพระเคียน"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_oldcode"</span><span class="token punctuation">:</span> <span class="token string">"X.150"</span><span class="token punctuation">,</span>
+    <span class="token string">"tele_station_type"</span><span class="token punctuation">:</span> <span class="token string">"W"</span><span class="token punctuation">,</span>
+    <span class="token string">"tumbon_name"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"th"</span><span class="token punctuation">:</span> <span class="token string">"นิคมพัฒนา"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+</code></pre>
+<p>ตัวอย่างไฟล์ detail.log</p>
+<pre class=" language-go"><code class="prism  language-go">Service id <span class="token punctuation">:</span> <span class="token number">1</span>
+Query <span class="token punctuation">:</span> SELECT tt<span class="token punctuation">.</span>id<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>agency_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_name <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_type <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_lat <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_long <span class="token punctuation">,</span> lg<span class="token punctuation">.</span>province_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>amphoe_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>tumbon_name<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_oldcode <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>riverbank <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>station_type_msl <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>hydro_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>offset <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>qmax  FROM m_tele_station tt  LEFT JOIN lt_geocode lg ON tt<span class="token punctuation">.</span>geocode_id <span class="token operator">=</span> lg<span class="token punctuation">.</span>id  LEFT JOIN subbasin s ON tt<span class="token punctuation">.</span>subbasin_id <span class="token operator">=</span> s<span class="token punctuation">.</span>id  WHERE tt<span class="token punctuation">.</span>agency_id <span class="token operator">=</span> <span class="token string">'12'</span> AND tt<span class="token punctuation">.</span>deleted_at <span class="token operator">=</span> <span class="token function">to_timestamp</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  AND hydro_id IS NOT NULL ORDER BY tt<span class="token punctuation">.</span>id 
+Param <span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> 
+<span class="token punctuation">(</span><span class="token number">0.01995</span> sec<span class="token punctuation">)</span>
+rows <span class="token number">286</span>
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>
+Service id <span class="token punctuation">:</span> <span class="token number">2</span>
+Query <span class="token punctuation">:</span> SELECT tt<span class="token punctuation">.</span>id<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>agency_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_name <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_type <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_lat <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_long <span class="token punctuation">,</span> lg<span class="token punctuation">.</span>province_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>amphoe_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>tumbon_name<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_oldcode <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>riverbank <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>station_type_msl <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>hydro_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>offset <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>qmax  FROM m_tele_station tt  LEFT JOIN lt_geocode lg ON tt<span class="token punctuation">.</span>geocode_id <span class="token operator">=</span> lg<span class="token punctuation">.</span>id  LEFT JOIN subbasin s ON tt<span class="token punctuation">.</span>subbasin_id <span class="token operator">=</span> s<span class="token punctuation">.</span>id  WHERE tt<span class="token punctuation">.</span>agency_id <span class="token operator">=</span> <span class="token string">'12'</span> AND tt<span class="token punctuation">.</span>deleted_at <span class="token operator">=</span> <span class="token function">to_timestamp</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  AND hydro_id IS NOT NULL ORDER BY tt<span class="token punctuation">.</span>id 
+Param <span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> 
+<span class="token punctuation">(</span><span class="token number">0.00705</span> sec<span class="token punctuation">)</span>
+rows <span class="token number">286</span>
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>
+Service id <span class="token punctuation">:</span> <span class="token number">4</span>
+Query <span class="token punctuation">:</span> SELECT tt<span class="token punctuation">.</span>id<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>agency_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_name <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_type <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_lat <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_long <span class="token punctuation">,</span> lg<span class="token punctuation">.</span>province_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>amphoe_name<span class="token punctuation">,</span> lg<span class="token punctuation">.</span>tumbon_name<span class="token punctuation">,</span> tt<span class="token punctuation">.</span>tele_station_oldcode <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>riverbank <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>station_type_msl <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>hydro_id <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>offset <span class="token punctuation">,</span> tt<span class="token punctuation">.</span>qmax  FROM m_tele_station tt  LEFT JOIN lt_geocode lg ON tt<span class="token punctuation">.</span>geocode_id <span class="token operator">=</span> lg<span class="token punctuation">.</span>id  LEFT JOIN subbasin s ON tt<span class="token punctuation">.</span>subbasin_id <span class="token operator">=</span> s<span class="token punctuation">.</span>id  WHERE tt<span class="token punctuation">.</span>agency_id <span class="token operator">=</span> <span class="token string">'12'</span> AND tt<span class="token punctuation">.</span>deleted_at <span class="token operator">=</span> <span class="token function">to_timestamp</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>  AND hydro_id IS NOT NULL ORDER BY tt<span class="token punctuation">.</span>id 
+Param <span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> 
+<span class="token punctuation">(</span><span class="token number">0.00573</span> sec<span class="token punctuation">)</span>
+rows <span class="token number">286</span>
+</code></pre>
+</div>
+</body>
+
+</html>

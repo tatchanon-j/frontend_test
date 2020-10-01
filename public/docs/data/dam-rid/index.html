@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dam-rid</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="วิธีตรวจสอบข้อมูล-เขื่อนกรมชล-ขนาดใหญ่-กรณีที่มีการเปลี่ยนแปลงข้อมูลต้นทาง-มีการเปลี่ยนชื่อหัว-subject-mail">วิธีตรวจสอบข้อมูล เขื่อนกรมชล-ขนาดใหญ่ กรณีที่มีการเปลี่ยนแปลงข้อมูลต้นทาง (มีการเปลี่ยนชื่อหัว subject mail)</h1>
+<ol>
+<li>ตรวจสอบข้อมูลจาก database ว่าข้อมูลไม่อัพเดจจริง โดยไปที่</li>
+</ol>
+<ul>
+<li>Host - 192.168.12.136</li>
+<li>phpPgAdmin - <a href="https://192.168.12.136/phpPgAdmin/">https://192.168.12.136/phpPgAdmin/</a></li>
+<li>Schema - public</li>
+<li>Table - dam_daily</li>
+</ul>
+<ol start="2">
+<li>
+<p>รันคำสั่ง sql เพื่อดูข้อมูลล่าสุด</p>
+<pre class=" language-sql"><code class="prism  language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> <span class="token string">"dam_daily"</span> <span class="token keyword">ORDER</span> <span class="token keyword">BY</span> <span class="token string">"dam_date"</span> <span class="token keyword">DESC</span>
+</code></pre>
+<p><img src="01.jpg" alt="Query Result"></p>
+</li>
+<li>
+<p>จากรูปด้านบน ถ้าข้อมูลไม่อัพเดจถึงวันปัจจุบัน ให้ตรวจสอบการเชื่อมโยงข้อมูลของ Thaiwater30 โดยเข้า
+Browser - <a href="http://web.thaiwater.net/thaiwater30/login">http://web.thaiwater.net/thaiwater30/login</a> แล้วทำการ Login เข้าสู่ระบบ แล้วไปที่
+ระบบสนับสนุนการบริหารจัดการ &gt; เมนูเชื่อมโยงข้อมูล &gt; ตั้งค่าการ download
+ค้นหา rid-big_dam แล้วทำการ play เพื่อรัน download อีกครั้ง ดังภาพที่ 2</p>
+<p><img src="02.jpg" alt="ภาพที่ 2 "></p>
+</li>
+<li>
+<p>จากนั้นตรวจสอบข้อมูลอีกครั้งดังข้อ 1 ถ้าในกรณีที่ข้อมูลยังไม่อัพเดจอีก ต้องทำการตรวจเช็คการเชื่อมโยงข้อมูลที่ละขั้นตอนได้แก่ download, convert, import โดยเริ่มจากการ download ตรวจสอบว่าข้อมูลถูกดาวโหลดมาจริง ต้องทำการไปเช็คข้อมูลที่ต้นทางก่อนว่าข้อมูลทางต้นทางมีการอัพเดจหรือไม่ โดยเข้าไปที่ email : rid bigdam เขื่อนขนาดใหญ่กรมชลฯ</p>
+</li>
+</ol>
+<ul>
+<li>user : <a href="mailto:bigdam@haii.or.th">bigdam@haii.or.th</a></li>
+<li>pass : Bigdam2012
+จากการตรวจสอบ mail มีการเปลี่ยนชื่อ subject mail ไม่สามารถจับรูปแบบที่แน่นอนได้ แต่มีการอัพเดจข้อมูลปกติ</li>
+</ul>
+<ol start="5">
+<li>
+<p>เนื่องจากข้อมูลต้นทางมีการเปลี่ยนแปลง จึงต้องไปแก้ไขการตั้งค่า download โดยไปที่
+ระบบสนับสนุนการบริหารจัดการ &gt; เมนูเชื่อมโยงข้อมูล &gt; ตั้งค่าการ download แล้วค้นหา rid-big_dam แล้วกดแก้ไข
+<img src="03.jpg" alt="ภาพที่ 3 "></p>
+</li>
+<li>
+<p>จากนั้นระบบจะแสดงการตั้งค่าดาวโหลด ไปดูที่การตั้งค่าโฮสตอนนี้เป็น
+bigdam%<a href="http://40haii.or.th">40haii.or.th</a><a href="mailto::Bigdam2012@incoming.mail.go.th">:Bigdam2012@incoming.mail.go.th</a>?subject=%E0%B9%80%E0%B8%82%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%99%E0
+%B8%82%E0%B8%99%E0%B8%B2%E0%B8%94%E0%B9%83%E0%B8%AB%E0%B8%8D%
+E0%B9%88
+copy ส่วนของค่า subject=
+%E0%B9%80%E0%B8%82%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%99%E0%B8%
+82%E0%B8%99%E0%B8%B2%E0%B8%94%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88
+ไปแปลงที่เว็บ <a href="https://meyerweb.com/eric/tools/dencoder/">https://meyerweb.com/eric/tools/dencoder/</a> จะได้คำว่า "เขื่อนขนาดใหญ่"
+การทำงานของ diver: imap:// คือการอ่านข้อมูลจาก mail โดยเซตค่าต่างๆตามโฮสที่ตั้งค่า ทั้งนี้จากการตรวจสอบ mail มีการเปลี่ยนชื่อ subject mail ไม่สามารถจับรูปแบบที่แน่นอนได้</p>
+</li>
+<li>
+<p>จากนั้นแก้ไขโดยการตั้งให้ subject= ค่าว่างเพื่อให้โค้ดไปวาด mail ที่มีวันที่ตรงกับปัจจุบันเท่านั้นโดยไม่ต้อง filter subject mail ที่มีคำว่า “เขื่อนขนาดใหญ่” เนื่องจาก mail มีไว้สำหรับส่งข้อมูลเขื่อนขนาดใหญ่เท่านั้น จึงไม่จำเป็นต้อง filter subject mail ดังนั้นจึงตั้งค่าโฮส ดังรูปที่ 6 แล้วทำการกดบันทึก
+<img src="04.jpg" alt="ภาพที่ 4 "></p>
+</li>
+<li>
+<p>ทำตามข้อ 3 อีกครึ่งเพื่อทำการรัน และตรวจสอบข้อมูลตามข้อ 1 อีกครั้ง</p>
+</li>
+</ol>
+</div>
+<div class="stackedit__html"><h1 id="วิธีตรวจสอบเขื่อนกรมชลขนาดใหญ่-กรณีที่วันที่ปัจจุบันไม่อัพเดท">วิธีตรวจสอบเขื่อนกรมชลขนาดใหญ่ กรณีที่วันที่ปัจจุบันไม่อัพเดท</h1>
+	<ol>
+		<li>ตรวจสอบข้อมูลว่าอัพเดทเป็นวันที่ปัจจุบันหรือไม่ ตามข้อที่ 1 ของ <b>วิธีตรวจสอบข้อมูล เขื่อนกรมชล-ขนาดใหญ่ กรณีที่มีการเปลี่ยนแปลงข้อมูลต้นทาง (มีการเปลี่ยนชื่อหัว subject mail)</b></li>
+	</ol>
+	<ol start="2">
+		<li>
+			<p>รันคำสั่ง sql เพื่อดูข้อมูลล่าสุด ตามข้อที่ 2 ของ <b>วิธีตรวจสอบข้อมูล เขื่อนกรมชล-ขนาดใหญ่ กรณีที่มีการเปลี่ยนแปลงข้อมูลต้นทาง (มีการเปลี่ยนชื่อหัว subject mail)</b></p>
+		</li>
+		<li>
+			<p>ตรวจสอบ E-mail rid Bigdam ว่าได้รับข้อมูลจากต้นทางหรือไม่ โดยไปที่</p>
+		</li>
+
+	</ol>
+	<ul>
+		<li>user : bigdam@haii.or.th</li>
+		<li>pass : Bigdam2012</li>
+	</ul>
+	<ol start="4">
+		<li>
+			<p>หากมีข้อมูลจากต้นทางมาที่ E-mail แล้ว แต่ข้อมูลยังไม่ถูกอัพเดทเป็นวันที่ปัจจุบัน ให้เข้าไปที่ Browser - http://web.thaiwater.net/thaiwater30/login แล้ว Login เข้าสู่ระบบ แล้วไปที่ ระบบสนับสนุนการบริหารจัดการ > เมนูเชื่อมโยงข้อมูล > ตั้งค่าการ download กดแก้ไข
+			<img src="05.jpg" alt="ภาพที่ 5"></p>
+			<p>ไปที่ การตั้งค่าเวลาของ crontab เพิ่มเวลา 15, 16, 17, 18 เข้าไป แล้วกดบันทึก
+				<img src="06.jpg" alt="ภาพที่ 6"></p>
+		</li>
+		<li>ตรวจสอบว่าข้อมูลถูกอัพเดทหรือไม่อีกครั้ง</li>
+	</ol>
+</div>
+</body>
+
+</html>

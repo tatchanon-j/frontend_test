@@ -1,0 +1,19 @@
+#After install set the following file permission
+tar xvfz vendor.tgz
+touch storage/logs/laravel.log
+chmod o+w storage/logs/laravel.log
+chmod o+w bootstrap/cache/services.json
+chmod o+w storage/framework/views
+chmod o+w storage/framework/sessions
+chmod o+w storage/framework/cache
+rm bootstrap/cache/services.json
+chmod o+w bootstrap/cache
+tar xvfz vendor.tgz
+
+#การกำหนด local environment ของ developer แต่ละคน
+#git clone
+copy .env
+edit
+API_APPKEY=    // ต้องตรงกับ table api.agent column secretkey
+API_APPID=   // ต้องตรงกับ table api.user column account
+SITE_URLPREFIX=   // path local ของแต่คน
